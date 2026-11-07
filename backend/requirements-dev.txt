@@ -1,0 +1,6 @@
+# Dépendances de développement et de tests
+-r requirements.txt
+pytest==8.4.2
+pytest-django==4.14.0
+factory-boy==3.3.3
+ruff==0.17.4
