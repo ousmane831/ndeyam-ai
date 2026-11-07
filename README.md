@@ -35,7 +35,7 @@ Première espèce prise en charge : **ovins**. L'architecture prévoit les capri
 | Base de données | PostgreSQL 18 (pgvector non requis) |
 | Calcul | PuLP 3 (solveur CBC intégré), NumPy, SciPy |
 | IA | Interface `LLMProvider` : Claude (Anthropic), API compatibles OpenAI, Ollama |
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, React Router, TanStack Query, Recharts |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, React Router, TanStack Query, Recharts — identité « Indigo & Mil » |
 | Tests | pytest + pytest-django ; Vitest + Testing Library |
 
 ## Démarrage rapide
@@ -97,6 +97,7 @@ docs/      Guides, documentation API, architecture, décisions techniques, journ
 - [Moteur de formulation](docs/moteur-formulation.md)
 - [Architecture IA](docs/architecture-ia.md)
 - [Schéma de la base de données](docs/schema-base-donnees.md)
+- [Identité visuelle](docs/identite-visuelle.md)
 - [Décisions techniques](docs/decisions-techniques.md)
 - [Journal des étapes](docs/journal-etapes.md)
 - [Jeu de données de démonstration](docs/donnees-demo.md) — `python manage.py load_demo_data`

@@ -57,7 +57,7 @@ export function ResetPasswordPage() {
           <Alert tone="success">{done}</Alert>
           <Link
             to="/connexion"
-            className="flex w-full items-center justify-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-brand-700"
+            className="flex w-full items-center justify-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-700"
           >
             Se connecter
           </Link>

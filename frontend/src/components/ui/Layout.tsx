@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import type { ReactNode } from 'react'
 
-export function PageHeader({ title, description, actions }: { title: string; description?: ReactNode; actions?: ReactNode }) {
+export function PageHeader({ title, description, actions }: { title: ReactNode; description?: ReactNode; actions?: ReactNode }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
-        <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
-        {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+        <h1 className="font-display text-[28px] leading-tight font-bold tracking-[-0.01em] text-slate-900">{title}</h1>
+        {description && <p className="mt-1.5 max-w-3xl text-sm text-slate-500">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
@@ -35,7 +35,7 @@ export function Tabs<T extends string>({
             className={clsx(
               '-mb-px border-b-2 px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors',
               tab.id === active
-                ? 'border-brand-600 text-brand-700'
+                ? 'border-mil-400 text-brand-800'
                 : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700',
             )}
           >
@@ -50,12 +50,12 @@ export function Tabs<T extends string>({
 
 export function StatCard({ label, value, hint, icon }: { label: string; value: ReactNode; hint?: ReactNode; icon?: ReactNode }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="min-w-0 rounded-md border border-slate-200 bg-white p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-slate-500">{label}</p>
-        {icon && <span className="text-brand-600">{icon}</span>}
+        <p className="text-[13px] font-medium text-slate-500 sm:text-sm">{label}</p>
+        {icon && <span className="text-mil-500">{icon}</span>}
       </div>
-      <p className="mt-2 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 font-display text-[22px] leading-none font-bold break-words text-brand-900 tabular-nums sm:text-[28px]">{value}</p>
       {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
     </div>
   )
@@ -78,5 +78,5 @@ export function TableShell({ children }: { children: ReactNode }) {
   return <div className="overflow-x-auto">{children}</div>
 }
 
-export const th = 'px-4 py-3 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase'
-export const td = 'px-4 py-3 text-sm text-slate-700'
+export const th = 'px-4 py-3 text-left font-mono text-[11px] font-semibold tracking-[0.08em] text-slate-500 uppercase'
+export const td = 'px-4 py-3 text-sm text-slate-700 tabular-nums'

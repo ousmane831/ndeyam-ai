@@ -3,7 +3,8 @@ import { ArrowLeft, Send, Trash2, Wheat } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
-import { Alert, Badge } from '@/components/ui/Feedback'
+import { Alert } from '@/components/ui/Feedback'
+import { FormulaStatus } from '@/features/formulation/FormulaStatus'
 import { PageHeader } from '@/components/ui/Layout'
 import { ConfirmDialog, Modal } from '@/components/ui/Modal'
 import { Spinner } from '@/components/ui/Spinner'
@@ -55,7 +56,7 @@ export function FormulaPage() {
       <Link to="/formulation?onglet=formules" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"><ArrowLeft className="size-4" /> Formules</Link>
       <PageHeader
         title={f.name}
-        description={<span className="flex flex-wrap items-center gap-2">{f.mode_label} · {formatDateTime(f.created_at)} <Badge>{f.status_label}</Badge>{f.is_demo && <Badge tone="demo">DEMO</Badge>}</span>}
+        description={<span className="flex flex-wrap items-center gap-2">{f.mode_label} · {formatDateTime(f.created_at)} <FormulaStatus status={f.status} label={f.status_label} isDemo={f.is_demo} /></span>}
         actions={
           <>
             {canSubmit && <Button icon={<Send className="size-4" />} loading={review.isPending} onClick={() => review.mutate({ action: 'submit-review', text: '' })}>Demander la vérification d'un expert</Button>}

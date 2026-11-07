@@ -3,7 +3,7 @@ import { Archive, ArrowLeft, Pencil, RotateCcw, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
-import { Alert, Badge, Card } from '@/components/ui/Feedback'
+import { Alert, Badge, Card, AnimalTag } from '@/components/ui/Feedback'
 import { SelectField, TextField } from '@/components/ui/Field'
 import { DefinitionList, PageHeader, Tabs } from '@/components/ui/Layout'
 import { ConfirmDialog, Modal } from '@/components/ui/Modal'
@@ -120,7 +120,7 @@ export function AnimalDetailPage() {
         <ArrowLeft className="size-4" /> Mes animaux
       </Link>
       <PageHeader
-        title={`${a.tag_number}${a.name ? ` — ${a.name}` : ''}`}
+        title={<span className="inline-flex flex-wrap items-center gap-3"><AnimalTag size="lg">{a.tag_number}</AnimalTag>{a.name && <span>{a.name}</span>}</span>}
         description={
           <span className="flex flex-wrap items-center gap-2">
             {a.species_name} · {a.sex_label} · {formatAge(a.age_days, a.birth_date_is_estimated)}

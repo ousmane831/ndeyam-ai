@@ -136,7 +136,7 @@ export function IngredientsPage() {
       />
       {exportError && <Alert tone="error">{exportError}</Alert>}
 
-      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="relative">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
           <input type="search" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} placeholder="Nom, nom local…"
@@ -160,7 +160,7 @@ export function IngredientsPage() {
         </select>
       </div>
 
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {ingredients.isPending ? (
           <div className="p-6"><Spinner /></div>
         ) : ingredients.isError ? (

@@ -48,7 +48,7 @@ export function DashboardPage() {
     <div className="space-y-6">
       <PageHeader title={`Bonjour ${user?.first_name ?? ''}`} description={scope ? `Vue d'ensemble : ${scope}.` : undefined} />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <StatCard label="Animaux présents" value={d.animals.total} icon={<PawPrint className="size-5" />}
           hint={d.animals.total ? `${d.animals.by_sex.F} femelle(s), ${d.animals.by_sex.M} mâle(s)` : 'Aucun animal enregistré'} />
         <StatCard label="Lots actifs" value={d.groups_count} icon={<Layers className="size-5" />} />

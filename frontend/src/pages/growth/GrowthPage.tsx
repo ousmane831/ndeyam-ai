@@ -3,7 +3,7 @@ import { Scale, TrendingUp } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
-import { Alert, Card, EmptyState } from '@/components/ui/Feedback'
+import { Alert, Card, EmptyState, AnimalTag } from '@/components/ui/Feedback'
 import { SelectField, TextField } from '@/components/ui/Field'
 import { PageHeader, td, th } from '@/components/ui/Layout'
 import { Spinner } from '@/components/ui/Spinner'
@@ -101,7 +101,7 @@ function WeighingSession({ groupId, farmId }: { groupId: number | null; farmId: 
             {list.map((a) => (
               <tr key={a.id}>
                 <td className={td}>
-                  <span className="font-medium">{a.tag_number}</span> {a.name && <span className="text-slate-500">{a.name}</span>}
+                  <AnimalTag>{a.tag_number}</AnimalTag> {a.name && <span className="ml-1 text-slate-500">{a.name}</span>}
                 </td>
                 <td className={td}>{a.last_weight ? `${formatNumber(a.last_weight.weight_kg)} kg (${formatDate(a.last_weight.weighed_on)})` : '—'}</td>
                 <td className={td}>
@@ -163,8 +163,8 @@ function GroupGrowthTable({ groupId }: { groupId: number }) {
             {g.animals.map((a) => (
               <tr key={a.animal_id}>
                 <td className={td}>
-                  <Link to={`/animaux/${a.animal_id}`} className="font-medium text-brand-700 hover:underline">
-                    {a.tag_number}
+                  <Link to={`/animaux/${a.animal_id}`} className="inline-block align-middle hover:opacity-80">
+                    <AnimalTag>{a.tag_number}</AnimalTag>
                   </Link>
                 </td>
                 <td className={td}>{a.last_weight_kg ? `${formatNumber(a.last_weight_kg)} kg (${formatDate(a.last_weighed_on)})` : '—'}</td>

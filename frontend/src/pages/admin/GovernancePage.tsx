@@ -90,7 +90,7 @@ function PagedTable<T extends { id: number }>({ queryKey, fetch, columns }: {
   const [page, setPage] = useState(1)
   const data = useQuery({ queryKey: [queryKey, page], queryFn: () => fetch(page), placeholderData: keepPreviousData })
   return (
-    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
       {data.isPending ? <div className="p-6"><Spinner /></div> : data.isError ? <div className="p-4"><Alert tone="error">{data.error.message}</Alert></div> : data.data.results.length === 0 ? <EmptyState title="Aucun enregistrement" /> : (
         <>
           <div className="overflow-x-auto">

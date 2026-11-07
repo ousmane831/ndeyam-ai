@@ -219,7 +219,7 @@ function DistributionsTab({ farmId, writable }: { farmId: number | null; writabl
           <StatCard label="Coût estimé" value={formatMoney(s.estimated_cost)} hint={s.records_without_cost ? `${s.records_without_cost} distribution(s) sans coût connu` : undefined} />
         </div>
       )}
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {records.isPending ? <div className="p-6"><Spinner /></div> : records.isError ? <div className="p-4"><Alert tone="error">{records.error.message}</Alert></div> : records.data.results.length === 0 ? (
           <EmptyState title="Aucune distribution enregistrée" />
         ) : (

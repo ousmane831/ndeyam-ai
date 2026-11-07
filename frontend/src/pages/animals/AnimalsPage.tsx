@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { ImportCsvModal } from '@/components/ImportCsvModal'
 import { Button } from '@/components/ui/Button'
-import { Alert, Badge, EmptyState } from '@/components/ui/Feedback'
+import { Alert, Badge, EmptyState, AnimalTag } from '@/components/ui/Feedback'
 import { PageHeader, td, th } from '@/components/ui/Layout'
 import { Pagination } from '@/components/ui/Pagination'
 import { Spinner } from '@/components/ui/Spinner'
@@ -83,7 +83,7 @@ export function AnimalsPage() {
       />
       {exportError && <Alert tone="error">{exportError}</Alert>}
 
-      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-6">
+      <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-6">
         <div className="relative sm:col-span-2">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
           <input
@@ -133,7 +133,7 @@ export function AnimalsPage() {
         </select>
       </div>
 
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {animals.isPending ? (
           <div className="p-6">
             <Spinner />
@@ -175,8 +175,8 @@ export function AnimalsPage() {
                   {animals.data.results.map((a) => (
                     <tr key={a.id} className="hover:bg-slate-50/70">
                       <td className={td}>
-                        <Link to={`/animaux/${a.id}`} className="font-medium text-brand-700 hover:underline">
-                          {a.tag_number}
+                        <Link to={`/animaux/${a.id}`} className="inline-block align-middle hover:opacity-80">
+                          <AnimalTag>{a.tag_number}</AnimalTag>
                         </Link>
                         {a.name && <span className="ml-2 text-slate-500">{a.name}</span>}
                         {a.is_demo && <span className="ml-2"><Badge tone="demo">DEMO</Badge></span>}

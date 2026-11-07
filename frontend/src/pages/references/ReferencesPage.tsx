@@ -103,7 +103,7 @@ export function ReferencesPage() {
         description="Besoins documentés par profil d'animal. Seules les références validées par un expert sont utilisées par le moteur de formulation."
         actions={isReviewer && <Button icon={<Plus className="size-4" />} onClick={() => setCreating(true)}>Nouvelle référence</Button>}
       />
-      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2">
+      <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2">
         <select aria-label="Système" className={select} value={filters.system ?? ''} onChange={(e) => setFilters({ ...filters, system: e.target.value, page: 1 })}>
           <option value="">Tous les systèmes</option>
           {systems.data?.map((s) => <option key={s.id} value={s.id}>{s.name} {s.version}</option>)}
@@ -116,7 +116,7 @@ export function ReferencesPage() {
           <option value="REJECTED">Rejetées</option>
         </select>
       </div>
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {refs.isPending ? <div className="p-6"><Spinner /></div> : refs.isError ? <div className="p-4"><Alert tone="error">{refs.error.message}</Alert></div> : refs.data.results.length === 0 ? (
           <EmptyState icon={<BookOpen className="size-10" />} title="Aucune référence nutritionnelle">
             Les références sont saisies par les experts à partir de sources identifiées, puis validées. Tant qu'aucune référence n'est validée,

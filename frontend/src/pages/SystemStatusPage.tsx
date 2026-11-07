@@ -30,7 +30,7 @@ export function SystemStatusPage() {
           </div>
         </header>
 
-        <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <section className="rounded-md border border-slate-200 bg-white">
           <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
             <h2 className="font-medium text-slate-800">Services</h2>
             <button
@@ -102,7 +102,7 @@ function StatusRow({
   warning?: boolean
   detail: string
 }) {
-  const tone = ok ? 'bg-brand-50 text-brand-700' : warning ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
+  const tone = ok ? 'bg-brand-50 text-brand-700' : warning ? 'bg-mil-50 text-mil-700' : 'bg-red-50 text-red-700'
   const badge = ok ? 'Opérationnel' : warning ? 'Non configuré' : 'Indisponible'
   return (
     <div className="flex items-start gap-4 px-5 py-4">

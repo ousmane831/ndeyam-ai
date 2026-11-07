@@ -295,3 +295,16 @@ journal). Un test parcourt le code et échoue si une action émise n'a pas de li
 ## DT-64 — Tests isolés du dossier media/
 En configuration de test, `MEDIA_ROOT` pointe vers un dossier temporaire : aucun fichier de test ne subsiste dans
 `backend/media/` après le retour arrière de la base.
+
+## DT-65 — Identité visuelle « Indigo & Mil » par jetons
+L'identité (couleurs, polices, formes) est définie au niveau des jetons Tailwind (`index.css`) et des composants de
+base, pas page par page : les 61 écrans en héritent. Trois motifs encodent une information (tampon = statut,
+boucle = identifiant d'animal, bande tissée = signature unique). Polices : Bricolage Grotesque, Atkinson Hyperlegible
+Next (lisibilité), IBM Plex Mono. Courbes en segments droits (aucune valeur dessinée entre deux mesures).
+Référence : [identite-visuelle.md](identite-visuelle.md).
+
+## DT-66 — Assistant en bouton flottant plutôt que dans le menu
+À la demande du porteur du projet, l'assistant quitte la barre latérale (le cahier des charges l'y plaçait) pour un
+bouton flottant en bas à droite, au symbole du bélier, disponible sur tous les écrans. Le panneau reste monté : la
+conversation survit à la navigation. La vue plein écran `/assistant` est conservée pour l'historique. Une seule
+logique (`useAssistantChat`, `ChatThread`) sert aux deux vues.

@@ -3,7 +3,8 @@ import { GitCompare } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
-import { Alert, Badge, EmptyState } from '@/components/ui/Feedback'
+import { Alert, EmptyState } from '@/components/ui/Feedback'
+import { FormulaStatus } from '@/features/formulation/FormulaStatus'
 import { PageHeader, Tabs, td, th } from '@/components/ui/Layout'
 import { Pagination } from '@/components/ui/Pagination'
 import { Spinner } from '@/components/ui/Spinner'
@@ -15,9 +16,6 @@ import { formatDateTime, formatMoney } from '@/utils/format'
 
 type TabId = 'calcul' | 'manuel' | 'formules'
 
-const STATUS_TONE: Record<string, 'neutral' | 'brand' | 'warning' | 'danger'> = {
-  ESTIMATED: 'warning', VALIDATED: 'brand', REFUSED: 'danger', INFEASIBLE: 'danger', REJECTED: 'danger', PENDING_REVIEW: 'neutral', DRAFT: 'neutral',
-}
 
 function FormulaList() {
   const navigate = useNavigate()
@@ -43,7 +41,7 @@ function FormulaList() {
         <Button variant="secondary" icon={<GitCompare className="size-4" />} disabled={selected.length < 2}
           onClick={() => navigate(`/formulation/comparer?ids=${selected.join(',')}`)}>Comparer ({selected.length})</Button>
       </div>
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {list.isPending ? <div className="p-6"><Spinner /></div> : list.isError ? <div className="p-4"><Alert tone="error">{list.error.message}</Alert></div> : list.data.results.length === 0 ? (
           <EmptyState title="Aucune formule enregistrée">Calculez une formule ou saisissez la ration que vous utilisez.</EmptyState>
         ) : (
@@ -55,9 +53,9 @@ function FormulaList() {
                   {list.data.results.map((f) => (
                     <tr key={f.id} className="hover:bg-slate-50/70">
                       <td className={td}><input type="checkbox" aria-label={`Comparer ${f.name}`} checked={selected.includes(f.id)} onChange={() => toggle(f.id)} className="size-4 accent-brand-600" /></td>
-                      <td className={td}><Link to={`/formulation/${f.id}`} className="font-medium text-brand-700 hover:underline">{f.name}</Link>{f.is_demo && <span className="ml-2"><Badge tone="demo">DEMO</Badge></span>}</td>
+                      <td className={td}><Link to={`/formulation/${f.id}`} className="font-medium text-brand-700 hover:underline">{f.name}</Link></td>
                       <td className={td}>{f.mode_label}</td>
-                      <td className={td}><Badge tone={STATUS_TONE[f.status]}>{f.status_label}</Badge></td>
+                      <td className={td}><FormulaStatus status={f.status} label={f.status_label} isDemo={f.is_demo} /></td>
                       <td className={td}>{formatMoney(f.cost_per_day, f.currency)}</td>
                       <td className={td}>{formatDateTime(f.created_at)}</td>
                     </tr>

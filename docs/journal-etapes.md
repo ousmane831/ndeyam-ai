@@ -406,3 +406,26 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
 |---|---|
 | pytest / Vitest | 455 / 75 réussis |
 | Ruff, `tsc`, oxlint, build, migrations, OpenAPI | aucun problème |
+
+## Identité visuelle (07/11/2026) ✅
+
+- Recherche d'inspiration (projets agritech et élevage, identités agricoles éditoriales, textile sénégalais), puis
+  planche de trois pistes ; retenue : « Indigo & Mil », avec les tampons de statut et les boucles d'identification.
+- Mise en œuvre par jetons : palette, polices, composants de base, logo (tête de bélier Ladoum), favicon, menu,
+  écran de connexion, tampons, boucles, graphiques.
+- Défauts trouvés en revue visuelle et corrigés : logo illisible en petite taille (redessiné), axes tronqués et
+  graduations irrégulières, tampons trop longs, indicateurs empilés sur mobile, couleurs d'avertissement
+  hors palette ; courbes lissées remplacées par des segments droits (aucune valeur inventée entre deux mesures).
+- Vérifications : Vitest 77 (2 nouveaux), `tsc`, oxlint, build ; parcours 200/200 ; interface 345/345 (ordinateur,
+  tablette, téléphone).
+
+## Assistant flottant (07/11/2026) ✅
+
+- L'assistant quitte le menu latéral : bouton flottant en bas à droite (symbole du bélier), panneau de discussion
+  (plein écran sur téléphone), Échap pour fermer, conversation conservée entre les pages, lien vers la vue plein
+  écran et l'historique.
+- Logique commune extraite (`useAssistantChat`, `ChatThread`) pour la page et le panneau.
+- Défauts trouvés en revue et corrigés : focus perdu à l'ouverture quand l'assistant n'est pas configuré (désormais
+  sur « Fermer »), accueil coupé par un défilement inutile, numéros de boucle coupés sur mobile.
+- Vérifications : Vitest 80 (3 nouveaux), lint, build ; navigateur 18/18 (panneau) et 345/345 (application) ;
+  parcours 200/200.

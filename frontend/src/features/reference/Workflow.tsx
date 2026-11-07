@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Alert, Badge } from '@/components/ui/Feedback'
+import { Alert, Stamp, type StampTone } from '@/components/ui/Feedback'
 import { Modal } from '@/components/ui/Modal'
 import type { ValidationStatus, WorkflowAction } from '@/types/nutrition'
 
-const STATUS: Record<ValidationStatus, { label: string; tone: 'neutral' | 'warning' | 'brand' | 'danger' }> = {
+const STATUS: Record<ValidationStatus, { label: string; tone: StampTone }> = {
   DRAFT: { label: 'Brouillon', tone: 'neutral' },
-  PENDING: { label: 'En attente de validation', tone: 'warning' },
-  VALIDATED: { label: 'Validé', tone: 'brand' },
+  PENDING: { label: 'En attente de validation', tone: 'pending' },
+  VALIDATED: { label: 'Validé', tone: 'ok' },
   REJECTED: { label: 'Rejeté', tone: 'danger' },
 }
 
 export function ValidationBadge({ status, isDemo }: { status: ValidationStatus; isDemo?: boolean }) {
   return (
     <span className="inline-flex flex-wrap gap-1">
-      <Badge tone={STATUS[status].tone}>{STATUS[status].label}</Badge>
-      {isDemo && <Badge tone="demo">DEMO</Badge>}
+      <Stamp tone={STATUS[status].tone}>{STATUS[status].label}</Stamp>
+      {isDemo && <Stamp tone="demo">DEMO</Stamp>}
     </span>
   )
 }

@@ -70,7 +70,7 @@ function NutrientTable({ nutrients }: { nutrients: NutrientSupply[] }) {
               <td className={td}>{n.requirements?.length ? n.requirements.map((r, i) => <p key={i}>{bounds(r.min, r.target, r.max)} {r.unit}</p>) : '—'}</td>
               <td className={td}>
                 {n.requirements?.map((r, i) => <Badge key={i} tone={CHECK[r.status].tone}>{CHECK[r.status].label}</Badge>)}
-                {!n.complete && <p className="mt-1 text-xs text-amber-700">Valeur inconnue pour : {n.missing_for.join(', ')}</p>}
+                {!n.complete && <p className="mt-1 text-xs text-mil-700">Valeur inconnue pour : {n.missing_for.join(', ')}</p>}
               </td>
             </tr>
           ))}
@@ -97,7 +97,7 @@ export function FormulaResult({ formula }: { formula: Formula }) {
             ['Coût / animal / j', formula.cost_per_day ? formatMoney(formula.cost_per_day, formula.currency) : 'Inconnu'],
             ['Coût / kg brut', formula.cost_per_kg_as_fed ? formatMoney(formula.cost_per_kg_as_fed, formula.currency) : 'Inconnu'],
           ].map(([label, value]) => (
-            <div key={label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div key={label} className="rounded-md border border-slate-200 bg-white p-4">
               <p className="text-xs font-medium text-slate-500 uppercase">{label}</p>
               <p className="mt-1 text-lg font-semibold text-slate-900">{value}</p>
             </div>

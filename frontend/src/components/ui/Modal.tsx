@@ -46,7 +46,7 @@ export function Modal({
         aria-labelledby={titleId}
         tabIndex={-1}
         onMouseDown={(event) => event.stopPropagation()}
-        className="w-full max-w-lg rounded-xl bg-white shadow-xl outline-none"
+        className="w-full max-w-lg rounded-md bg-white shadow-xl outline-none"
       >
         <header className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <h2 id={titleId} className="font-semibold text-slate-800">

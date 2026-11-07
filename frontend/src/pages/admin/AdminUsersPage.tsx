@@ -178,7 +178,7 @@ export function AdminUsersPage() {
         </div>
       </Card>
 
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {update.isError && <Alert tone="error" className="m-4">{update.error.message}</Alert>}
         {users.isPending ? (
           <div className="p-6">

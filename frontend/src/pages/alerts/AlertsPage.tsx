@@ -51,7 +51,7 @@ export function AlertsPage() {
       )}
       {evaluate.isError && <Notice tone="error">{evaluate.error.message}</Notice>}
 
-      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-3">
+      <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-3">
         <select aria-label="Statut" className={select} value={filters.status ?? ''} onChange={(e) => set('status', e.target.value)}>
           <option value="">Ouvertes</option>
           <option value="RESOLVED">Résolues</option>

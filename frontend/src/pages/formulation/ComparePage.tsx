@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router'
-import { Alert, Badge, Card } from '@/components/ui/Feedback'
+import { Alert, Card } from '@/components/ui/Feedback'
+import { FormulaStatus } from '@/features/formulation/FormulaStatus'
 import { PageHeader, td, th } from '@/components/ui/Layout'
 import { Spinner } from '@/components/ui/Spinner'
 import { formulaService } from '@/services/formulas'
@@ -32,7 +33,7 @@ export function ComparePage() {
           <table className="w-full">
             <thead className="border-y border-slate-200 bg-slate-50"><tr><th className={th} />{formulas.map((f) => <th key={f.id} className={th}><Link to={`/formulation/${f.id}`} className="text-brand-700 normal-case hover:underline">{f.name}</Link></th>)}</tr></thead>
             <tbody className="divide-y divide-slate-100">
-              {row('Statut', (f) => <Badge>{f.status_label}</Badge>)}
+              {row('Statut', (f) => <FormulaStatus status={f.status} label={f.status_label} isDemo={f.is_demo} />)}
               {row('Mode', (f) => f.mode_label)}
               {row('Coût / animal / j', (f) => formatMoney(f.cost_per_day, f.currency))}
               {row('Coût / kg brut', (f) => formatMoney(f.cost_per_kg_as_fed, f.currency))}

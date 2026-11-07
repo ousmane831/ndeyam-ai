@@ -6,10 +6,10 @@ type Variant = 'primary' | 'secondary' | 'danger' | 'ghost'
 type Size = 'sm' | 'md'
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm',
-  secondary: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50',
-  danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
-  ghost: 'text-slate-600 hover:bg-slate-100',
+  primary: 'bg-brand-800 text-white hover:bg-brand-700',
+  secondary: 'bg-white text-brand-800 ring-1 ring-inset ring-brand-300 hover:bg-brand-50 hover:ring-brand-400',
+  danger: 'bg-red-700 text-white hover:bg-red-800',
+  ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
 }
 
 const SIZES: Record<Size, string> = {
@@ -41,7 +41,7 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={clsx(
-        'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60',
+        'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60',
         VARIANTS[variant],
         SIZES[size],
         className,

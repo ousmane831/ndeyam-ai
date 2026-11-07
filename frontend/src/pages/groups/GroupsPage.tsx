@@ -131,7 +131,7 @@ export function GroupsPage() {
           )
         }
       />
-      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {groups.isPending ? (
           <div className="p-6">
             <Spinner />

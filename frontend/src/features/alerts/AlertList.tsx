@@ -11,7 +11,7 @@ import { formatDate, formatDateTime } from '@/utils/format'
 
 const SEVERITY = {
   INFO: { icon: <Info className="size-5" />, tone: 'text-sky-600 bg-sky-50' },
-  WARNING: { icon: <AlertTriangle className="size-5" />, tone: 'text-amber-600 bg-amber-50' },
+  WARNING: { icon: <AlertTriangle className="size-5" />, tone: 'text-mil-600 bg-mil-50' },
   CRITICAL: { icon: <XCircle className="size-5" />, tone: 'text-red-600 bg-red-50' },
 } as const
 

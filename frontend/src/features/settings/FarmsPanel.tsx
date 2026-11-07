@@ -134,7 +134,7 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
                   <p className="truncate text-xs text-slate-500">{member.user_email}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
-                  <Badge tone={member.role === 'OWNER' ? 'brand' : 'neutral'}>{member.role_label}</Badge>
+                  <Badge tone={member.role === 'OWNER' ? 'indigo' : 'neutral'}>{member.role_label}</Badge>
                   {canManage && member.role !== 'OWNER' && (
                     <button
                       type="button"
@@ -241,7 +241,7 @@ export function FarmsPanel() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {farm.my_role_label && <Badge tone="brand">{farm.my_role_label}</Badge>}
+                    {farm.my_role_label && <Badge tone="indigo">{farm.my_role_label}</Badge>}
                     <Button size="sm" variant="ghost" icon={<Users className="size-4" />} onClick={() => setMembersOf(farm)}>
                       Membres
                     </Button>

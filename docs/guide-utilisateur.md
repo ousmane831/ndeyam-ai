@@ -31,7 +31,6 @@ envoyé par e-mail.
 | Alertes et rappels | Alertes ouvertes, résolues ou ignorées |
 | Références nutritionnelles | Besoins documentés utilisés par le moteur (consultation) |
 | Base documentaire | Recherche dans les documents techniques validés |
-| Assistant Ndeyam AI | Questions en langage courant sur vos données, vos formules et la documentation |
 | Traçabilité des données | Experts et administrateurs : sources, validations, imports, journal |
 | Paramètres | Profil, exploitations et membres, réglages des alertes, mot de passe |
 
@@ -175,7 +174,10 @@ rapports). Chaque résultat indique le document, les pages et la source. Vous po
 
 ## 12. Assistant NDEYAM AI
 
-**Assistant Ndeyam AI** : posez vos questions en français, par exemple « Quel est le poids de SN-001 ? »,
+**Assistant Ndeyam AI** : cliquez sur le **bouton à tête de bélier, en bas à droite** de chaque écran. Un panneau de
+discussion s'ouvre (en plein écran sur téléphone) ; la conversation reste ouverte quand vous changez de page.
+Touche Échap ou ✕ pour le refermer ; l'icône d'agrandissement ouvre la vue plein écran avec l'historique de vos
+conversations. Posez vos questions en français, par exemple « Quel est le poids de SN-001 ? »,
 « Pourquoi ma formule a-t-elle été refusée ? », « Combien ont coûté les rations ce mois-ci ? ».
 
 - L'assistant consulte **vos** données (uniquement les exploitations auxquelles vous avez accès), les résultats du
