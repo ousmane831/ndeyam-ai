@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Download, PawPrint, Plus, Search, Upload } from 'lucide-react'
+import { ChevronDown, Download, PawPrint, Plus, Search, Upload } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { ImportCsvModal } from '@/components/ImportCsvModal'
@@ -46,6 +46,8 @@ export function AnimalsPage() {
   const groups = useQuery({ queryKey: ['groups', selectedFarmId], queryFn: () => groupService.list(selectedFarmId) })
 
   const setFilter = (key: keyof AnimalFilters, value: string) => setFilters((f) => ({ ...f, [key]: value, page: 1 }))
+  const [showFilters, setShowFilters] = useState(false)
+  const activeFilters = [filters.species, filters.breed, filters.sex, filters.group, filters.status].filter(Boolean).length
   const hasFilters = Boolean(filters.search || filters.species || filters.breed || filters.sex || filters.group || filters.status)
   const canCreate = writableFarms.length > 0
 
@@ -85,7 +87,7 @@ export function AnimalsPage() {
 
       <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-6">
         <div className="relative sm:col-span-2">
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500" />
           <input
             type="search"
             value={searchInput}
@@ -95,42 +97,49 @@ export function AnimalsPage() {
             className="block w-full rounded-lg border border-slate-300 py-2.5 pr-3 pl-9 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none"
           />
         </div>
-        <select aria-label="Espèce" className={select} value={filters.species ?? ''} onChange={(e) => setFilter('species', e.target.value)}>
-          <option value="">Toutes espèces</option>
-          {species.data?.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-        <select aria-label="Race" className={select} value={filters.breed ?? ''} onChange={(e) => setFilter('breed', e.target.value)}>
-          <option value="">Toutes races</option>
-          {breeds.data?.map((b) => (
-            <option key={b.id} value={b.id}>
-              {b.name}
-            </option>
-          ))}
-        </select>
-        <select aria-label="Sexe" className={select} value={filters.sex ?? ''} onChange={(e) => setFilter('sex', e.target.value)}>
-          <option value="">Mâles et femelles</option>
-          <option value="M">Mâles</option>
-          <option value="F">Femelles</option>
-        </select>
-        <select aria-label="Lot" className={select} value={filters.group ?? ''} onChange={(e) => setFilter('group', e.target.value)}>
-          <option value="">Tous les lots</option>
-          {groups.data?.results.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </select>
-        <select aria-label="Statut" className={`${select} lg:col-start-6`} value={filters.status ?? ''} onChange={(e) => setFilter('status', e.target.value)}>
-          {STATUS_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
+        <button type="button" onClick={() => setShowFilters((v) => !v)} aria-expanded={showFilters}
+          className="inline-flex min-h-11 items-center justify-between rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 sm:hidden">
+          Filtres{activeFilters ? ` (${activeFilters})` : ''}
+          <ChevronDown className={showFilters ? 'size-4 rotate-180 transition-transform' : 'size-4 transition-transform'} aria-hidden />
+        </button>
+        <div className={showFilters ? 'grid gap-3 sm:contents' : 'hidden sm:contents'}>
+          <select aria-label="Espèce" className={select} value={filters.species ?? ''} onChange={(e) => setFilter('species', e.target.value)}>
+            <option value="">Toutes espèces</option>
+            {species.data?.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+          <select aria-label="Race" className={select} value={filters.breed ?? ''} onChange={(e) => setFilter('breed', e.target.value)}>
+            <option value="">Toutes races</option>
+            {breeds.data?.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+          <select aria-label="Sexe" className={select} value={filters.sex ?? ''} onChange={(e) => setFilter('sex', e.target.value)}>
+            <option value="">Mâles et femelles</option>
+            <option value="M">Mâles</option>
+            <option value="F">Femelles</option>
+          </select>
+          <select aria-label="Lot" className={select} value={filters.group ?? ''} onChange={(e) => setFilter('group', e.target.value)}>
+            <option value="">Tous les lots</option>
+            {groups.data?.results.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.name}
+              </option>
+            ))}
+          </select>
+          <select aria-label="Statut" className={`${select} lg:col-start-6`} value={filters.status ?? ''} onChange={(e) => setFilter('status', e.target.value)}>
+            {STATUS_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <section className="overflow-hidden rounded-md border border-slate-200 bg-white">

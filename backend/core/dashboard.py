@@ -104,6 +104,8 @@ class DashboardView(APIView):
                             "id": w.pk,
                             "animal_id": w.animal_id,
                             "animal": str(w.animal),
+                            "tag_number": w.animal.tag_number,
+                            "animal_name": w.animal.name,
                             "weighed_on": w.weighed_on,
                             "weight_kg": str(w.weight_kg),
                         }
@@ -120,7 +122,10 @@ class DashboardView(APIView):
                         }
                         for r in trend
                     ],
-                    "note": "Poids moyen des pesées enregistrées chaque mois (tous animaux confondus).",
+                    "note": (
+                        "Moyenne des pesées de chaque mois, tous animaux confondus : les animaux pesés "
+                        "changent d'un mois à l'autre, ce n'est pas la courbe d'un animal."
+                    ),
                 },
                 "rations": {
                     "active_count": active_rations.count(),
@@ -160,7 +165,8 @@ class DashboardView(APIView):
                         "action": e.action,
                         "label": action_label(e.action),
                         "object": e.object_repr,
-                        "actor": e.actor.email if e.actor else None,
+                        # Nom affiché plutôt que l'adresse e-mail (repli sur l'e-mail si aucun nom).
+                        "actor": str(e.actor) if e.actor else None,
                         "created_at": e.created_at,
                     }
                     for e in activity

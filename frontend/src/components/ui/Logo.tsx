@@ -32,7 +32,7 @@ export function Wordmark({ tone = 'dark', size = 'md' }: { tone?: 'dark' | 'ligh
         >
           NDEYAM
         </span>
-        <span className={clsx('font-mono text-xs font-semibold', tone === 'light' ? 'text-mil-300' : 'text-mil-600')}>AI</span>
+        <span className={clsx('font-mono text-xs font-semibold', tone === 'light' ? 'text-mil-300' : 'text-mil-700')}>AI</span>
       </span>
     </span>
   )

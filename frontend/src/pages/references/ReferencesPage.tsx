@@ -20,6 +20,7 @@ const select = 'rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm'
 
 function range(min: string | null, max: string | null, unit: string) {
   if (min === null && max === null) return '—'
+  if (min !== null && max !== null && Number(min) === Number(max)) return `${formatNumber(min, 3)} ${unit}`
   return `${min !== null ? formatNumber(min, 3) : '…'} – ${max !== null ? formatNumber(max, 3) : '…'} ${unit}`
 }
 

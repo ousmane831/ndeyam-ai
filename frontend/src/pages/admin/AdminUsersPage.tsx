@@ -142,7 +142,7 @@ export function AdminUsersPage() {
       <Card>
         <div className="grid gap-3 sm:grid-cols-[1fr_180px_180px]">
           <div className="relative">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500" />
             <input
               type="search"
               value={searchInput}

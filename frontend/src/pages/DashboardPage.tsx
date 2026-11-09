@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { Bell, Layers, PawPrint, Scale, Wallet } from 'lucide-react'
+import { Layers, PawPrint, Scale, Wallet } from 'lucide-react'
 import { Link } from 'react-router'
-import { DistributionChart, WeightTrendChart } from '@/components/LazyChart'
-import { Alert, Badge, Card, EmptyState } from '@/components/ui/Feedback'
+import { WeightTrendChart } from '@/components/LazyChart'
+import { Alert, AnimalTag, Card, EmptyState } from '@/components/ui/Feedback'
 import { PageHeader, StatCard } from '@/components/ui/Layout'
 import { Spinner } from '@/components/ui/Spinner'
+import { TodayTasks } from '@/features/dashboard/TodayTasks'
 import { useAuth } from '@/hooks/useAuth'
 import { useFarm } from '@/hooks/useFarm'
 import { dashboardService } from '@/services/alerts'
@@ -16,7 +17,9 @@ export function DashboardPage() {
   const { user } = useAuth()
   const { selectedFarmId, farms } = useFarm()
   const dashboard = useQuery({ queryKey: ['dashboard', selectedFarmId], queryFn: () => dashboardService.get(selectedFarmId) })
-  const health = useQuery({ queryKey: ['health'], queryFn: fetchHealth, retry: false })
+  const isAdmin = Boolean(user?.is_platform_admin)
+  // État des services : information d'administration, inutile à un éleveur.
+  const health = useQuery({ queryKey: ['health'], queryFn: fetchHealth, retry: false, enabled: isAdmin })
 
   const scope = selectedFarmId ? farms.find((f) => f.id === selectedFarmId)?.name : farms.length > 1 ? 'toutes vos exploitations' : farms[0]?.name
 
@@ -48,6 +51,8 @@ export function DashboardPage() {
     <div className="space-y-6">
       <PageHeader title={`Bonjour ${user?.first_name ?? ''}`} description={scope ? `Vue d'ensemble : ${scope}.` : undefined} />
 
+      <TodayTasks farmId={selectedFarmId} />
+
       <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <StatCard label="Animaux présents" value={d.animals.total} icon={<PawPrint className="size-5" />}
           hint={d.animals.total ? `${d.animals.by_sex.F} femelle(s), ${d.animals.by_sex.M} mâle(s)` : 'Aucun animal enregistré'} />
@@ -69,17 +74,27 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card title="Répartition des animaux">
+        <Card title="Troupeau">
           {d.animals.total === 0 ? (
             <EmptyState title="Aucun animal">
               <Link to="/animaux/nouveau" className="text-brand-700 hover:underline">Ajouter un animal</Link>
             </EmptyState>
           ) : (
             <>
-              <DistributionChart data={d.animals.by_category} />
-              <p className="mt-2 text-xs text-slate-500">
-                Par catégorie · espèces : {d.animals.by_species.map((s) => `${s.name} (${s.count})`).join(', ')}
-              </p>
+              <ul className="space-y-3">
+                {d.animals.by_category.map((c) => (
+                  <li key={c.name}>
+                    <div className="flex justify-between gap-3 text-sm">
+                      <span className="text-slate-700">{c.name}</span>
+                      <span className="font-semibold text-slate-900 tabular-nums">{c.count}</span>
+                    </div>
+                    <div className="mt-1 h-1.5 rounded-full bg-slate-100" aria-hidden>
+                      <div className="h-full rounded-full bg-brand-600" style={{ width: `${Math.max(4, (c.count / d.animals.total) * 100)}%` }} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-sm text-slate-500">Espèces : {d.animals.by_species.map((s) => `${s.name} (${s.count})`).join(', ')}</p>
             </>
           )}
         </Card>
@@ -89,21 +104,24 @@ export function DashboardPage() {
           ) : (
             <>
               <WeightTrendChart points={d.weight_trend.points} />
-              <p className="mt-2 text-xs text-slate-500">{d.weight_trend.note}</p>
+              <p className="mt-2 text-sm text-slate-500">{d.weight_trend.note}</p>
             </>
           )}
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Dernières pesées" actions={<Link to="/suivi-croissance" className="text-sm font-medium text-brand-700 hover:underline">Suivi</Link>}>
           {d.weighings.latest.length === 0 ? (
             <EmptyState title="Aucune pesée" />
           ) : (
             <ul className="divide-y divide-slate-100 text-sm">
               {d.weighings.latest.map((w) => (
-                <li key={w.id} className="flex justify-between gap-2 py-2 first:pt-0">
-                  <Link to={`/animaux/${w.animal_id}`} className="truncate text-brand-700 hover:underline">{w.animal}</Link>
+                <li key={w.id} className="flex items-center justify-between gap-2 py-2 first:pt-0">
+                  <Link to={`/animaux/${w.animal_id}`} className="flex min-w-0 items-center gap-2 hover:opacity-80">
+                    {w.tag_number ? <AnimalTag>{w.tag_number}</AnimalTag> : <span className="text-brand-700">{w.animal}</span>}
+                    {w.animal_name && <span className="truncate text-slate-600">{w.animal_name}</span>}
+                  </Link>
                   <span className="shrink-0 text-slate-600">{formatNumber(w.weight_kg)} kg · {formatDate(w.weighed_on)}</span>
                 </li>
               ))}
@@ -112,7 +130,10 @@ export function DashboardPage() {
         </Card>
         <Card title="Rations en cours">
           {d.rations.active_count === 0 ? (
-            <EmptyState title="Aucune ration en cours" />
+            <EmptyState title="Aucune ration en cours">
+              Une ration se crée à partir d'une formule validée par un expert.{' '}
+              <Link to="/rations" className="font-semibold text-brand-700 hover:underline">Voir les rations</Link>
+            </EmptyState>
           ) : (
             <ul className="divide-y divide-slate-100 text-sm">
               {d.rations.active.map((r) => (
@@ -124,27 +145,10 @@ export function DashboardPage() {
             </ul>
           )}
         </Card>
-        <Card title="Alertes" actions={<Link to="/alertes" className="text-sm font-medium text-brand-700 hover:underline">Tout voir</Link>}>
-          {d.alerts.open === 0 ? (
-            <EmptyState icon={<Bell className="size-8" />} title="Aucune alerte ouverte" />
-          ) : (
-            <ul className="space-y-2 text-sm">
-              {d.alerts.latest.map((a) => (
-                <li key={a.id} className="flex items-start gap-2">
-                  <Badge tone={a.severity === 'INFO' ? 'neutral' : a.severity === 'WARNING' ? 'warning' : 'danger'}>
-                    {a.severity === 'INFO' ? 'Info' : a.severity === 'WARNING' ? 'Attention' : 'Important'}
-                  </Badge>
-                  <span className="text-slate-700">{a.title}</span>
-                </li>
-              ))}
-              {d.alerts.open > d.alerts.latest.length && <li className="text-xs text-slate-500">… et {d.alerts.open - d.alerts.latest.length} autre(s).</li>}
-            </ul>
-          )}
-        </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card title="Activités récentes" className="lg:col-span-2">
+      <div className={isAdmin ? 'grid gap-6 lg:grid-cols-3' : ''}>
+        <Card title="Activités récentes" className={isAdmin ? 'lg:col-span-2' : undefined}>
           {d.recent_activity.length === 0 ? (
             <EmptyState title="Aucune activité enregistrée" />
           ) : (
@@ -153,7 +157,7 @@ export function DashboardPage() {
                 <li key={e.id} className="flex flex-wrap justify-between gap-2 py-2 first:pt-0">
                   <span className="text-slate-700">
                     <span className="font-medium">{e.label}</span>
-                    {e.object && ` — ${e.object}`}
+                    {e.object && <span className="text-slate-600"> · {e.object}</span>}
                   </span>
                   <span className="text-xs text-slate-500">{e.actor ?? '—'} · {formatDateTime(e.created_at)}</span>
                 </li>
@@ -161,6 +165,7 @@ export function DashboardPage() {
             </ul>
           )}
         </Card>
+        {isAdmin && (
         <Card title="Services">
           {health.isPending ? (
             <Spinner />
@@ -176,6 +181,7 @@ export function DashboardPage() {
             </ul>
           )}
         </Card>
+        )}
       </div>
     </div>
   )

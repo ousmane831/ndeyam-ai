@@ -72,7 +72,7 @@ function SourcesTab() {
                   <p className="font-medium text-slate-800">{s.title} {s.year && `(${s.year})`} {s.is_demo && <Badge tone="demo">DEMO</Badge>}</p>
                   <p className="text-xs text-slate-500">{[s.source_type_label, s.authors, s.publisher, s.identifier].filter(Boolean).join(' · ')}</p>
                 </div>
-                <button type="button" onClick={() => removal.mutate(s.id)} className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label={`Supprimer ${s.title}`}><Trash2 className="size-4" /></button>
+                <button type="button" onClick={() => removal.mutate(s.id)} className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={`Supprimer ${s.title}`}><Trash2 className="size-4" /></button>
               </li>
             ))}
           </ul>
@@ -145,7 +145,7 @@ export function GovernancePage() {
       {tab === 'journal' && (
         <PagedTable queryKey="activity-logs" fetch={(page) => governanceService.activity({ page })} columns={[
           { label: 'Date', render: (r) => formatDateTime(r.created_at) },
-          { label: 'Action', render: (r) => <span>{r.action_label}<span className="block font-mono text-xs text-slate-400">{r.action}</span></span> },
+          { label: 'Action', render: (r) => <span>{r.action_label}<span className="block font-mono text-xs text-slate-500">{r.action}</span></span> },
           { label: 'Objet', render: (r) => r.object_repr || '—' },
           { label: 'Exploitation', render: (r) => r.farm_name ?? '—' },
           { label: 'Utilisateur', render: (r) => r.actor_email ?? '—' },

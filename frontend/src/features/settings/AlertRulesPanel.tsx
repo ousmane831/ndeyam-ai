@@ -51,7 +51,7 @@ function RuleRow({ def, farmId }: { def: AlertRuleDefinition; farmId: number }) 
           <p className="text-sm text-slate-500">{def.description}</p>
         </div>
         <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-          <input type="checkbox" className="size-4 accent-brand-600" checked={isActive} onChange={(e) => setActive(e.target.checked)} />
+          <input type="checkbox" className="size-5 accent-brand-700" checked={isActive} onChange={(e) => setActive(e.target.checked)} />
           Activée
         </label>
       </div>

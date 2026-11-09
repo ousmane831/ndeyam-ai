@@ -83,6 +83,34 @@
   table {
     font-variant-numeric: tabular-nums;
   }
+  /* Pas de mot isolé en fin de paragraphe. */
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
+  /* Surfaces du navigateur aux couleurs de la marque. */
+  ::selection {
+    background: var(--color-mil-200);
+    color: var(--color-brand-900);
+  }
+  input,
+  textarea {
+    caret-color: var(--color-brand-700);
+  }
+  /* Textes d'exemple lisibles (contraste ≥ 4,5:1), y compris dans les champs sans classe dédiée. */
+  ::placeholder {
+    color: var(--color-slate-500);
+    opacity: 1;
+  }
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: var(--color-brand-700);
+  }
+  html {
+    scrollbar-color: var(--color-slate-300) transparent;
+  }
 }
 
 @layer components {

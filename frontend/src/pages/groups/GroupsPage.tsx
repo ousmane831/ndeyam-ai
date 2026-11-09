@@ -95,7 +95,7 @@ function GroupModal({ group, open, onClose }: { group?: AnimalGroup; open: boole
         />
         <TextField label="Description" {...register('description')} />
         <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-          <input type="checkbox" className="size-4 accent-brand-600" {...register('is_active')} />
+          <input type="checkbox" className="size-5 accent-brand-700" {...register('is_active')} />
           Lot actif
         </label>
       </form>
@@ -173,10 +173,10 @@ export function GroupsPage() {
                     <td className={`${td} text-right whitespace-nowrap`}>
                       {canWrite(g.farm) && (
                         <>
-                          <button type="button" onClick={() => setEditing(g)} className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label={`Modifier ${g.name}`}>
+                          <button type="button" onClick={() => setEditing(g)} className="rounded-md p-2.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700" aria-label={`Modifier ${g.name}`}>
                             <Pencil className="size-4" />
                           </button>
-                          <button type="button" onClick={() => setToDelete(g)} className="rounded p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600" aria-label={`Supprimer ${g.name}`}>
+                          <button type="button" onClick={() => setToDelete(g)} className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600" aria-label={`Supprimer ${g.name}`}>
                             <Trash2 className="size-4" />
                           </button>
                         </>

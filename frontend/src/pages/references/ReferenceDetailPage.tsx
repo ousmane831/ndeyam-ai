@@ -114,7 +114,7 @@ function InclusionCard({ reference, isReviewer }: { reference: NutritionalRefere
                 {isReviewer && (
                   <div className="flex items-start gap-2">
                     <WorkflowActions status={c.status} canSubmit isReviewer onAction={(a, comment) => inclusionService.act(c.id, a, comment).then(refresh)} />
-                    <button type="button" onClick={() => removal.mutate(c.id)} className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label="Supprimer la contrainte"><Trash2 className="size-4" /></button>
+                    <button type="button" onClick={() => removal.mutate(c.id)} className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label="Supprimer la contrainte"><Trash2 className="size-4" /></button>
                   </div>
                 )}
               </li>
@@ -158,7 +158,8 @@ export function ReferenceDetailPage() {
   if (reference.isPending) return <Spinner />
   if (reference.isError) return <Alert tone="error">{reference.error.message}</Alert>
   const r = reference.data
-  const bound = (a: string | null, b: string | null, unit: string) => (a === null && b === null ? 'Non borné' : `${a ?? '…'} – ${b ?? '…'} ${unit}`)
+  const bound = (a: string | null, b: string | null, unit: string) =>
+    a === null && b === null ? 'Non borné' : a !== null && b !== null && Number(a) === Number(b) ? `${a} ${unit}` : `${a ?? '…'} – ${b ?? '…'} ${unit}`
 
   return (
     <div className="space-y-6">
@@ -201,7 +202,7 @@ export function ReferenceDetailPage() {
                       <td className={td}>{q.target_value !== null ? formatNumber(q.target_value, 4) : '—'}</td>
                       <td className={td}>{q.max_value !== null ? formatNumber(q.max_value, 4) : '—'}</td>
                       <td className={td}>{q.unit_label}</td>
-                      {isReviewer && <td className={`${td} text-right`}><button type="button" onClick={() => removeReq.mutate(q.id)} className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label={`Supprimer le besoin ${q.nutrient_code}`}><Trash2 className="size-4" /></button></td>}
+                      {isReviewer && <td className={`${td} text-right`}><button type="button" onClick={() => removeReq.mutate(q.id)} className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={`Supprimer le besoin ${q.nutrient_code}`}><Trash2 className="size-4" /></button></td>}
                     </tr>
                   ))}
                 </tbody>

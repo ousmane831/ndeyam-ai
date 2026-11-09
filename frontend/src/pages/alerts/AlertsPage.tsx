@@ -1,6 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { RefreshCw } from 'lucide-react'
 import { useState } from 'react'
+import { useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert as Notice, Card } from '@/components/ui/Feedback'
 import { PageHeader } from '@/components/ui/Layout'
@@ -17,7 +18,8 @@ export function AlertsPage() {
   const queryClient = useQueryClient()
   const { user } = useAuth()
   const { selectedFarmId, canWrite, writableFarms } = useFarm()
-  const [filters, setFilters] = useState<AlertFilters>({ page: 1 })
+  const [params] = useSearchParams()
+  const [filters, setFilters] = useState<AlertFilters>({ page: 1, alert_type: params.get('type') ?? undefined })
   const effective = { ...filters, farm: selectedFarmId }
   const alerts = useQuery({ queryKey: ['alerts', effective], queryFn: () => alertService.list(effective), placeholderData: keepPreviousData })
 

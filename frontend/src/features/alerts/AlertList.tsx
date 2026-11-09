@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { AlertTriangle, Bell, CheckCircle2, Eye, Info, XCircle } from 'lucide-react'
+import { AlertTriangle, Bell, CheckCircle2, Eye, Info, Scale, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/Button'
@@ -10,8 +10,8 @@ import type { Alert } from '@/types/alert'
 import { formatDate, formatDateTime } from '@/utils/format'
 
 const SEVERITY = {
-  INFO: { icon: <Info className="size-5" />, tone: 'text-sky-600 bg-sky-50' },
-  WARNING: { icon: <AlertTriangle className="size-5" />, tone: 'text-mil-600 bg-mil-50' },
+  INFO: { icon: <Info className="size-5" />, tone: 'text-brand-700 bg-brand-50' },
+  WARNING: { icon: <AlertTriangle className="size-5" />, tone: 'text-mil-700 bg-mil-100' },
   CRITICAL: { icon: <XCircle className="size-5" />, tone: 'text-red-600 bg-red-50' },
 } as const
 
@@ -65,7 +65,7 @@ export function AlertList({ alerts, canAct, emptyTitle = 'Aucune alerte' }: { al
                   {a.status !== 'OPEN' && <Badge tone="neutral">{a.status_label}</Badge>}
                 </div>
                 <p className="mt-1 text-sm text-slate-600">{a.message}</p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs text-slate-500">
                   {a.farm_name && `${a.farm_name} · `}
                   {formatDateTime(a.created_at)}
                   {a.due_date && ` · échéance ${formatDate(a.due_date)}`}
@@ -81,6 +81,12 @@ export function AlertList({ alerts, canAct, emptyTitle = 'Aucune alerte' }: { al
                 <TriggerDetails data={a.trigger_data} />
                 {open && canAct(a) && (
                   <div className="mt-3 flex flex-wrap gap-2">
+                    {a.alert_type === 'WEIGHING_REMINDER' && a.target?.type === 'animal' && (
+                      <Link to={`/animaux/${a.target.id}?onglet=pesees`}
+                        className="inline-flex items-center gap-2 rounded-md bg-brand-800 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700">
+                        <Scale className="size-4" aria-hidden /> Peser maintenant
+                      </Link>
+                    )}
                     {a.status === 'OPEN' && (
                       <Button size="sm" variant="secondary" icon={<Eye className="size-4" />} disabled={action.isPending}
                         onClick={() => action.mutate({ id: a.id, kind: 'acknowledge' })}>

@@ -79,7 +79,7 @@ Les ressources d'exploitation acceptent le filtre `farm=<id>`.
 | | `POST /formulas/{id}/submit-review/` | Propriétaire / gestionnaire |
 | | `POST /formulas/{id}/validate/`, `/reject/` | Expert invité sur l'exploitation ou administrateur (`comment` obligatoire pour un rejet) |
 | | `GET /formulas/compare/?ids=1,2` | 2 à 5 formules |
-| Rations | `/rations/` | Un animal **ou** un lot ; `POST /rations/{id}/end/ {end_date}` |
+| Rations | `/rations/` | Un animal **ou** un lot ; `POST /rations/{id}/end/ {end_date}`. Formule calculée : **validée par un expert obligatoire** (400 sinon) ; formule saisie : autorisée sauf rejet ; exploitation DEMO : non concernée |
 | Historique alimentaire | `/feeding-records/` | Quantité calculée et coût dérivés automatiquement ; consommée = mesurée uniquement. `GET /feeding-records/summary/`, `/export/` |
 
 ### Référentiel (lecture par tous, écriture par les experts / administrateurs)
@@ -87,7 +87,7 @@ Les ressources d'exploitation acceptent le filtre `farm=<id>`.
 | Ressource | Route | Particularités |
 |---|---|---|
 | Sources documentaires | `/sources/` | Suppression refusée (409) si la source est utilisée |
-| Ingrédients | `/ingredients/` | `?scope=catalog\|private`. Catalogue commun : experts ; ingrédient privé (`farm`) : éleveurs de l'exploitation. Le détail contient `composition_table` (une ligne par nutriment, valeur inconnue explicite) |
+| Ingrédients | `/ingredients/` | `ready_for_engine` (liste) : matière sèche utilisable par le moteur. `?scope=catalog\|private`. Catalogue commun : experts ; ingrédient privé (`farm`) : éleveurs de l'exploitation. Le détail contient `composition_table` (une ligne par nutriment, valeur inconnue explicite) |
 | Compositions | `/compositions/` | `POST /compositions/import/` (CSV, experts) |
 | Références nutritionnelles | `/nutritional-references/` | Besoins inclus en lecture |
 | Besoins | `/requirements/?reference=` | Toute modification remet la référence validée en brouillon |

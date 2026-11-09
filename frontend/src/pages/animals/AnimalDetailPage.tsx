@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Archive, ArrowLeft, Pencil, RotateCcw, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, Badge, Card, AnimalTag } from '@/components/ui/Feedback'
 import { SelectField, TextField } from '@/components/ui/Field'
@@ -74,7 +74,9 @@ export function AnimalDetailPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { canWrite } = useFarm()
-  const [tab, setTab] = useState<TabId>('general')
+  const [params] = useSearchParams()
+  // Lien direct vers un onglet (ex. un rappel de pesée ouvre « Pesées et croissance »).
+  const [tab, setTab] = useState<TabId>(params.get('onglet') === 'pesees' ? 'weighings' : 'general')
   const [archiveOpen, setArchiveOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
 
@@ -169,7 +171,6 @@ export function AnimalDetailPage() {
         <Card>
           <DefinitionList
             items={[
-              { label: 'Identifiant unique', value: <span className="font-mono text-xs">{a.uuid}</span> },
               { label: 'Numéro / boucle', value: a.tag_number },
               { label: 'Nom', value: a.name || '—' },
               { label: 'Espèce', value: a.species_name },
@@ -191,6 +192,10 @@ export function AnimalDetailPage() {
               { label: 'Observations', value: a.observations || '—' },
             ]}
           />
+          <details className="mt-5 border-t border-slate-100 pt-4 text-sm text-slate-600">
+            <summary className="cursor-pointer font-medium text-slate-700">Détails techniques</summary>
+            <p className="mt-2">Identifiant interne (synchronisation, exports) : <span className="font-mono text-xs">{a.uuid}</span></p>
+          </details>
         </Card>
       )}
       {tab === 'weighings' && <WeighingsTab animal={a} canWrite={writable} />}

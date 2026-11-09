@@ -42,7 +42,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 function NavSection({ title, items, onNavigate }: { title?: string; items: NavItem[]; onNavigate: () => void }) {
   return (
     <div className="space-y-1">
-      {title && <p className="px-3 pt-5 pb-1.5 font-mono text-[10.5px] font-semibold tracking-[0.12em] text-brand-300 uppercase">{title}</p>}
+      {title && <p className="px-3 pt-5 pb-1.5 font-mono text-xs font-semibold tracking-[0.1em] text-brand-300 uppercase">{title}</p>}
       {items.map((item) => (
         <NavLink
           key={item.to}
@@ -103,7 +103,7 @@ export function AppLayout() {
           </>
         )}
       </nav>
-      <p className="px-6 pt-3 font-mono text-[10.5px] tracking-[0.08em] text-brand-300 uppercase">Prototype · v0.1</p>
+      <p className="px-6 pt-3 font-mono text-xs tracking-[0.06em] text-brand-300 uppercase">Prototype · v0.1</p>
     </div>
   )
 
@@ -114,7 +114,7 @@ export function AppLayout() {
 
       {/* Tiroir (tablette / téléphone) */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
+        <div className="fixed inset-0 z-[60] lg:hidden">
           <div className="absolute inset-0 bg-slate-900/40" onClick={() => setMenuOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72">{sidebar}</aside>
           <button
@@ -133,7 +133,7 @@ export function AppLayout() {
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"
+            className="rounded-md p-2.5 text-slate-600 hover:bg-slate-100 lg:hidden"
             aria-label="Ouvrir le menu"
           >
             <Menu className="size-5" />
@@ -144,12 +144,12 @@ export function AppLayout() {
             <p className="text-sm font-semibold text-slate-800">{user ? `${user.first_name} ${user.last_name}`.trim() || user.email : ''}</p>
             <p className="text-xs text-slate-500">{user?.email}</p>
           </div>
-          {user && <Badge tone={user.is_platform_admin ? 'warning' : 'indigo'}>{user.role_label}</Badge>}
+          {user && <span className="hidden sm:inline-flex"><Badge tone={user.is_platform_admin ? 'warning' : 'indigo'}>{user.role_label}</Badge></span>}
           <button
             type="button"
             onClick={handleLogout}
             disabled={loggingOut}
-            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-50"
+            className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-50"
           >
             <LogOut className="size-4" />
             <span className="hidden sm:inline">Déconnexion</span>

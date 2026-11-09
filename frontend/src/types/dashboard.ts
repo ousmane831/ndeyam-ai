@@ -10,7 +10,7 @@ export interface DashboardData {
   weighings: {
     last_30_days: number
     never_weighed: number
-    latest: { id: number; animal_id: number; animal: string; weighed_on: string; weight_kg: string }[]
+    latest: { id: number; animal_id: number; animal: string; tag_number?: string; animal_name?: string; weighed_on: string; weight_kg: string }[]
   }
   weight_trend: { points: { month: string; mean_weight_kg: number; weighings: number; animals: number }[]; note: string }
   rations: {

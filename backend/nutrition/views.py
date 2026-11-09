@@ -86,8 +86,20 @@ class IngredientViewSet(ValidationWorkflowMixin, viewsets.ModelViewSet):
     ordering = ["name"]
 
     def get_queryset(self):
-        qs = visible_ingredients(self.request.user).select_related(
-            "category", "source", "validated_by", "farm"
+        from django.db.models import Exists, OuterRef, Q
+
+        # Même règle que le moteur : sans teneur en matière sèche utilisable, l'ingrédient est exclu.
+        # Donnée réelle : valeur validée et non DEMO. Donnée DEMO : valeur DEMO non rejetée.
+        dry_matter = IngredientComposition.objects.filter(
+            ingredient=OuterRef("pk"), nutrient__category="DRY_MATTER"
+        )
+        qs = (
+            visible_ingredients(self.request.user)
+            .select_related("category", "source", "validated_by", "farm")
+            .annotate(
+                ready_for_engine=Exists(dry_matter.filter(status="VALIDATED", is_demo=False))
+                | (Q(is_demo=True) & Exists(dry_matter.filter(is_demo=True).exclude(status="REJECTED")))
+            )
         )
         scope = self.request.query_params.get("scope")
         if scope == "catalog":

@@ -76,7 +76,7 @@ export function ManualForm() {
                 <TextField label={index === 0 ? 'kg brut / animal / j' : ''} aria-label={`Quantité ${index + 1}`} inputMode="decimal" value={row.qty}
                   onChange={(e) => setRows((r) => r.map((x, i) => (i === index ? { ...x, qty: e.target.value } : x)))} />
                 <button type="button" onClick={() => setRows((r) => (r.length > 1 ? r.filter((_, i) => i !== index) : r))}
-                  className="mb-1 rounded p-2 text-slate-400 hover:bg-red-50 hover:text-red-600" aria-label={`Retirer la ligne ${index + 1}`}>
+                  className="mb-1 rounded p-2 text-slate-500 hover:bg-red-50 hover:text-red-600" aria-label={`Retirer la ligne ${index + 1}`}>
                   <Trash2 className="size-4" />
                 </button>
               </div>

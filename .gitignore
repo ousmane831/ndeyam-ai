@@ -21,6 +21,12 @@ frontend/dist/
 frontend/coverage/
 *.local
 
+# Outils d'IA (copies locales de skills tiers, réinstallables ; skills-lock.json reste suivi)
+.claude/skills/
+.claude/settings.local.json
+.agents/
+.impeccable/
+
 # Éditeurs et systèmes
 .vscode/*
 !.vscode/extensions.json

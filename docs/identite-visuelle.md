@@ -40,7 +40,8 @@ le statut **DEMO** utilise toujours le motif hachuré `demo-hatch`, distinct de 
 | Interface et texte | **Atkinson Hyperlegible Next** | `font-sans` (par défaut) : conçue pour la lisibilité ; zéro barré |
 | Identifiants, en-têtes de tableaux | **IBM Plex Mono** | `font-mono` : boucles, tampons, axes de graphiques |
 
-Les chiffres des tableaux sont alignés (`tabular-nums`).
+Les chiffres des tableaux sont alignés (`tabular-nums`). Taille minimale : 12 px pour tout texte fonctionnel,
+13 px pour les mentions ; contraste ≥ 4,5:1 (texte secondaire `slate-500`, jamais `slate-400`).
 
 ## Composants de signature
 
@@ -51,7 +52,12 @@ Les chiffres des tableaux sont alignés (`tabular-nums`).
 | `FormulaStatus` | `features/formulation/FormulaStatus.tsx` | Statut de formule en tampon (+ tampon DEMO) |
 | `AnimalTag` | `components/ui/Feedback.tsx` | Numéro d'animal en forme de boucle |
 | `Badge` | `components/ui/Feedback.tsx` | `brand` = état positif (acacia) ; `indigo` = rôle / appartenance |
-| `AssistantLauncher` | `features/assistant/AssistantLauncher.tsx` | Bouton flottant bas droite au symbole du bélier ; panneau 400 px (plein écran sur téléphone) |
+| `AssistantLauncher` | `features/assistant/AssistantLauncher.tsx` | Bouton flottant bas droite au symbole du bélier ; panneau 400 px (plein écran sur téléphone) ; guide et glossaire si l'assistant n'est pas activé |
+| `TodayTasks` | `features/dashboard/TodayTasks.tsx` | Tâches du jour : une ligne, une action directe ; mil = urgent, indigo = à suivre |
+
+**Tampon ou pastille ?** Le *tampon* (`Stamp`) porte un statut de **validation** (formule, référence, composition,
+document) : c'est une décision tracée. La *pastille* (`Badge`) porte un **état** courant (présent, actif, respecté,
+rôle). La bande tissée apparaît une seule fois par écran (haut du menu ou écran de connexion).
 
 ## Graphiques
 

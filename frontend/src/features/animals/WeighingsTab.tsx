@@ -30,7 +30,7 @@ const schema = z.object({
 type Values = z.infer<typeof schema>
 
 function AdgValue({ value }: { value: string | null }) {
-  if (value === null) return <span className="text-slate-400">—</span>
+  if (value === null) return <span className="text-slate-500">—</span>
   const n = Number(value)
   return <span className={n < 0 ? 'text-red-700' : ''}>{formatNumber(n, 1)} g/j</span>
 }
@@ -185,7 +185,7 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
                         <button
                           type="button"
                           onClick={() => setToDelete(w)}
-                          className="rounded p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600"
+                          className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600"
                           aria-label={`Supprimer la pesée du ${formatDate(w.weighed_on)}`}
                         >
                           <Trash2 className="size-4" />

@@ -76,6 +76,8 @@ class IngredientSerializer(ReadOnlyStatusSerializerMixin, serializers.ModelSeria
     category_name = serializers.CharField(source="category.name", read_only=True)
     scope = serializers.SerializerMethodField()
     source = SourceSummaryField(required=False, allow_null=True)
+    # Teneur en matière sèche utilisable par le moteur (annotation de la vue ; absent hors liste).
+    ready_for_engine = serializers.BooleanField(read_only=True, default=None)
 
     class Meta:
         model = Ingredient
@@ -92,6 +94,7 @@ class IngredientSerializer(ReadOnlyStatusSerializerMixin, serializers.ModelSeria
             "is_active",
             "source",
             "reference_date",
+            "ready_for_engine",
             "is_demo",
             "status",
             "status_label",

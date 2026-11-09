@@ -78,5 +78,5 @@ export function TableShell({ children }: { children: ReactNode }) {
   return <div className="overflow-x-auto">{children}</div>
 }
 
-export const th = 'px-4 py-3 text-left font-mono text-[11px] font-semibold tracking-[0.08em] text-slate-500 uppercase'
+export const th = 'px-4 py-3 text-left font-mono text-xs font-semibold tracking-[0.06em] text-slate-500 uppercase'
 export const td = 'px-4 py-3 text-sm text-slate-700 tabular-nums'

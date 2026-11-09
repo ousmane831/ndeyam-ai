@@ -105,7 +105,7 @@ function DocumentRow({ doc }: { doc: TechnicalDocument }) {
           <Button size="sm" variant="ghost" icon={<Download className="size-4" />} onClick={() => documentService.download(doc).catch((e) => setMessage(errorText(e)))}>PDF</Button>
           <Button size="sm" variant="ghost" icon={open ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />} onClick={() => setOpen((v) => !v)}>Passages</Button>
           {isReviewer && <Button size="sm" variant="secondary" icon={<RefreshCw className="size-4" />} loading={reindex.isPending} onClick={() => reindex.mutate()}>Réindexer</Button>}
-          {isReviewer && <button type="button" onClick={() => setDeleting(true)} className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label={`Supprimer ${doc.title}`}><Trash2 className="size-4" /></button>}
+          {isReviewer && <button type="button" onClick={() => setDeleting(true)} className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={`Supprimer ${doc.title}`}><Trash2 className="size-4" /></button>}
         </div>
       </div>
       {isReviewer && <WorkflowActions status={doc.status} canSubmit isReviewer onAction={(a, c) => documentService.act(doc.id, a, c).then(refresh)} />}
@@ -157,7 +157,7 @@ export function DocumentsPage() {
         <form onSubmit={(e) => { e.preventDefault(); setSubmitted(query.trim()) }} className="space-y-3">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500" />
               <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="ex. conservation du tourteau, matière sèche du foin…"
                 aria-label="Recherche documentaire" className="block w-full rounded-lg border border-slate-300 py-2.5 pr-3 pl-9 text-sm" />
             </div>

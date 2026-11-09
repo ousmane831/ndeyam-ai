@@ -48,7 +48,7 @@ function MessageBubble({ message }: { message: AssistantMessage }) {
         {!mine && <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500"><Logo className="size-4" /> Assistant Ndeyam AI</p>}
         <div className="whitespace-pre-wrap">{message.content}</div>
         {!mine && <ProvenanceChips items={message.provenance} />}
-        <p className={clsx('mt-1 text-right text-[11px]', mine ? 'text-brand-200' : 'text-slate-400')}>{formatDateTime(message.created_at)}</p>
+        <p className={clsx('mt-1 text-right text-xs', mine ? 'text-brand-200' : 'text-slate-500')}>{formatDateTime(message.created_at)}</p>
       </div>
     </div>
   )
@@ -106,7 +106,7 @@ export function ChatThread({ chat, compact = false, inputRef }: { chat: Assistan
           <Button type="submit" disabled={!configured || !chat.draft.trim()} loading={chat.isSending} icon={<Send className="size-4" />}
             aria-label="Envoyer">{compact ? null : 'Envoyer'}</Button>
         </div>
-        {!compact && chat.status.data?.model && <p className="mt-1.5 text-xs text-slate-400">Modèle : {chat.status.data.model}</p>}
+        {!compact && chat.status.data?.model && <p className="mt-1.5 text-xs text-slate-500">Modèle : {chat.status.data.model}</p>}
       </form>
     </>
   )

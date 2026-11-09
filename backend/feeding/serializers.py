@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from animals.models import Animal, AnimalGroup
 from core.serializers import FarmScopedRelatedField, WritableFarmField
-from formulations.models import FeedFormula
+from formulations.models import FeedFormula, FormulaMode, FormulaStatus
 
 from .models import FeedingRecord, Ration
 
@@ -15,6 +15,28 @@ def _check_same_farm(attrs, instance, fields):
         target = attrs.get(field)
         if target is not None and farm is not None and target.farm_id != farm.pk:
             raise serializers.ValidationError({field: "Doit appartenir à la même exploitation."})
+
+
+def ration_blocker(formula):
+    """Raison pour laquelle cette formule ne peut pas devenir une ration (None si elle le peut).
+
+    - Formule calculée par le moteur : seulement une fois validée par un expert. Une estimation
+      mathématique ne nourrit jamais un animal réel sans vérification humaine.
+    - Formule saisie à la main : c'est la ration que l'éleveur distribue déjà ; autorisée sauf rejet.
+    - Exploitation DEMO : données fictives jamais validables, la démonstration reste possible.
+    """
+    if formula.farm.is_demo:
+        return None
+    if formula.mode == FormulaMode.MANUAL:
+        if formula.status == FormulaStatus.REJECTED:
+            return "Cette formule a été rejetée par un expert : elle ne peut pas devenir une ration."
+        return None
+    if formula.status != FormulaStatus.VALIDATED:
+        return (
+            "Seule une formule validée par un expert peut devenir une ration. "
+            "Demandez d'abord la vérification de cette estimation."
+        )
+    return None
 
 
 def _check_one_target(attrs, instance):
@@ -68,6 +90,11 @@ class RationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         _check_same_farm(attrs, self.instance, ("formula", "animal", "group"))
         _check_one_target(attrs, self.instance)
+        formula = attrs.get("formula")
+        if formula is not None:
+            problem = ration_blocker(formula)
+            if problem:
+                raise serializers.ValidationError({"formula": problem})
         start = attrs.get("start_date", getattr(self.instance, "start_date", None))
         end = attrs.get("end_date", getattr(self.instance, "end_date", None))
         if start and end and end < start:

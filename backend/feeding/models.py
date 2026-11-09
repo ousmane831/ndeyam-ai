@@ -134,4 +134,5 @@ class FeedingRecord(TimeStampedModel):
         indexes = [models.Index(fields=["farm", "-fed_on"])]
 
     def __str__(self):
-        return f"{self.fed_on} — {self.quantity_distributed_kg} kg"
+        quantity = format(self.quantity_distributed_kg.normalize(), "f").replace(".", ",")
+        return f"{self.fed_on:%d/%m/%Y} — {quantity} kg"

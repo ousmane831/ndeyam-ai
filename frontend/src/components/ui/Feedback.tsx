@@ -66,7 +66,7 @@ export function Stamp({ tone, children, title }: { tone: StampTone; children: Re
     <span
       title={title}
       className={clsx(
-        'inline-flex -rotate-1 items-center rounded-[3px] whitespace-nowrap border-[1.5px] bg-white/70 px-2 py-[3px] font-mono text-[11px] leading-none font-semibold tracking-[0.08em] uppercase',
+        'inline-flex -rotate-1 items-center rounded-[3px] whitespace-nowrap border-[1.5px] bg-white/70 px-2 py-1 font-mono text-xs leading-none font-semibold tracking-[0.06em] uppercase',
         STAMP_TONES[tone],
       )}
     >

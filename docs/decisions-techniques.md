@@ -308,3 +308,18 @@ Référence : [identite-visuelle.md](identite-visuelle.md).
 bouton flottant en bas à droite, au symbole du bélier, disponible sur tous les écrans. Le panneau reste monté : la
 conversation survit à la navigation. La vue plein écran `/assistant` est conservée pour l'historique. Une seule
 logique (`useAssistantChat`, `ChatThread`) sert aux deux vues.
+
+## DT-67 — Une estimation ne devient jamais une ration
+Décision du porteur du projet. Le serveur (`feeding.serializers.ration_blocker`) refuse une ration fondée sur une
+formule calculée non validée par un expert ; une formule saisie (ration déjà distribuée) reste autorisée sauf rejet ;
+les exploitations DEMO ne sont pas concernées (leurs formules ne sont jamais validables). L'interface applique la même
+règle (`rationRules.ts`) pour ne jamais proposer une action refusée.
+
+## DT-68 — Accueil orienté tâches, guide quand l'assistant est éteint
+L'écran d'accueil d'un outil quotidien commence par « À faire aujourd'hui », construit à partir des alertes ouvertes,
+chaque tâche avec son action directe. Quand aucun fournisseur d'IA n'est configuré, le bouton bélier ouvre un guide et
+un glossaire au lieu d'un message technique ; l'indication d'activation n'est montrée qu'aux administrateurs.
+
+## DT-69 — Skills de design installés pour le projet seulement, sans hook
+Impeccable, emil-design-eng, taste-skill et unslop sont installés dans `.claude/skills/` (exclus de Git localement).
+Le hook automatique d'Impeccable (exécution après chaque modification de fichier) n'est pas activé sans accord explicite.

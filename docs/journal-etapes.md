@@ -429,3 +429,17 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
   sur « Fermer »), accueil coupé par un défilement inutile, numéros de boucle coupés sur mobile.
 - Vérifications : Vitest 80 (3 nouveaux), lint, build ; navigateur 18/18 (panneau) et 345/345 (application) ;
   parcours 200/200.
+
+## Audit Impeccable et corrections (09/11/2026) ✅
+
+- Audit : détecteur Impeccable sur 19 écrans rendus (1440 et 390 px), mesures d'accessibilité, revue design par un
+  agent isolé (heuristiques de Nielsen 24/40, audit technique 14/20).
+- Corrections appliquées (P1 à P3) : formulation utilisable sur téléphone, reprise après refus (« Que faire
+  maintenant ? », « Modifier et recalculer »), règle serveur « pas de ration sans formule validée », jargon retiré
+  (identifiant interne et détails moteur repliés, message d'assistant adapté au rôle, noms au lieu d'e-mails, « 10 kg »),
+  contraste ≥ 4,5:1, textes ≥ 12 px, cibles tactiles agrandies, accueil « À faire aujourd'hui », guide et glossaire du
+  bouton bélier, filtres repliables sur mobile, indicateur `ready_for_engine` (matière sèche utilisable).
+- Mesure du détecteur : 54 → 20 constats (ordinateur) et 21 → 5 (téléphone), dont la bande tissée volontaire ;
+  contraste insuffisant 19 → 0, textes trop petits 18 → 0, mots isolés 13 → 0.
+- Vérifications : pytest 467, Vitest 82, lint, build, OpenAPI ; navigateur 345/345, nouveaux parcours 33/33, panneau
+  22/22, parcours API 200/200.

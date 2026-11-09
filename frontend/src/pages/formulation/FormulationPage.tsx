@@ -52,7 +52,7 @@ function FormulaList() {
                 <tbody className="divide-y divide-slate-100">
                   {list.data.results.map((f) => (
                     <tr key={f.id} className="hover:bg-slate-50/70">
-                      <td className={td}><input type="checkbox" aria-label={`Comparer ${f.name}`} checked={selected.includes(f.id)} onChange={() => toggle(f.id)} className="size-4 accent-brand-600" /></td>
+                      <td className={td}><input type="checkbox" aria-label={`Comparer ${f.name}`} checked={selected.includes(f.id)} onChange={() => toggle(f.id)} className="size-5 accent-brand-700" /></td>
                       <td className={td}><Link to={`/formulation/${f.id}`} className="font-medium text-brand-700 hover:underline">{f.name}</Link></td>
                       <td className={td}>{f.mode_label}</td>
                       <td className={td}><FormulaStatus status={f.status} label={f.status_label} isDemo={f.is_demo} /></td>

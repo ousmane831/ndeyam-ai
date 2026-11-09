@@ -56,6 +56,8 @@ export interface Ingredient extends ValidatedFields {
   observations: string
   is_active: boolean
   created_at: string
+  /** Teneur en matière sèche utilisable par le moteur (liste uniquement). */
+  ready_for_engine?: boolean | null
 }
 
 export interface Composition extends ValidatedFields {

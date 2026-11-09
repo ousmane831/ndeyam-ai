@@ -81,7 +81,7 @@ export function SystemStatusPage() {
           </div>
         </section>
 
-        <p className="mt-6 text-center text-xs text-slate-400">
+        <p className="mt-6 text-center text-xs text-slate-500">
           Documentation de l'API : <a className="underline hover:text-brand-600" href="/api/docs/">/api/docs/</a>
         </p>
       </div>
@@ -106,7 +106,7 @@ function StatusRow({
   const badge = ok ? 'Opérationnel' : warning ? 'Non configuré' : 'Indisponible'
   return (
     <div className="flex items-start gap-4 px-5 py-4">
-      <span className="mt-0.5 text-slate-400">{icon}</span>
+      <span className="mt-0.5 text-slate-500">{icon}</span>
       <div className="min-w-0 flex-1">
         <p className="font-medium text-slate-800">{label}</p>
         <p className="text-sm break-words text-slate-500">{detail}</p>

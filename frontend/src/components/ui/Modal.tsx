@@ -52,7 +52,7 @@ export function Modal({
           <h2 id={titleId} className="font-semibold text-slate-800">
             {title}
           </h2>
-          <button type="button" onClick={onClose} className="rounded p-1 text-slate-400 hover:text-slate-600" aria-label="Fermer">
+          <button type="button" onClick={onClose} className="rounded p-1 text-slate-500 hover:text-slate-600" aria-label="Fermer">
             <X className="size-5" />
           </button>
         </header>

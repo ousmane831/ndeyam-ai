@@ -9383,6 +9383,9 @@ components:
           format: date
           nullable: true
           title: Date de référence
+        ready_for_engine:
+          type: boolean
+          readOnly: true
         is_demo:
           type: boolean
           title: Donnée DEMO
@@ -9421,6 +9424,7 @@ components:
       - created_at
       - id
       - name
+      - ready_for_engine
       - scope
       - status
       - status_label
@@ -9494,6 +9498,9 @@ components:
           format: date
           nullable: true
           title: Date de référence
+        ready_for_engine:
+          type: boolean
+          readOnly: true
         is_demo:
           type: boolean
           title: Donnée DEMO
@@ -9539,6 +9546,7 @@ components:
       - created_at
       - id
       - name
+      - ready_for_engine
       - scope
       - status
       - status_label

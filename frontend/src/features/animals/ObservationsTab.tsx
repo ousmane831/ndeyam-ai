@@ -118,7 +118,7 @@ export function ObservationsTab({ animalId, canWrite }: { animalId: number; canW
                   <button
                     type="button"
                     onClick={() => setToDelete(o)}
-                    className="rounded p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600"
+                    className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600"
                     aria-label="Supprimer l'observation"
                   >
                     <Trash2 className="size-4" />

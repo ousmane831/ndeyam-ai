@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { Calculator } from 'lucide-react'
+import clsx from 'clsx'
+import { Calculator, ChevronDown } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, Badge, Card } from '@/components/ui/Feedback'
 import { SelectField, TextField } from '@/components/ui/Field'
-import { td, th } from '@/components/ui/Layout'
 import { Spinner } from '@/components/ui/Spinner'
 import { useFarm } from '@/hooks/useFarm'
 import { ApiError } from '@/services/api'
 import { animalService, groupService, nomenclatureService } from '@/services/animals'
 import { formulaService } from '@/services/formulas'
 import { ingredientService, nutritionService, priceService, referenceService } from '@/services/nutrition'
+import type { Formula } from '@/types/formula'
+import type { Ingredient, IngredientPrice } from '@/types/nutrition'
 import { formatMoney } from '@/utils/format'
 import { buildCalculationPayload, type IngredientChoice } from './payload'
 
@@ -20,16 +22,91 @@ const MODES = [
   { value: 'BALANCED', label: 'Équilibré', help: 'Au plus près des cibles fixées par les experts ; le coût est un critère secondaire.' },
 ] as const
 
+const EMPTY_CHOICE: IngredientChoice = { selected: false, price: '', available: '' }
+const priceInput =
+  'block w-full rounded-md border border-slate-300 px-2.5 py-2 text-sm tabular-nums disabled:bg-slate-50 disabled:text-slate-500 sm:py-1.5'
+
+/** Une ligne d'ingrédient : grille sur ordinateur, carte empilée sur téléphone (jamais de défilement horizontal). */
+function IngredientRow({ ingredient, choice, lastPrice, onChange }: {
+  ingredient: Ingredient
+  choice: IngredientChoice
+  lastPrice?: IngredientPrice
+  onChange: (patch: Partial<IngredientChoice>) => void
+}) {
+  const id = `ing-${ingredient.id}`
+  return (
+    <li className={clsx('grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2 px-5 py-3 sm:grid-cols-[auto_minmax(0,1fr)_7.5rem_8rem_8rem]', choice.selected && 'bg-brand-50/50')}>
+      <input id={id} type="checkbox" aria-label={`Utiliser ${ingredient.name}`} checked={choice.selected}
+        onChange={(e) => onChange({ selected: e.target.checked })} className="size-5" />
+      <label htmlFor={id} className="min-w-0 cursor-pointer">
+        <span className="font-medium text-slate-800">{ingredient.name}</span>
+        <span className="ml-2 inline-flex flex-wrap gap-1 align-middle">
+          {ingredient.is_demo && <Badge tone="demo">DEMO</Badge>}
+        </span>
+      </label>
+      <p className="col-start-2 text-sm text-slate-500 tabular-nums sm:col-start-auto sm:text-slate-700">
+        <span className="sm:hidden">Dernier prix : </span>
+        {lastPrice ? formatMoney(lastPrice.price_per_kg_as_fed, lastPrice.currency) : 'aucun'}
+      </p>
+      <div className={clsx('col-start-2 grid grid-cols-2 gap-3 sm:col-span-2 sm:col-start-auto', !choice.selected && 'max-sm:hidden')}>
+        <label className="text-xs text-slate-500 sm:sr-only">
+          Prix (FCFA / kg brut)
+          <input aria-label={`Prix de ${ingredient.name}`} inputMode="decimal" disabled={!choice.selected} value={choice.price}
+            placeholder={lastPrice ? 'dernier prix' : ''} onChange={(e) => onChange({ price: e.target.value })} className={clsx(priceInput, 'mt-1 sm:mt-0')} />
+        </label>
+        <label className="text-xs text-slate-500 sm:sr-only">
+          Stock (kg brut)
+          <input aria-label={`Stock de ${ingredient.name}`} inputMode="decimal" disabled={!choice.selected} value={choice.available}
+            onChange={(e) => onChange({ available: e.target.value })} className={clsx(priceInput, 'mt-1 sm:mt-0')} />
+        </label>
+      </div>
+    </li>
+  )
+}
+
+type Profile = { animal: string; group: string; species: string; category: string; stage: string; objective: string; weight: string; age: string; reference: string; animals: string; days: string }
+const EMPTY_PROFILE: Profile = { animal: '', group: '', species: '', category: '', stage: '', objective: '', weight: '', age: '', reference: '', animals: '', days: '' }
+
+function initialFrom(f?: Formula) {
+  if (!f) return null
+  const profile = (f.result_snapshot.profile ?? {}) as Record<string, unknown>
+  const str = (v: unknown) => (v === null || v === undefined ? '' : String(v))
+  const ids = [...f.items.map((i) => i.ingredient), ...(f.result_snapshot.excluded_ingredients ?? []).map((e) => e.ingredient_id)]
+  return {
+    farm: f.farm,
+    name: `${f.name} (révisée)`,
+    mode: f.mode === 'BALANCED' ? ('BALANCED' as const) : ('ECONOMIC' as const),
+    target: f.animal ? ('animal' as const) : f.group ? ('group' as const) : ('profile' as const),
+    profile: {
+      ...EMPTY_PROFILE,
+      animal: str(f.animal), group: str(f.group), species: str(f.species), category: str(profile.category),
+      stage: str(f.physiological_stage), objective: str(f.objective),
+      weight: f.animal ? '' : str(f.animal_weight_kg), age: f.animal ? '' : str(f.animal_age_months), reference: str(f.reference),
+    },
+    choices: Object.fromEntries(ids.map((id) => [id, { ...EMPTY_CHOICE, selected: true }])) as Record<number, IngredientChoice>,
+  }
+}
+
+/** Charge la formule d'origine si l'on reprend un calcul (?depuis=<id>), puis affiche le formulaire. */
 export function CalculationForm() {
+  const [params] = useSearchParams()
+  const fromId = Number(params.get('depuis')) || null
+  const source = useQuery({ queryKey: ['formula', fromId], queryFn: () => formulaService.get(fromId!), enabled: fromId !== null })
+  if (fromId !== null && source.isPending) return <Spinner label="Reprise de la formule…" />
+  return <CalculationFormBody key={source.data?.id ?? 'new'} source={source.data} />
+}
+
+function CalculationFormBody({ source }: { source?: Formula }) {
   const navigate = useNavigate()
   const { writableFarms, defaultWritableFarmId, farms } = useFarm()
-  const [farmId, setFarmId] = useState<number | null>(defaultWritableFarmId)
+  const [initial] = useState(() => initialFrom(source))
+  const [farmId, setFarmId] = useState<number | null>(initial?.farm ?? defaultWritableFarmId)
   const farm = farms.find((f) => f.id === farmId)
-  const [name, setName] = useState('')
-  const [mode, setMode] = useState<'ECONOMIC' | 'BALANCED'>('ECONOMIC')
-  const [target, setTarget] = useState<'animal' | 'group' | 'profile'>('profile')
-  const [p, setP] = useState({ animal: '', group: '', species: '', category: '', stage: '', objective: '', weight: '', age: '', reference: '', animals: '', days: '' })
-  const [choices, setChoices] = useState<Record<number, IngredientChoice>>({})
+  const [name, setName] = useState(initial?.name ?? '')
+  const [mode, setMode] = useState<'ECONOMIC' | 'BALANCED'>(initial?.mode ?? 'ECONOMIC')
+  const [target, setTarget] = useState<'animal' | 'group' | 'profile'>(initial?.target ?? 'profile')
+  const [p, setP] = useState<Profile>(initial?.profile ?? EMPTY_PROFILE)
+  const [choices, setChoices] = useState<Record<number, IngredientChoice>>(initial?.choices ?? {})
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -45,12 +122,22 @@ export function CalculationForm() {
   const prices = useQuery({ queryKey: ['prices', 'latest', farmId], queryFn: () => priceService.list({ farm: farmId, latest: true }), enabled: farmId !== null })
 
   const priceByIngredient = useMemo(() => new Map((prices.data ?? []).map((x) => [x.ingredient, x])), [prices.data])
-  const visible = (ingredients.data ?? []).filter((i) => i.farm === null || i.farm === farmId)
-  const selectedCount = Object.values(choices).filter((c) => c.selected).length
-  const needsHeadcount = Object.values(choices).some((c) => c.selected && c.available.trim())
+  const demoFarm = Boolean(farm?.is_demo)
+  // Une exploitation réelle n'utilise jamais de données DEMO (et inversement) : inutile de les proposer.
+  const inScope = (ingredients.data ?? []).filter((i) => (i.farm === null || i.farm === farmId) && i.is_demo === demoFarm)
+  const hiddenOtherWorld = (ingredients.data ?? []).filter((i) => (i.farm === null || i.farm === farmId) && i.is_demo !== demoFarm).length
+  // Même règle que le moteur : sans matière sèche utilisable, l'ingrédient est exclu du calcul.
+  const isReady = (i: Ingredient) => i.ready_for_engine ?? i.status === 'VALIDATED'
+  const ready = inScope.filter(isReady)
+  const others = inScope.filter((i) => !isReady(i))
+  const choiceOf = (id: number) => choices[id] ?? EMPTY_CHOICE
+  const selected = inScope.filter((i) => choiceOf(i.id).selected)
+  const selectedCount = selected.length
+  const needsHeadcount = selected.some((i) => choiceOf(i.id).available.trim())
+  const risky = selected.filter((i) => !isReady(i))
+  const unpriced = mode === 'ECONOMIC' ? selected.filter((i) => !choiceOf(i.id).price.trim() && !priceByIngredient.has(i.id)) : []
   const set = (k: keyof typeof p) => (e: { target: { value: string } }) => setP((s) => ({ ...s, [k]: e.target.value }))
-  const choose = (id: number, patch: Partial<IngredientChoice>) =>
-    setChoices((c) => ({ ...c, [id]: { ...(c[id] ?? { selected: false, price: '', available: '' }), ...patch } }))
+  const choose = (id: number, patch: Partial<IngredientChoice>) => setChoices((c) => ({ ...c, [id]: { ...(c[id] ?? EMPTY_CHOICE), ...patch } }))
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,7 +150,9 @@ export function CalculationForm() {
     if (needsHeadcount && (!p.animals || !p.days)) return setError('Indiquez le nombre d’animaux et la durée pour tenir compte des quantités disponibles.')
     setBusy(true)
     try {
-      const payload = buildCalculationPayload({ farm: farmId, name, mode, target, ...p, species: p.species || String(speciesId ?? ''), choices })
+      const inScopeIds = new Set(inScope.map((i) => i.id))
+      const scoped = Object.fromEntries(Object.entries(choices).filter(([id]) => inScopeIds.has(Number(id))))
+      const payload = buildCalculationPayload({ farm: farmId, name, mode, target, ...p, species: p.species || String(speciesId ?? ''), choices: scoped })
       const { formula } = await formulaService.calculate(payload)
       if (formula) navigate(`/formulation/${formula.id}`)
     } catch (err) {
@@ -75,11 +164,19 @@ export function CalculationForm() {
 
   if (writableFarms.length === 0) return <Alert tone="info">Le calcul de formules est réservé aux propriétaires et gestionnaires d'exploitation.</Alert>
   const opts = (items: { id: number; name: string }[] | undefined, empty: string) => [{ value: '', label: empty }, ...(items ?? []).map((i) => ({ value: String(i.id), label: i.name }))]
+  const row = (i: Ingredient) => (
+    <IngredientRow key={i.id} ingredient={i} choice={choiceOf(i.id)} lastPrice={priceByIngredient.get(i.id)} onChange={(patch) => choose(i.id, patch)} />
+  )
 
   return (
     <form onSubmit={submit} noValidate className="space-y-6">
       {error && <Alert tone="error">{error}</Alert>}
-      {farm?.is_demo && <Alert tone="warning" title="Exploitation de démonstration">Le calcul utilisera uniquement des données DEMO : ne pas utiliser pour nourrir des animaux.</Alert>}
+      {source && (
+        <Alert tone="info" title={`Reprise de « ${source.name} »`}>
+          Profil, référence et ingrédients sont repris. Complétez les données manquantes signalées, puis relancez le calcul : une nouvelle formule sera enregistrée.
+        </Alert>
+      )}
+      {demoFarm && <Alert tone="warning" title="Exploitation de démonstration">Le calcul utilisera uniquement des données DEMO : ne pas utiliser pour nourrir des animaux.</Alert>}
 
       <Card title="1. Formule">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -93,8 +190,8 @@ export function CalculationForm() {
           <legend className="mb-2 text-sm font-medium text-slate-700">Mode de calcul</legend>
           <div className="grid gap-3 sm:grid-cols-2">
             {MODES.map((m) => (
-              <label key={m.value} className={`flex cursor-pointer gap-3 rounded-lg border p-3 ${mode === m.value ? 'border-brand-500 bg-brand-50' : 'border-slate-200'}`}>
-                <input type="radio" name="mode" value={m.value} checked={mode === m.value} onChange={() => setMode(m.value)} className="mt-1 accent-brand-600" />
+              <label key={m.value} className={`flex cursor-pointer gap-3 rounded-md border p-3 ${mode === m.value ? 'border-brand-500 bg-brand-50' : 'border-slate-200'}`}>
+                <input type="radio" name="mode" value={m.value} checked={mode === m.value} onChange={() => setMode(m.value)} className="mt-1 size-4" />
                 <span><span className="block font-medium text-slate-800">{m.label}</span><span className="text-sm text-slate-500">{m.help}</span></span>
               </label>
             ))}
@@ -104,9 +201,9 @@ export function CalculationForm() {
 
       <Card title="2. Animaux concernés">
         <div className="space-y-4">
-          <div className="flex flex-wrap gap-4 text-sm">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             {([['profile', 'Profil type'], ['animal', 'Un animal'], ['group', 'Un lot']] as const).map(([v, l]) => (
-              <label key={v} className="inline-flex items-center gap-2"><input type="radio" name="target" checked={target === v} onChange={() => setTarget(v)} className="accent-brand-600" />{l}</label>
+              <label key={v} className="inline-flex min-h-10 cursor-pointer items-center gap-2"><input type="radio" name="target" checked={target === v} onChange={() => setTarget(v)} className="size-4" />{l}</label>
             ))}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -129,39 +226,39 @@ export function CalculationForm() {
       </Card>
 
       <Card title={`3. Ingrédients disponibles (${selectedCount} sélectionné(s))`}>
-        {ingredients.isPending ? <Spinner /> : visible.length === 0 ? (
+        {ingredients.isPending ? <Spinner /> : inScope.length === 0 ? (
           <p className="text-sm text-slate-500">Aucun ingrédient disponible. Ajoutez-en depuis la page Ingrédients.</p>
         ) : (
           <div className="space-y-4">
-            <p className="text-xs text-slate-500">
-              Le prix par défaut est le dernier prix enregistré dans l'exploitation ; vous pouvez le remplacer pour ce calcul. Un ingrédient sans
-              valeur validée pour un nutriment requis sera exclu (jamais compté à zéro).
+            <p className="text-sm text-slate-500">
+              Cochez les ingrédients dont vous disposez. Le prix proposé est le dernier prix enregistré ; remplacez-le si besoin pour ce calcul.
             </p>
-            <div className="-mx-5 overflow-x-auto">
-              <table className="w-full">
-                <thead className="border-y border-slate-200 bg-slate-50"><tr>
-                  <th className={th}>Utiliser</th><th className={th}>Ingrédient</th><th className={th}>Dernier prix</th><th className={th}>Prix pour ce calcul</th><th className={th}>Stock (kg brut)</th>
-                </tr></thead>
-                <tbody className="divide-y divide-slate-100">
-                  {visible.map((i) => {
-                    const c = choices[i.id]
-                    const last = priceByIngredient.get(i.id)
-                    return (
-                      <tr key={i.id}>
-                        <td className={td}><input type="checkbox" aria-label={`Utiliser ${i.name}`} checked={Boolean(c?.selected)} onChange={(e) => choose(i.id, { selected: e.target.checked })} className="size-4 accent-brand-600" /></td>
-                        <td className={td}>
-                          <span className="font-medium text-slate-800">{i.name}</span>
-                          <span className="ml-2 inline-flex gap-1">{i.status !== 'VALIDATED' && <Badge tone="warning">Non validé</Badge>}{i.is_demo && <Badge tone="demo">DEMO</Badge>}</span>
-                        </td>
-                        <td className={td}>{last ? formatMoney(last.price_per_kg_as_fed, last.currency) : <span className="text-slate-400">Aucun</span>}</td>
-                        <td className={td}><input aria-label={`Prix de ${i.name}`} inputMode="decimal" disabled={!c?.selected} value={c?.price ?? ''} onChange={(e) => choose(i.id, { price: e.target.value })} className="w-28 rounded-lg border border-slate-300 px-2 py-1.5 text-sm disabled:bg-slate-50" /></td>
-                        <td className={td}><input aria-label={`Stock de ${i.name}`} inputMode="decimal" disabled={!c?.selected} value={c?.available ?? ''} onChange={(e) => choose(i.id, { available: e.target.value })} className="w-28 rounded-lg border border-slate-300 px-2 py-1.5 text-sm disabled:bg-slate-50" /></td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+            <div className="-mx-5 border-y border-slate-200">
+              <div className="hidden grid-cols-[auto_minmax(0,1fr)_7.5rem_8rem_8rem] gap-x-3 bg-slate-50 px-5 py-2.5 font-mono text-xs font-semibold tracking-[0.06em] text-slate-500 uppercase sm:grid" aria-hidden>
+                <span className="w-5" /><span>Ingrédient</span><span>Dernier prix</span><span>Prix du calcul</span><span>Stock (kg brut)</span>
+              </div>
+              {ready.length > 0 ? (
+                <ul className="divide-y divide-slate-100">{ready.map(row)}</ul>
+              ) : (
+                <p className="px-5 py-3 text-sm text-slate-500">Aucun ingrédient n'a encore de matière sèche validée par un expert : le calcul sera refusé.</p>
+              )}
+              {others.length > 0 && (
+                <details className="group border-t border-slate-200" open={ready.length === 0 || others.some((i) => choiceOf(i.id).selected)}>
+                  <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden />
+                    Sans matière sèche validée ({others.length}) : exclus du calcul
+                  </summary>
+                  <ul className="divide-y divide-slate-100 border-t border-slate-100">{others.map(row)}</ul>
+                </details>
+              )}
             </div>
+            {hiddenOtherWorld > 0 && (
+              <p className="text-xs text-slate-500">
+                {demoFarm
+                  ? `${hiddenOtherWorld} ingrédient(s) réel(s) masqué(s) : une exploitation DEMO n'utilise que des données DEMO.`
+                  : `${hiddenOtherWorld} ingrédient(s) DEMO masqué(s) : ils ne sont jamais utilisés dans une exploitation réelle.`}
+              </p>
+            )}
             {needsHeadcount && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <TextField label="Nombre d'animaux nourris" inputMode="numeric" value={p.animals} onChange={set('animals')} />
@@ -172,9 +269,18 @@ export function CalculationForm() {
         )}
       </Card>
 
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-xs text-slate-500">Le résultat sera une estimation mathématique, à faire vérifier par un expert avant usage.</p>
-        <Button type="submit" loading={busy} icon={<Calculator className="size-4" />}>Calculer la formule</Button>
+      {(risky.length > 0 || unpriced.length > 0) && (
+        <Alert tone="warning" title="Avant de calculer">
+          <ul className="list-disc space-y-1 pl-5">
+            {risky.length > 0 && <li>{risky.map((i) => i.name).join(', ')} : matière sèche non validée, l'ingrédient sera exclu du calcul.</li>}
+            {unpriced.length > 0 && <li>{unpriced.map((i) => i.name).join(', ')} : aucun prix connu ; en mode économique, l'ingrédient sera exclu. Saisissez un prix ou passez en mode équilibré.</li>}
+          </ul>
+        </Alert>
+      )}
+
+      <div className="sticky bottom-0 -mx-4 border-t border-slate-200 bg-white/95 px-4 py-3 pr-24 sm:static sm:mx-0 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:border-0 sm:bg-transparent sm:p-0">
+        <p className="mb-2 text-sm text-slate-500 sm:mb-0">Le résultat sera une estimation, à faire vérifier par un expert avant usage.</p>
+        <Button type="submit" loading={busy} icon={<Calculator className="size-4" />} className="w-full sm:w-auto">Calculer la formule</Button>
       </div>
     </form>
   )

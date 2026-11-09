@@ -2,9 +2,10 @@ import clsx from 'clsx'
 import { Maximize2, MessageSquarePlus, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router'
-import { Alert } from '@/components/ui/Feedback'
 import { Logo } from '@/components/ui/Logo'
+import { useAuth } from '@/hooks/useAuth'
 import { ChatThread } from './AssistantChat'
+import { GuidePanel } from './GuidePanel'
 import { useAssistantChat } from './useAssistantChat'
 
 /**
@@ -14,12 +15,15 @@ import { useAssistantChat } from './useAssistantChat'
  */
 export function AssistantLauncher() {
   const [open, setOpen] = useState(false)
+  const { user } = useAuth()
   const chat = useAssistantChat()
   const { pathname } = useLocation()
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const launcherRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const statusKnown = !chat.status.isLoading
+  // Assistant non activé : le bouton bélier ouvre le guide et le glossaire, jamais un message technique.
+  const guideMode = statusKnown && !chat.configured
 
   // À l'ouverture : focus dans la zone de saisie si l'assistant répond, sinon sur « Fermer »
   // (un champ désactivé ne peut pas recevoir le focus ; il ne doit jamais rester hors du panneau).
@@ -50,7 +54,7 @@ export function AssistantLauncher() {
         <section
           id="assistant-panel"
           role="dialog"
-          aria-label="Assistant Ndeyam AI"
+          aria-label={guideMode ? 'Guide Ndeyam AI' : 'Assistant Ndeyam AI'}
           className={clsx(
             'fixed z-50 flex flex-col overflow-hidden bg-white',
             // Téléphone : plein écran ; ordinateur et tablette : panneau ancré au-dessus du bouton.
@@ -62,39 +66,43 @@ export function AssistantLauncher() {
             <div className="flex items-center gap-3 px-4 py-3">
               <Logo className="size-9 shrink-0" />
               <div className="min-w-0 flex-1">
-                <p className="font-display text-[15px] leading-tight font-bold">Assistant Ndeyam AI</p>
+                <p className="font-display text-[15px] leading-tight font-bold">{guideMode ? 'Guide Ndeyam AI' : 'Assistant Ndeyam AI'}</p>
                 <p className="truncate text-xs text-brand-200">
-                  {chat.status.isLoading ? 'Vérification…' : chat.configured ? 'Répond à partir de vos données' : 'Non configuré'}
+                  {chat.status.isLoading ? 'Vérification…' : guideMode ? 'Les gestes essentiels et le vocabulaire' : 'Répond à partir de vos données'}
                 </p>
               </div>
-              <button type="button" onClick={() => chat.open(null)} className="rounded-md p-2 text-brand-200 hover:bg-white/10 hover:text-white"
-                aria-label="Nouvelle conversation" title="Nouvelle conversation">
-                <MessageSquarePlus className="size-[18px]" />
-              </button>
-              <Link to="/assistant" onClick={() => setOpen(false)} className="rounded-md p-2 text-brand-200 hover:bg-white/10 hover:text-white"
-                aria-label="Ouvrir en plein écran (historique des conversations)" title="Plein écran et historique">
-                <Maximize2 className="size-[18px]" />
-              </Link>
-              <button ref={closeRef} type="button" onClick={() => setOpen(false)} className="rounded-md p-2 text-brand-200 hover:bg-white/10 hover:text-white"
+              {!guideMode && (
+                <>
+                  <button type="button" onClick={() => chat.open(null)} className="rounded-md p-2.5 text-brand-200 hover:bg-white/10 hover:text-white"
+                    aria-label="Nouvelle conversation" title="Nouvelle conversation">
+                    <MessageSquarePlus className="size-[18px]" />
+                  </button>
+                  <Link to="/assistant" onClick={() => setOpen(false)} className="rounded-md p-2.5 text-brand-200 hover:bg-white/10 hover:text-white"
+                    aria-label="Ouvrir en plein écran (historique des conversations)" title="Plein écran et historique">
+                    <Maximize2 className="size-[18px]" />
+                  </Link>
+                </>
+              )}
+              <button ref={closeRef} type="button" onClick={() => setOpen(false)} className="rounded-md p-2.5 text-brand-200 hover:bg-white/10 hover:text-white"
                 aria-label="Fermer l'assistant">
                 <X className="size-5" />
               </button>
             </div>
-            <div className="weave-dark" aria-hidden />
           </header>
+          <div className="h-[3px] bg-mil-400" aria-hidden />
 
-          {!chat.status.isLoading && !chat.configured && (
-            <Alert tone="info" className="m-3 mb-0" title="Assistant non configuré">
-              L'administrateur peut l'activer dans <code>backend/.env</code> (LLM_PROVIDER). Les autres modules restent utilisables.
-            </Alert>
+          {chat.status.isLoading ? null : guideMode ? (
+            <GuidePanel onNavigate={() => setOpen(false)} adminNote={Boolean(user?.is_platform_admin)} />
+          ) : (
+            <>
+              <p className="border-b border-slate-100 px-4 py-2 text-[13px] leading-snug text-slate-600">
+                Explique vos données et les résultats du moteur. Ne calcule aucune ration et ne pose aucun diagnostic vétérinaire.
+              </p>
+              <div className="flex min-h-0 flex-1 flex-col">
+                <ChatThread chat={chat} compact inputRef={inputRef} />
+              </div>
+            </>
           )}
-          <p className="border-b border-slate-100 px-4 py-2 text-[11.5px] leading-snug text-slate-500">
-            Explique vos données et les résultats du moteur. Ne calcule aucune ration et ne pose aucun diagnostic vétérinaire.
-          </p>
-
-          <div className="flex min-h-0 flex-1 flex-col">
-            <ChatThread chat={chat} compact inputRef={inputRef} />
-          </div>
         </section>
       )}
 
@@ -105,7 +113,7 @@ export function AssistantLauncher() {
         aria-expanded={open}
         aria-controls="assistant-panel"
         aria-label={open ? "Fermer l'assistant Ndeyam AI" : "Ouvrir l'assistant Ndeyam AI"}
-        title="Assistant Ndeyam AI"
+        title={guideMode ? 'Guide Ndeyam AI' : 'Assistant Ndeyam AI'}
         className={clsx(
           'group fixed z-50 rounded-[14px] transition-transform focus-visible:outline-offset-4 motion-safe:hover:-translate-y-0.5',
           'right-[max(1.25rem,env(safe-area-inset-right))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:right-6 sm:bottom-6',
@@ -122,7 +130,7 @@ export function AssistantLauncher() {
         )}
         {!open && (
           <span className="pointer-events-none absolute right-full top-1/2 mr-3 hidden -translate-y-1/2 whitespace-nowrap rounded-md bg-brand-900 px-3 py-1.5 text-xs font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100 sm:block">
-            Assistant Ndeyam AI
+            {guideMode ? 'Guide Ndeyam AI' : 'Assistant Ndeyam AI'}
           </span>
         )}
       </button>

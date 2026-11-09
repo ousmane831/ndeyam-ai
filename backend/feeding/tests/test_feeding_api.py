@@ -130,3 +130,62 @@ def test_feeding_records_are_isolated_and_exportable(ctx, make_user, client_for)
     assert client_for(make_user()).get(RECORDS).json()["count"] == 0
     csv = ctx["client"].get(f"{RECORDS}export/").content.decode("utf-8-sig")
     assert csv.splitlines()[0].startswith("date;ration;animal") and len(csv.splitlines()) == 2
+
+
+# --- Une estimation non vérifiée ne devient jamais une ration (décision du porteur de projet) ---------
+
+
+@pytest.mark.parametrize(
+    "mode, status, allowed",
+    [
+        ("ECONOMIC", "ESTIMATED", False),
+        ("BALANCED", "PENDING_REVIEW", False),
+        ("ECONOMIC", "REFUSED", False),
+        ("ECONOMIC", "INFEASIBLE", False),
+        ("ECONOMIC", "REJECTED", False),
+        ("ECONOMIC", "VALIDATED", True),
+        ("MANUAL", "DRAFT", True),
+        ("MANUAL", "REJECTED", False),
+    ],
+)
+def test_ration_requires_a_validated_engine_formula(ctx, ovin, mode, status, allowed):
+    from django.utils import timezone
+
+    formula = FeedFormula.objects.create(
+        validated_at=timezone.now() if status == "VALIDATED" else None,
+        farm=ctx["farm"],
+        name=f"{mode} {status}",
+        species=ovin,
+        mode=mode,
+        status=status,
+    )
+    response = ration(ctx, formula=formula.pk)
+    assert (response.status_code == 201) is allowed, response.json()
+    if not allowed:
+        assert "formula" in response.json()["errors"]
+
+
+def test_demo_farm_may_use_its_demo_estimate(client_for, breeder, make_farm, ovin):
+    from animals.models import AnimalGroup
+
+    demo = make_farm(owner=breeder, name="Démo", is_demo=True)
+    formula = FeedFormula.objects.create(
+        farm=demo, name="Démo", species=ovin, mode="ECONOMIC", status="ESTIMATED", is_demo=True
+    )
+    group = AnimalGroup.objects.create(farm=demo, name="Lot démo", is_demo=True)
+    response = client_for(breeder).post(
+        RATIONS,
+        {"farm": demo.pk, "name": "Ration démo", "formula": formula.pk, "group": group.pk},
+        format="json",
+    )
+    assert response.status_code == 201, response.json()
+
+
+def test_feeding_record_label_is_readable():
+    from datetime import date
+    from decimal import Decimal
+
+    from feeding.models import FeedingRecord
+
+    record = FeedingRecord(fed_on=date(2026, 11, 7), quantity_distributed_kg=Decimal("10.000"))
+    assert str(record) == "07/11/2026 — 10 kg"

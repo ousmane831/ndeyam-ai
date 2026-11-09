@@ -67,6 +67,8 @@ export interface FormulaSnapshot {
   reference?: { id: number; name: string; system: string; source: string | null; status: string; is_demo: boolean } | null
   solver_status?: string
   engine_version?: string
+  /** Profil d'animal retenu pour le calcul (identifiants de nomenclature). */
+  profile?: Record<string, number | string | null>
 }
 
 export interface Formula {

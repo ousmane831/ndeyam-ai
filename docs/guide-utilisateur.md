@@ -40,12 +40,18 @@ Dans les formulaires, l'exploitation proposée par défaut est celle sélectionn
 
 ## 3. Tableau de bord
 
-Tous les chiffres proviennent de vos données enregistrées. Lorsqu'il n'y a pas encore de données, un message
-l'indique : aucune statistique n'est inventée.
+Le tableau de bord s'ouvre sur **À faire aujourd'hui** : animaux à peser, croissance à surveiller, distributions
+à enregistrer, formules en attente d'un expert, fiches à compléter. Chaque tâche a son bouton d'action direct
+(par exemple **Peser**, qui ouvre la fiche de l'animal sur l'onglet des pesées).
+
+Viennent ensuite les indicateurs, le troupeau, l'évolution du poids, les dernières pesées, les rations en cours et
+les activités récentes. Tous les chiffres proviennent de vos données enregistrées. Lorsqu'il n'y a pas encore de
+données, un message l'indique : aucune statistique n'est inventée.
 
 - **Coût d'alimentation estimé** : somme des coûts des distributions des 30 derniers jours. Si certaines
   distributions n'ont pas de coût connu (formule sans prix), leur nombre est indiqué.
-- **Évolution du poids** : poids moyen des pesées enregistrées chaque mois, tous animaux confondus.
+- **Évolution du poids** : moyenne des pesées de chaque mois, tous animaux confondus. Les animaux pesés changent
+  d'un mois à l'autre : ce n'est pas la courbe d'un animal (voir sa fiche pour cela).
 
 ## 4. Animaux
 
@@ -143,6 +149,10 @@ si vous le souhaitez, la quantité disponible.
    et la durée) pour que le moteur en tienne compte.
 5. **Calculer la formule**.
 
+Sur téléphone, cochez un ingrédient pour faire apparaître son prix et son stock. Les ingrédients dont la matière
+sèche n'est pas validée sont regroupés à part : ils seraient exclus du calcul. Avant de calculer, un encadré signale
+ce qui risque d'être exclu (matière sèche non validée, prix manquant en mode économique).
+
 Trois issues possibles :
 
 | Résultat | Signification |
@@ -152,6 +162,8 @@ Trois issues possibles :
 | **Calcul refusé** | Des données validées manquent (référence, valeurs, prix) : la raison est indiquée |
 
 Un ingrédient sans valeur validée pour un nutriment requis est **exclu** (et signalé), jamais compté à zéro.
+Après un refus ou une impossibilité, **Que faire maintenant ?** indique chaque ingrédient à compléter (avec un lien)
+et propose **Modifier et recalculer**, qui reprend le profil, la référence et les ingrédients du calcul.
 Une estimation n'est pas une recommandation : demandez la vérification d'un expert avant de l'utiliser.
 
 **Ration saisie** : enregistrez la ration que vous distribuez déjà (kg brut par animal et par jour) pour en connaître
@@ -163,6 +175,8 @@ la matière sèche, les apports et le coût.
 
 - **Rations** : créez une ration à partir d'une formule (*Créer une ration* dans la formule, ou *Nouvelle ration*),
   associez-la à un lot ou à un animal, puis **terminez-la** à la fin de la période.
+  **Une formule calculée par le moteur ne devient une ration qu'après validation par un expert** : une estimation ne
+  nourrit jamais un animal. Une ration saisie (ce que vous distribuez déjà) peut être enregistrée directement.
 - **Distributions** : enregistrez chaque distribution. La **quantité calculée** (prévue par la ration) et le
   **coût estimé** sont automatiques ; saisissez la **quantité distribuée** et, seulement si vous l'avez mesurée
   (pesée des refus), la **quantité consommée**. Une synthèse et un export CSV sont disponibles.
@@ -188,8 +202,9 @@ conversations. Posez vos questions en français, par exemple « Quel est le poid
   signale les informations manquantes plutôt que de les inventer.
 - La conversation est liée à l'exploitation sélectionnée en haut de l'écran ; vos conversations sont privées et
   peuvent être supprimées.
-- Si l'assistant n'est pas configuré sur l'installation, la page l'indique et la saisie est désactivée : tous les
-  autres modules restent utilisables.
+- Si l'assistant n'est pas encore activé sur l'installation, le bouton bélier ouvre un **guide** (les gestes
+  essentiels, avec un lien vers chaque écran) et un **glossaire** (MS, brut, GMD, UFL, MAT…). Tous les autres
+  modules restent utilisables.
 
 ## 13. Données de démonstration (DEMO)
 

@@ -139,7 +139,7 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
                     <button
                       type="button"
                       onClick={() => setToRemove(member)}
-                      className="rounded p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600"
+                      className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600"
                       aria-label={`Retirer ${member.user_email}`}
                     >
                       <Trash2 className="size-4" />

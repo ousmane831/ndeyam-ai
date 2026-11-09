@@ -9,14 +9,16 @@ import { ConfirmDialog } from '@/components/ui/Modal'
 import { Spinner } from '@/components/ui/Spinner'
 import { ChatThread } from '@/features/assistant/AssistantChat'
 import { useAssistantChat } from '@/features/assistant/useAssistantChat'
+import { useAuth } from '@/hooks/useAuth'
 import { assistantService } from '@/services/assistant'
 import { formatDateTime } from '@/utils/format'
 
-export function NotConfiguredNotice({ message }: { message?: string }) {
+export function NotConfiguredNotice({ admin }: { admin: boolean }) {
   return (
     <Alert tone="info" title="Assistant non configuré">
-      {message ?? "Le statut de l'assistant n'a pas pu être vérifié."} L'administrateur peut l'activer dans le fichier
-      <code className="mx-1">backend/.env</code>(LLM_PROVIDER). Tous les autres modules restent utilisables.
+      L'assistant conversationnel n'est pas encore activé sur cette installation. Tous les autres modules restent utilisables,
+      et le bouton bélier en bas à droite ouvre un guide et un glossaire.
+      {admin && <> Pour l'activer, renseignez <code className="mx-1">LLM_PROVIDER</code> dans <code className="mx-1">backend/.env</code>.</>}
     </Alert>
   )
 }
@@ -25,6 +27,7 @@ export function NotConfiguredNotice({ message }: { message?: string }) {
 export function AssistantPage() {
   const queryClient = useQueryClient()
   const chat = useAssistantChat()
+  const { user } = useAuth()
   const [toDelete, setToDelete] = useState<number | null>(null)
   const conversations = useQuery({ queryKey: ['assistant', 'conversations'], queryFn: assistantService.list })
 
@@ -42,7 +45,7 @@ export function AssistantPage() {
       <PageHeader title="Assistant Ndeyam AI"
         description="Posez vos questions sur vos animaux, vos rations, vos formules et la documentation technique validée." />
 
-      {chat.status.isLoading ? <Spinner /> : !chat.configured ? <NotConfiguredNotice message={chat.status.data?.message} /> : null}
+      {chat.status.isLoading ? <Spinner /> : !chat.configured ? <NotConfiguredNotice admin={Boolean(user?.is_platform_admin)} /> : null}
 
       <Alert tone="warning">
         L'assistant explique vos données et les résultats du moteur nutritionnel : il ne calcule aucune ration lui-même, ne pose
@@ -62,7 +65,7 @@ export function AssistantPage() {
                     <span className="block truncate text-sm font-medium text-slate-800">{c.title || 'Nouvelle conversation'}</span>
                     <span className="block text-xs text-slate-500">{formatDateTime(c.updated_at)}</span>
                   </button>
-                  <button type="button" className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label={`Supprimer la conversation ${c.title}`}
+                  <button type="button" className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={`Supprimer la conversation ${c.title}`}
                     onClick={() => setToDelete(c.id)}>
                     <Trash2 className="size-4" />
                   </button>

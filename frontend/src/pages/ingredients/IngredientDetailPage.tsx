@@ -128,7 +128,7 @@ function PricesCard({ ingredient }: { ingredient: IngredientDetail }) {
                     <td className={td}>{p.quantity_available_kg ? `${formatNumber(p.quantity_available_kg)} kg` : '—'}</td>
                     {writable && (
                       <td className={`${td} text-right`}>
-                        <button type="button" onClick={() => removal.mutate(p.id)} className="rounded p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600" aria-label="Supprimer le prix">
+                        <button type="button" onClick={() => removal.mutate(p.id)} className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600" aria-label="Supprimer le prix">
                           <Trash2 className="size-4" />
                         </button>
                       </td>
@@ -215,11 +215,11 @@ export function IngredientDetailPage() {
                       {row.validated_value !== null ? (
                         <span className="font-semibold text-slate-900">{formatNumber(row.validated_value, 4)}</span>
                       ) : (
-                        <span className="text-slate-400 italic">Inconnue</span>
+                        <span className="text-slate-500 italic">Inconnue</span>
                       )}
                     </td>
                     <td className={td}>
-                      {row.values.length === 0 ? <span className="text-slate-400">—</span> : (
+                      {row.values.length === 0 ? <span className="text-slate-500">—</span> : (
                         <ul className="space-y-3">
                           {row.values.map((c) => (
                             <li key={c.id} className="space-y-1.5">
@@ -228,7 +228,7 @@ export function IngredientDetailPage() {
                                 <ValidationBadge status={c.status} isDemo={c.is_demo} />
                                 <span className="text-xs text-slate-500">{c.source?.title ?? 'sans source'}{c.reference_date ? ` · ${formatDate(c.reference_date)}` : ''}</span>
                                 {writable && c.status !== 'VALIDATED' && (
-                                  <button type="button" onClick={() => setToDelete(c.id)} className="rounded p-1 text-slate-400 hover:text-red-600" aria-label="Supprimer la valeur">
+                                  <button type="button" onClick={() => setToDelete(c.id)} className="rounded p-1 text-slate-500 hover:text-red-600" aria-label="Supprimer la valeur">
                                     <Trash2 className="size-3.5" />
                                   </button>
                                 )}

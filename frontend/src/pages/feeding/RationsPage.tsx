@@ -14,6 +14,7 @@ import { useFarm } from '@/hooks/useFarm'
 import { ApiError } from '@/services/api'
 import { animalService, groupService } from '@/services/animals'
 import { feedingService, type RationSummary, type RecordFilters } from '@/services/feeding'
+import { canCreateRation } from '@/features/formulation/rationRules'
 import { formulaService } from '@/services/formulas'
 import { formatDate, formatMoney, formatNumber, todayIso } from '@/utils/format'
 
@@ -30,7 +31,9 @@ function RationModal({ farmId, initialFormula, onClose }: { farmId: number; init
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF((s) => ({ ...s, [k]: e.target.value }))
-  const usable = (formulas.data ?? []).filter((x) => x.items.length > 0)
+  // Une estimation non vérifiée ne nourrit jamais un animal : seules les formules autorisées sont proposées.
+  const usable = (formulas.data ?? []).filter((x) => x.items.length > 0 && canCreateRation(x))
+  const waiting = (formulas.data ?? []).filter((x) => x.items.length > 0 && !canCreateRation(x)).length
   const chosen = usable.find((x) => String(x.id) === f.formula)
 
   const submit = async () => {
@@ -60,7 +63,8 @@ function RationModal({ farmId, initialFormula, onClose }: { farmId: number; init
         <TextField label="Nom de la ration" required value={f.name} onChange={set('name')} />
         <SelectField label="Formule" required value={f.formula} onChange={set('formula')}
           options={[{ value: '', label: 'Choisir…' }, ...usable.map((x) => ({ value: String(x.id), label: `${x.name} — ${x.status_label}` }))]} />
-        {chosen && chosen.status !== 'VALIDATED' && <Alert tone="warning">Cette formule n'a pas été validée par un expert.</Alert>}
+        {chosen?.mode === 'MANUAL' && chosen.status !== 'VALIDATED' && <Alert tone="info">Ration saisie : ses apports n'ont pas été vérifiés par un expert.</Alert>}
+        {waiting > 0 && <p className="text-sm text-slate-500">{waiting} formule(s) calculée(s) en attente de validation par un expert ne sont pas proposées.</p>}
         <div className="flex gap-4 text-sm">
           <label className="inline-flex items-center gap-2"><input type="radio" checked={f.target === 'group'} onChange={() => setF({ ...f, target: 'group' })} className="accent-brand-600" /> Un lot</label>
           <label className="inline-flex items-center gap-2"><input type="radio" checked={f.target === 'animal'} onChange={() => setF({ ...f, target: 'animal' })} className="accent-brand-600" /> Un animal</label>
@@ -169,7 +173,7 @@ function RationsTab({ farmId, writable, initialFormula }: { farmId: number | nul
                 <div className="flex items-center gap-2">
                   <Badge tone={r.status === 'ACTIVE' ? 'brand' : 'neutral'}>{r.status_label}</Badge>
                   {writable && r.status === 'ACTIVE' && <Button size="sm" variant="secondary" icon={<Square className="size-3.5" />} onClick={() => setEnding(r)}>Terminer</Button>}
-                  {writable && <button type="button" onClick={() => setToDelete(r)} className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label={`Supprimer ${r.name}`}><Trash2 className="size-4" /></button>}
+                  {writable && <button type="button" onClick={() => setToDelete(r)} className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={`Supprimer ${r.name}`}><Trash2 className="size-4" /></button>}
                 </div>
               </li>
             ))}
@@ -239,7 +243,7 @@ function DistributionsTab({ farmId, writable }: { farmId: number | null; writabl
                       <td className={td}>{formatNumber(r.quantity_distributed_kg, 3)} kg</td>
                       <td className={td}>{r.quantity_consumed_kg ? `${formatNumber(r.quantity_consumed_kg, 3)} kg` : 'Non mesurée'}</td>
                       <td className={td}>{formatMoney(r.estimated_cost, r.currency)}</td>
-                      {writable && <td className={`${td} text-right`}><button type="button" onClick={() => removal.mutate(r.id)} className="rounded p-1.5 text-slate-400 hover:text-red-600" aria-label="Supprimer la distribution"><Trash2 className="size-4" /></button></td>}
+                      {writable && <td className={`${td} text-right`}><button type="button" onClick={() => removal.mutate(r.id)} className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label="Supprimer la distribution"><Trash2 className="size-4" /></button></td>}
                     </tr>
                   ))}
                 </tbody>

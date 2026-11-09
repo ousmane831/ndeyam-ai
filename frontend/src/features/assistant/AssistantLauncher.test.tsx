@@ -6,6 +6,8 @@ import { breeder, fakeAuth, renderWithProviders } from '@/test/utils'
 import { AssistantLauncher } from './AssistantLauncher'
 
 const auth = () => fakeAuth({ status: 'authenticated', user: breeder })
+const configured = () =>
+  vi.spyOn(assistantService, 'status').mockResolvedValue({ configured: true, provider: 'anthropic', model: 'claude-opus-5-5', message: '' })
 
 describe('AssistantLauncher', () => {
   beforeEach(() => {
@@ -15,27 +17,39 @@ describe('AssistantLauncher', () => {
     })
   })
 
-  it("ouvre le panneau depuis le bouton flottant et le referme avec Échap", async () => {
+  it("sans assistant activé, le bouton bélier ouvre un guide et un glossaire, sans jargon technique", async () => {
     renderWithProviders(<AssistantLauncher />, { auth: auth() })
     const launcher = screen.getByRole('button', { name: "Ouvrir l'assistant Ndeyam AI" })
     expect(launcher).toHaveAttribute('aria-expanded', 'false')
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
 
     await userEvent.click(launcher)
-    expect(screen.getByRole('dialog', { name: 'Assistant Ndeyam AI' })).toBeInTheDocument()
-    expect(await screen.findByText('Assistant non configuré')).toBeInTheDocument()
-    expect(screen.getByLabelText('Votre question')).toBeDisabled()
-    expect(screen.getByText(/ne pose aucun diagnostic vétérinaire/)).toBeInTheDocument()
-    // Assistant non configuré : le champ est désactivé, le focus va sur « Fermer » (jamais hors du panneau).
+    expect(await screen.findByRole('dialog', { name: 'Guide Ndeyam AI' })).toBeInTheDocument()
+    // Le focus reste dans le panneau (sur « Fermer ») pour la navigation au clavier.
     await vi.waitFor(() => expect(screen.getByRole('button', { name: "Fermer l'assistant" })).toHaveFocus())
+    expect(screen.getByText('Peser vos animaux')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Séance de pesée/ })).toHaveAttribute('href', '/suivi-croissance')
+    expect(screen.queryByText(/backend\/\.env/)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Votre question')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Glossaire' }))
+    expect(screen.getByText('MS (matière sèche)')).toBeInTheDocument()
 
     await userEvent.keyboard('{Escape}')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it("propose la vue plein écran et se masque sur la page de l'assistant", async () => {
+  it("l'indication technique d'activation n'est montrée qu'aux administrateurs", async () => {
+    renderWithProviders(<AssistantLauncher />, { auth: fakeAuth({ status: 'authenticated', user: { ...breeder, is_platform_admin: true } }) })
+    await userEvent.click(screen.getByRole('button', { name: "Ouvrir l'assistant Ndeyam AI" }))
+    expect(await screen.findByText('LLM_PROVIDER')).toBeInTheDocument()
+  })
+
+  it("assistant activé : discussion, vue plein écran, et masqué sur la page de l'assistant", async () => {
+    configured()
     const { unmount } = renderWithProviders(<AssistantLauncher />, { auth: auth() })
     await userEvent.click(screen.getByRole('button', { name: "Ouvrir l'assistant Ndeyam AI" }))
+    expect(await screen.findByRole('dialog', { name: 'Assistant Ndeyam AI' })).toBeInTheDocument()
+    expect(screen.getByText(/ne pose aucun diagnostic vétérinaire/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /plein écran/ })).toHaveAttribute('href', '/assistant')
     unmount()
 
@@ -44,7 +58,7 @@ describe('AssistantLauncher', () => {
   })
 
   it('envoie une question depuis le panneau', async () => {
-    vi.spyOn(assistantService, 'status').mockResolvedValue({ configured: true, provider: 'anthropic', model: 'claude-opus-5-5', message: '' })
+    configured()
     const create = vi.spyOn(assistantService, 'create').mockResolvedValue({
       id: 3, title: '', farm: 1, is_archived: false, messages_count: 0, created_at: '', updated_at: '',
     })
@@ -54,7 +68,7 @@ describe('AssistantLauncher', () => {
     })
     renderWithProviders(<AssistantLauncher />, { auth: auth() })
     await userEvent.click(screen.getByRole('button', { name: "Ouvrir l'assistant Ndeyam AI" }))
-    const input = screen.getByLabelText('Votre question')
+    const input = await screen.findByLabelText('Votre question')
     await vi.waitFor(() => expect(input).toBeEnabled())
     await vi.waitFor(() => expect(input).toHaveFocus())
     await userEvent.type(input, 'Combien pèse E2E-001 ?{Enter}')
