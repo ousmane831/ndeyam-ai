@@ -150,3 +150,24 @@
     outline-offset: -1px;
   }
 }
+
+/* Impression de la carte ration seule (bouton « Imprimer la fiche ») : le reste de la page est masqué. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  html.print-ration body * {
+    visibility: hidden;
+  }
+  html.print-ration .ration-card,
+  html.print-ration .ration-card * {
+    visibility: visible;
+  }
+  html.print-ration .ration-card {
+    position: absolute;
+    inset: 0 0 auto 0;
+    border: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

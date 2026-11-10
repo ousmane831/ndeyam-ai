@@ -74,6 +74,7 @@ class SourceSummaryField(serializers.PrimaryKeyRelatedField):
 class IngredientSerializer(ReadOnlyStatusSerializerMixin, serializers.ModelSerializer):
     farm = WritableFarmField(required=False, allow_null=True)
     category_name = serializers.CharField(source="category.name", read_only=True)
+    category_code = serializers.CharField(source="category.code", read_only=True)
     scope = serializers.SerializerMethodField()
     source = SourceSummaryField(required=False, allow_null=True)
     # Teneur en matière sèche utilisable par le moteur (annotation de la vue ; absent hors liste).
@@ -87,6 +88,7 @@ class IngredientSerializer(ReadOnlyStatusSerializerMixin, serializers.ModelSeria
             "local_names",
             "category",
             "category_name",
+            "category_code",
             "description",
             "farm",
             "scope",

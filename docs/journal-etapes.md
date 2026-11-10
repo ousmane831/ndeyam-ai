@@ -443,3 +443,22 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
   contraste insuffisant 19 → 0, textes trop petits 18 → 0, mots isolés 13 → 0.
 - Vérifications : pytest 467, Vitest 82, lint, build, OpenAPI ; navigateur 345/345, nouveaux parcours 33/33, panneau
   22/22, parcours API 200/200.
+
+## Lot 1 des retours clients (10/11/2026) ✅
+
+- Formule rapide (lot → objectif → aliments), profil du lot déduit par le serveur, mémoire des choix sur l'appareil.
+- Carte « À donner chaque jour » : quantités pour tout le lot en gros, pictogrammes, coût du jour et de la semaine,
+  partage WhatsApp, impression de la carte seule.
+- Application installable (manifeste, icônes, service worker de l'interface, bouton « Installer l'application »).
+- Vérifications : pytest 469, Vitest 89, lint, build ; navigateur 33/33 (téléphone et ordinateur).
+
+## Lot 2 des retours clients : hors ligne et données (10/11/2026) ✅
+
+- Lecture hors ligne (copie locale des données, reprise de session sans réseau), bandeau de connexion.
+- Pesées et séances de pesée hors ligne, file d'envoi automatique, refus affichés avec leur motif.
+- Formule rapide hors ligne : paquet de calcul par exploitation, moteur porté dans le navigateur (parité testée sur
+  15 cas du moteur Python), recalcul officiel par le serveur au retour du réseau.
+- Interface préchargée par le service worker ; consommation mesurée (≈ 530 Ko à l'installation, 4 à 5 Ko par écran),
+  affichée dans Paramètres.
+- Vérifications : pytest 472, Vitest 114, lint, build, OpenAPI ; parcours hors ligne réel (version de production,
+  coupure réseau, rechargement, pesée, calcul, retour du réseau) 18/18.

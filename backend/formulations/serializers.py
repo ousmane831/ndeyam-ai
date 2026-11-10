@@ -13,6 +13,7 @@ from animals.models import (
     ProductionObjective,
     Species,
 )
+from animals.services import group_profile
 from core.serializers import FarmScopedRelatedField, ModelCleanMixin, WritableFarmField
 from nutrition.models import Ingredient, NutritionalReference
 
@@ -22,6 +23,9 @@ from .models import FeedFormula, FeedFormulaIngredient, FormulaMode, FormulaStat
 
 class FormulaItemSerializer(serializers.ModelSerializer):
     ingredient_name = serializers.CharField(source="ingredient.name", read_only=True)
+    ingredient_category = serializers.CharField(
+        source="ingredient.category.code", read_only=True, default=None
+    )
 
     class Meta:
         model = FeedFormulaIngredient
@@ -29,6 +33,7 @@ class FormulaItemSerializer(serializers.ModelSerializer):
             "id",
             "ingredient",
             "ingredient_name",
+            "ingredient_category",
             "inclusion_pct_dm",
             "inclusion_pct_as_fed",
             "quantity_dm_kg",
@@ -270,8 +275,23 @@ class CalculationRequestSerializer(serializers.Serializer):
             if attrs.get("animal_age_months") is None and animal.birth_date:
                 months = Decimal(animal.age_in_days()) / Decimal("30.44")
                 attrs["animal_age_months"] = months.quantize(Decimal("0.1"))
+        elif group is not None:
+            derived = group_profile(group)
+            attrs["group_head_count"] = derived["head_count"]
+            attrs["group_notes"] = derived["notes"]
+            if attrs.get("species") is None and derived.get("species") is not None:
+                attrs["species"] = derived["species"]
+            for field in ("breed", "category", "physiological_stage"):
+                if attrs.get(field) is None:
+                    attrs[field] = derived.get(field)
+            if attrs.get("animal_weight_kg") is None:
+                attrs["animal_weight_kg"] = derived.get("weight_kg")
+            if attrs.get("animal_age_months") is None:
+                attrs["animal_age_months"] = derived.get("age_months")
         if attrs.get("species") is None:
-            raise serializers.ValidationError({"species": "Indiquez l'espèce ou choisissez un animal."})
+            raise serializers.ValidationError(
+                {"species": "Indiquez l'espèce ou choisissez un animal ou un lot."}
+            )
 
         reference = attrs.get("reference")
         if reference is not None:

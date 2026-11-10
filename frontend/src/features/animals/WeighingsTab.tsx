@@ -11,6 +11,8 @@ import { SelectField, TextField } from '@/components/ui/Field'
 import { td, th } from '@/components/ui/Layout'
 import { ConfirmDialog } from '@/components/ui/Modal'
 import { Spinner } from '@/components/ui/Spinner'
+import { isOnline } from '@/features/offline/connectivity'
+import { isNetworkError, outbox } from '@/features/offline/outbox'
 import { animalService, weighingService } from '@/services/animals'
 import type { Animal, Weighing } from '@/types/animal'
 import { applyServerErrors } from '@/utils/forms'
@@ -40,6 +42,7 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
   const growth = useQuery({ queryKey: ['growth', animal.id], queryFn: () => animalService.growth(animal.id) })
   const weighings = useQuery({ queryKey: ['weighings', animal.id], queryFn: () => weighingService.list({ animal: animal.id, page_size: 100 }) })
   const [serverError, setServerError] = useState<string | null>(null)
+  const [offlineNote, setOfflineNote] = useState<string | null>(null)
   const [toDelete, setToDelete] = useState<Weighing | null>(null)
 
   const refresh = () => {
@@ -58,11 +61,21 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null)
+    setOfflineNote(null)
+    const payload = { ...values, animal: animal.id, weight_kg: values.weight_kg.replace(',', '.') }
+    // Sans réseau, la pesée est gardée sur l'appareil et envoyée au retour de la connexion.
+    const keepForLater = () => {
+      outbox.add({ kind: 'weighing', payload, label: `Pesée de ${animal.tag_number} (${payload.weight_kg.replace('.', ',')} kg, ${formatDate(values.weighed_on)})` })
+      reset({ ...values, weight_kg: '', observations: '' })
+      setOfflineNote('Hors ligne : pesée gardée sur cet appareil, envoyée automatiquement au retour du réseau.')
+    }
+    if (!isOnline()) return keepForLater()
     try {
-      await weighingService.create({ ...values, animal: animal.id, weight_kg: values.weight_kg.replace(',', '.') })
+      await weighingService.create(payload)
       reset({ ...values, weight_kg: '', observations: '' })
       refresh()
     } catch (error) {
+      if (isNetworkError(error)) return keepForLater()
       setServerError(applyServerErrors(error, setError, ['weighed_on', 'weight_kg', 'method', 'observations']))
     }
   })
@@ -82,6 +95,7 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
         <Card title="Nouvelle pesée">
           <form onSubmit={onSubmit} noValidate className="space-y-4">
             {serverError && <Alert tone="error">{serverError}</Alert>}
+            {offlineNote && <Alert tone="success">{offlineNote}</Alert>}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <TextField label="Date" type="date" max={todayIso()} required error={errors.weighed_on?.message} {...register('weighed_on')} />
               <TextField label="Poids (kg)" inputMode="decimal" required error={errors.weight_kg?.message} {...register('weight_kg')} />

@@ -3,6 +3,7 @@ import { Alert, Badge, Card } from '@/components/ui/Feedback'
 import { td, th } from '@/components/ui/Layout'
 import type { Formula, NutrientSupply } from '@/types/formula'
 import { formatMoney, formatNumber } from '@/utils/format'
+import { RationCard } from './RationCard'
 
 const CHECK = {
   ok: { label: 'Respecté', tone: 'brand' },
@@ -99,6 +100,11 @@ export function FormulaResult({ formula }: { formula: Formula }) {
       <StatusBanner formula={formula} />
       {formula.is_demo && <Alert tone="warning">Formule de DÉMONSTRATION calculée avec des données fictives.</Alert>}
 
+      {hasItems && <RationCard formula={formula} />}
+
+      {hasItems && (
+        <h2 className="pt-2 font-display text-lg font-bold text-brand-900">Détail du calcul (par animal)</h2>
+      )}
       {hasItems && (
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {[

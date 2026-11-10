@@ -323,3 +323,32 @@ un glossaire au lieu d'un message technique ; l'indication d'activation n'est mo
 ## DT-69 — Skills de design installés pour le projet seulement, sans hook
 Impeccable, emil-design-eng, taste-skill et unslop sont installés dans `.claude/skills/` (exclus de Git localement).
 Le hook automatique d'Impeccable (exécution après chaque modification de fichier) n'est pas activé sans accord explicite.
+
+## DT-70 — Formule rapide à partir d'un lot, carte ration, application installable
+Retours des premiers clients (10/11/2026) : trop d'étapes, chiffres trop nombreux, usage sur téléphone.
+- **Profil d'un lot** (`animals.services.group_profile`) : déduit des seuls animaux présents (valeurs les plus
+  fréquentes, poids moyen des dernières pesées) ; rien n'est inventé, chaque déduction est écrite dans les
+  avertissements de la formule. L'objectif n'est pas déduit : il reste un choix de l'éleveur, car la sélection de la
+  référence l'exige (une référence propre à un objectif n'est jamais appliquée sans lui).
+- **Carte ration** : seuls l'arrondi d'affichage (grammes sous 1 kg, kilos au dixième) et la multiplication par le
+  nombre d'animaux sont calculés dans l'interface ; le verdict (« vous pouvez la distribuer » ou non) suit la règle des
+  rations (DT-67).
+- **PWA** : manifeste, icônes et service worker écrits à la main (aucune dépendance). Le service worker ne met en cache
+  que l'interface (pages, fichiers versionnés, polices) et jamais `/api` : le mode hors ligne des données demandera une
+  synchronisation explicite, traitée à part. Il n'est enregistré qu'en production.
+
+## DT-71 — Mode hors ligne : lecture, saisie, calcul provisoire
+Retour client : zones mal couvertes, formulation indispensable sur le terrain.
+- **Lecture** : la copie des requêtes réussies (TanStack Query, `dehydrate`) est gardée sur l'appareil, par utilisateur,
+  7 jours et 3 Mo au plus, uniquement avec « Rester connecté » ; effacée à la déconnexion. Hors ligne, les requêtes sont
+  mises en pause (`onlineManager`) au lieu d'échouer ; un échec réseau bascule hors ligne, une sonde `/health/` détecte
+  le retour. La session se rouvre sans réseau avec le dernier profil connu ; le jeton est renouvelé au retour.
+- **Saisie** : file d'envoi (pesées, séances, calculs) toujours conservée et rattachée à l'utilisateur ; envoi dans
+  l'ordre, arrêt sur coupure, refus du serveur conservés avec leur motif (jamais d'écrasement silencieux).
+- **Calcul** : le serveur fournit, par exploitation, les problèmes préparés par `build_problem` (aucune règle de
+  données recopiée côté client). Le moteur hors ligne (`features/offline/engine.ts`, solveur `javascript-lp-solver`)
+  porte `checks`, le programme linéaire et `verify` ; sa parité avec PuLP/CBC est testée sur des cas calculés par le
+  moteur Python (`scripts/export_engine_cases.py`). Pas de diagnostic d'infaisabilité hors ligne. Le résultat est
+  provisoire : le calcul est rejoué par le serveur, qui enregistre la formule officielle.
+- **Interface** : le service worker précharge toute l'interface (liste produite à la construction) et change de cache
+  à chaque version. Le solveur n'est chargé qu'avec l'écran de formulation.

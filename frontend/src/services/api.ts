@@ -7,6 +7,7 @@
  * - Convertit toute erreur en `ApiError` avec un message en français.
  */
 import axios, { AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios'
+import { reportNetworkFailure } from '@/features/offline/connectivity'
 import { tokenStore } from './tokens'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
@@ -58,6 +59,7 @@ export function toApiError(error: unknown): ApiError {
   if (axios.isAxiosError(error)) {
     const err = error as AxiosError<ApiErrorBody>
     if (!err.response) {
+      reportNetworkFailure()
       return new ApiError(
         'Impossible de joindre le serveur. Vérifiez que le backend est démarré et votre connexion réseau.',
         null,

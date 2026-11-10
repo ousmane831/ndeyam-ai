@@ -10,8 +10,11 @@ import { Spinner } from '@/components/ui/Spinner'
 import { METHOD_OPTIONS } from '@/features/animals/constants'
 import { useFarm } from '@/hooks/useFarm'
 import { ApiError } from '@/services/api'
+import { isOnline } from '@/features/offline/connectivity'
+import { isNetworkError, outbox } from '@/features/offline/outbox'
+import { loadPack } from '@/features/offline/pack'
 import { animalService, groupService, weighingService } from '@/services/animals'
-import type { WeighingMethod } from '@/types/animal'
+import type { Animal, WeighingMethod } from '@/types/animal'
 import { formatDate, formatNumber, todayIso } from '@/utils/format'
 
 /** Séance de pesée : tous les animaux présents d'un lot, une même date, enregistrement en une fois. */
@@ -28,7 +31,13 @@ function WeighingSession({ groupId, farmId }: { groupId: number | null; farmId: 
   const [message, setMessage] = useState<{ tone: 'success' | 'error'; text: string } | null>(null)
   const [busy, setBusy] = useState(false)
 
-  const list = animals.data?.results ?? []
+  // Sans réseau et sans liste en mémoire : les animaux présents du paquet hors ligne (téléchargé à la connexion).
+  const offlineList = useMemo(() => {
+    if (animals.data || farmId === null) return null
+    const pack = loadPack(farmId)
+    return pack ? (pack.animals.filter((a) => !groupId || a.group === groupId) as unknown as Animal[]) : null
+  }, [animals.data, farmId, groupId])
+  const list = animals.data?.results ?? offlineList ?? []
   const filled = list.filter((a) => (weights[a.id] ?? '').trim() !== '')
 
   const submit = async () => {
@@ -48,19 +57,33 @@ function WeighingSession({ groupId, farmId }: { groupId: number | null; farmId: 
       return
     }
     setBusy(true)
+    const payload = {
+      weighed_on: date,
+      method,
+      entries: filled.map((a) => ({ animal: a.id, weight_kg: weights[a.id].replace(',', '.') })),
+    }
+    // Sans réseau, la séance est gardée sur l'appareil et envoyée au retour de la connexion.
+    const keepForLater = () => {
+      outbox.add({ kind: 'weighing-session', payload, label: `Séance de pesée du ${formatDate(date)} (${filled.length} animal(aux))` })
+      setWeights({})
+      setMessage({ tone: 'success', text: `Hors ligne : ${filled.length} pesée(s) gardée(s) sur cet appareil, envoyée(s) automatiquement au retour du réseau.` })
+    }
+    if (!isOnline()) {
+      keepForLater()
+      setBusy(false)
+      return
+    }
     try {
-      const created = await weighingService.bulk({
-        weighed_on: date,
-        method,
-        entries: filled.map((a) => ({ animal: a.id, weight_kg: weights[a.id].replace(',', '.') })),
-      })
+      const created = await weighingService.bulk(payload)
       setWeights({})
       setMessage({ tone: 'success', text: `${created.length} pesée(s) enregistrée(s).` })
       for (const key of ['animals', 'growth', 'weighings', 'group-growth', 'alerts', 'dashboard']) {
         queryClient.invalidateQueries({ queryKey: [key] })
       }
     } catch (e) {
-      if (e instanceof ApiError && Object.keys(e.fieldErrors).length) {
+      if (isNetworkError(e)) {
+        keepForLater()
+      } else if (e instanceof ApiError && Object.keys(e.fieldErrors).length) {
         // Erreurs indexées par ligne de la séance (0, 1, …).
         const serverErrors: Record<number, string> = {}
         for (const [index, messages] of Object.entries(e.fieldErrors)) {
@@ -77,8 +100,8 @@ function WeighingSession({ groupId, farmId }: { groupId: number | null; farmId: 
     }
   }
 
-  if (animals.isPending) return <Spinner />
-  if (animals.isError) return <Alert tone="error">{animals.error.message}</Alert>
+  if (animals.isPending && !offlineList) return <Spinner />
+  if (animals.isError && !offlineList) return <Alert tone="error">{animals.error.message}</Alert>
   if (list.length === 0) return <EmptyState title="Aucun animal présent dans ce lot" />
 
   return (
@@ -119,7 +142,7 @@ function WeighingSession({ groupId, farmId }: { groupId: number | null; farmId: 
           </tbody>
         </table>
       </div>
-      {animals.data.count > list.length && (
+      {(animals.data?.count ?? 0) > list.length && (
         <Alert tone="info">Seuls les {list.length} premiers animaux sont affichés : sélectionnez un lot pour une séance plus ciblée.</Alert>
       )}
       <div className="flex items-center justify-between gap-3">

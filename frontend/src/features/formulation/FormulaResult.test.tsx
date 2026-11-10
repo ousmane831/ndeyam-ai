@@ -32,7 +32,7 @@ describe('FormulaResult', () => {
     render(<FormulaResult formula={base} />)
     expect(screen.getByText('Estimation mathématique')).toBeInTheDocument()
     expect(screen.getByText(/seules données validées/)).toBeInTheDocument()
-    expect(screen.getByText('Maïs test')).toBeInTheDocument()
+    expect(screen.getAllByText('Maïs test')).toHaveLength(2) // carte ration + tableau détaillé
     expect(screen.getByText('Insuffisant')).toBeInTheDocument()
     expect(screen.getByText('Inconnu')).toBeInTheDocument()
     expect(screen.getByText('Valeur inconnue pour : Maïs test')).toBeInTheDocument()

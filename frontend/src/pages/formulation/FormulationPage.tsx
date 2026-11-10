@@ -10,11 +10,12 @@ import { Pagination } from '@/components/ui/Pagination'
 import { Spinner } from '@/components/ui/Spinner'
 import { CalculationForm } from '@/features/formulation/CalculationForm'
 import { ManualForm } from '@/features/formulation/ManualForm'
+import { QuickForm } from '@/features/formulation/QuickForm'
 import { useFarm } from '@/hooks/useFarm'
 import { formulaService } from '@/services/formulas'
 import { formatDateTime, formatMoney } from '@/utils/format'
 
-type TabId = 'calcul' | 'manuel' | 'formules'
+type TabId = 'rapide' | 'calcul' | 'manuel' | 'formules'
 
 
 function FormulaList() {
@@ -73,13 +74,14 @@ function FormulaList() {
 
 export function FormulationPage() {
   const [params, setParams] = useSearchParams()
-  const tab = (params.get('onglet') as TabId) || 'calcul'
+  const tab = (params.get('onglet') as TabId) || 'rapide'
   return (
     <div className="space-y-6">
       <PageHeader title="Formulation des aliments"
         description="Le moteur calcule une ration à partir des seules données validées (références, compositions, contraintes). Le résultat est une estimation mathématique jusqu'à la vérification d'un expert." />
       <Tabs<TabId> active={tab} onChange={(id) => setParams({ onglet: id })}
-        tabs={[{ id: 'calcul', label: 'Calcul optimisé' }, { id: 'manuel', label: 'Ration saisie' }, { id: 'formules', label: 'Formules enregistrées' }]} />
+        tabs={[{ id: 'rapide', label: 'Formule rapide' }, { id: 'calcul', label: 'Calcul détaillé' }, { id: 'manuel', label: 'Ration saisie' }, { id: 'formules', label: 'Formules enregistrées' }]} />
+      {tab === 'rapide' && <QuickForm />}
       {tab === 'calcul' && <CalculationForm />}
       {tab === 'manuel' && <ManualForm />}
       {tab === 'formules' && <FormulaList />}

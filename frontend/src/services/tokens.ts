@@ -5,6 +5,8 @@
  * - Jeton de rafraîchissement : localStorage si « Rester connecté », sinon sessionStorage
  *   (effacé à la fermeture du navigateur). Il est révoqué côté serveur à la déconnexion.
  */
+import { clearSessionData } from '@/features/offline/storage'
+
 const REFRESH_KEY = 'ndeyam.refresh'
 
 let accessToken: string | null = null
@@ -38,6 +40,7 @@ export const tokenStore = {
 
   clear() {
     accessToken = null
+    clearSessionData()
     safeStorage('local')?.removeItem(REFRESH_KEY)
     safeStorage('session')?.removeItem(REFRESH_KEY)
   },

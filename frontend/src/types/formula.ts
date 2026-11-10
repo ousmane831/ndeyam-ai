@@ -5,6 +5,8 @@ export interface FormulaItem {
   id: number
   ingredient: number
   ingredient_name: string
+  /** Code de catégorie de l'ingrédient (pictogramme). */
+  ingredient_category?: string | null
   inclusion_pct_dm: string | null
   inclusion_pct_as_fed: string | null
   quantity_dm_kg: string | null
@@ -68,7 +70,7 @@ export interface FormulaSnapshot {
   solver_status?: string
   engine_version?: string
   /** Profil d'animal retenu pour le calcul (identifiants de nomenclature). */
-  profile?: Record<string, number | string | null>
+  profile?: Record<string, number | string | null> & { head_count?: number | null }
 }
 
 export interface Formula {

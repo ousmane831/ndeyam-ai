@@ -30,6 +30,7 @@ const ReferencesPage = page(() => import('@/pages/references/ReferencesPage'), '
 const ReferenceDetailPage = page(() => import('@/pages/references/ReferenceDetailPage'), 'ReferenceDetailPage')
 const FormulationPage = page(() => import('@/pages/formulation/FormulationPage'), 'FormulationPage')
 const FormulaPage = page(() => import('@/pages/formulation/FormulaPage'), 'FormulaPage')
+const OfflineFormulaPage = page(() => import('@/pages/formulation/OfflineFormulaPage'), 'OfflineFormulaPage')
 const ComparePage = page(() => import('@/pages/formulation/ComparePage'), 'ComparePage')
 const RationsPage = page(() => import('@/pages/feeding/RationsPage'), 'RationsPage')
 const GovernancePage = page(() => import('@/pages/admin/GovernancePage'), 'GovernancePage')
@@ -69,6 +70,7 @@ export function AppRoutes() {
           <Route path="references/:id" element={<ReferenceDetailPage />} />
           <Route path="formulation" element={<FormulationPage />} />
           <Route path="formulation/comparer" element={<ComparePage />} />
+          <Route path="formulation/hors-ligne/:id" element={<OfflineFormulaPage />} />
           <Route path="formulation/:id" element={<FormulaPage />} />
           <Route path="rations" element={<RationsPage />} />
           <Route path="alertes" element={<AlertsPage />} />

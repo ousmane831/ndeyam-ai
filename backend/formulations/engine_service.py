@@ -24,7 +24,16 @@ from nutrition.models import (
     NutritionalReference,
 )
 
-from .engine import InclusionBound, IngredientInput, Mode, NutrientSpec, Problem, RequirementSpec, formulate
+from .engine import (
+    ENGINE_VERSION,
+    InclusionBound,
+    IngredientInput,
+    Mode,
+    NutrientSpec,
+    Problem,
+    RequirementSpec,
+    formulate,
+)
 from .engine.types import Expression
 from .models import FeedFormula, FeedFormulaIngredient, FormulaStatus
 
@@ -274,9 +283,10 @@ def run_formulation(
     group=None,
     notes="",
     save=True,
+    extra_warnings=(),
 ):
     profile = profile or {}
-    pre_warnings = []
+    pre_warnings = list(extra_warnings)
     if reference is None:
         reference = match_reference(
             species=species,
@@ -302,7 +312,7 @@ def run_formulation(
             "infeasibility": [],
             "excluded_ingredients": [],
             "sources": [],
-            "warnings": [],
+            "warnings": pre_warnings,
             "refusal_reasons": [
                 "Aucune référence nutritionnelle validée ne correspond à ce profil d'animal "
                 "(espèce, catégorie, stade, objectif, poids, âge). "
@@ -393,3 +403,190 @@ def run_formulation(
                 cost_per_day=_d(item["cost_per_day"], "0.01"),
             )
     return formula, result
+
+
+def serialize_problem(problem):
+    """`Problem` du moteur en JSON (mêmes champs, mêmes unités) : c'est ce que le calcul hors ligne résout."""
+    return {
+        "mode": str(problem.mode),
+        "nutrients": {
+            str(n.id): {
+                "id": n.id,
+                "code": n.code,
+                "name": n.name,
+                "amount_unit": n.amount_unit,
+                "system": n.system,
+            }
+            for n in problem.nutrients.values()
+        },
+        "requirements": [
+            {
+                "nutrient_id": r.nutrient_id,
+                "expression": str(r.expression),
+                "min_value": r.min_value,
+                "target_value": r.target_value,
+                "max_value": r.max_value,
+            }
+            for r in problem.requirements
+        ],
+        "ingredients": [
+            {
+                "id": i.id,
+                "name": i.name,
+                "dm_g_per_kg_as_fed": i.dm_g_per_kg_as_fed,
+                "composition_per_kg_dm": {str(k): v for k, v in i.composition_per_kg_dm.items()},
+                "price_per_kg_as_fed": i.price_per_kg_as_fed,
+                "currency": i.currency,
+                "price_is_demo": i.price_is_demo,
+                "max_as_fed_kg_per_day": i.max_as_fed_kg_per_day,
+            }
+            for i in problem.ingredients
+        ],
+        "dm_intake_min_kg": problem.dm_intake_min_kg,
+        "dm_intake_max_kg": problem.dm_intake_max_kg,
+        "inclusion_bounds": [
+            {
+                "label": b.label,
+                "ingredient_ids": sorted(b.ingredient_ids),
+                "min_pct_dm": b.min_pct_dm,
+                "max_pct_dm": b.max_pct_dm,
+            }
+            for b in problem.inclusion_bounds
+        ],
+        "reference_label": problem.reference_label,
+        "reference_source": problem.reference_source,
+        "is_demo": problem.is_demo,
+    }
+
+
+def deserialize_problem(data):
+    """Inverse de `serialize_problem` (cas de référence du moteur hors ligne, tests)."""
+    return Problem(
+        mode=Mode(data["mode"]),
+        nutrients={
+            int(k): NutrientSpec(n["id"], n["code"], n["name"], n["amount_unit"], n["system"])
+            for k, n in data["nutrients"].items()
+        },
+        requirements=[
+            RequirementSpec(
+                r["nutrient_id"],
+                Expression(r["expression"]),
+                r["min_value"],
+                r["target_value"],
+                r["max_value"],
+            )
+            for r in data["requirements"]
+        ],
+        ingredients=[
+            IngredientInput(
+                id=i["id"],
+                name=i["name"],
+                dm_g_per_kg_as_fed=i["dm_g_per_kg_as_fed"],
+                composition_per_kg_dm={int(k): v for k, v in i["composition_per_kg_dm"].items()},
+                price_per_kg_as_fed=i["price_per_kg_as_fed"],
+                currency=i["currency"],
+                max_as_fed_kg_per_day=i.get("max_as_fed_kg_per_day"),
+                price_is_demo=i["price_is_demo"],
+            )
+            for i in data["ingredients"]
+        ],
+        dm_intake_min_kg=data["dm_intake_min_kg"],
+        dm_intake_max_kg=data["dm_intake_max_kg"],
+        inclusion_bounds=[
+            InclusionBound(b["label"], frozenset(b["ingredient_ids"]), b["min_pct_dm"], b["max_pct_dm"])
+            for b in data["inclusion_bounds"]
+        ],
+        reference_label=data["reference_label"],
+        reference_source=data["reference_source"],
+        is_demo=data["is_demo"],
+    )
+
+
+def offline_pack(farm):
+    """
+    Tout ce qu'il faut pour estimer une ration sans connexion, pour une exploitation :
+    les références utilisables (critères de choix + problème préparé par `build_problem`, donc
+    exactement les mêmes données et règles que le calcul en ligne), et le profil de chaque lot.
+    Le calcul hors ligne reste provisoire : la formule officielle est recalculée par le serveur.
+    """
+    from animals.models import Animal, AnimalGroup, AnimalStatus, ProductionObjective
+    from animals.services import group_profile
+    from nutrition.models import Ingredient
+
+    ingredients = list(
+        Ingredient.objects.filter(is_active=True, is_demo=farm.is_demo)
+        .filter(Q(farm__isnull=True) | Q(farm=farm))
+        .select_related("category")
+    )
+    entries = [{"ingredient": i} for i in ingredients]
+    references = []
+    for ref in _reference_pool(farm.is_demo).select_related("species", "system", "source"):
+        problem, warnings, _prices = build_problem(farm=farm, reference=ref, mode="ECONOMIC", entries=entries)
+        references.append(
+            {
+                "id": ref.pk,
+                "name": ref.name,
+                "species": ref.species_id,
+                "criteria": {
+                    "breed": ref.breed_id,
+                    "category": ref.category_id,
+                    "physiological_stage": ref.physiological_stage_id,
+                    "objective": ref.objective_id,
+                    "weight_min_kg": _float(ref.weight_min_kg),
+                    "weight_max_kg": _float(ref.weight_max_kg),
+                    "age_min_months": _float(ref.age_min_months),
+                    "age_max_months": _float(ref.age_max_months),
+                },
+                "problem": serialize_problem(problem),
+                "warnings": warnings,
+            }
+        )
+
+    def ident(value):
+        return getattr(value, "pk", value)
+
+    groups = []
+    for group in AnimalGroup.objects.filter(farm=farm, is_active=True):
+        profile = group_profile(group)
+        groups.append(
+            {
+                "id": group.pk,
+                "name": group.name,
+                "head_count": profile["head_count"],
+                "notes": profile["notes"],
+                "species": ident(profile.get("species")),
+                "breed": ident(profile.get("breed")),
+                "category": ident(profile.get("category")),
+                "physiological_stage": ident(profile.get("physiological_stage")),
+                "weight_kg": _float(profile.get("weight_kg")),
+                "age_months": _float(profile.get("age_months")),
+            }
+        )
+    return {
+        "farm": farm.pk,
+        "is_demo": farm.is_demo,
+        "generated_at": timezone.now().isoformat(),
+        "engine_version": ENGINE_VERSION,
+        "ingredients": [
+            {"id": i.id, "name": i.name, "category_code": i.category.code, "local_names": i.local_names}
+            for i in ingredients
+        ],
+        "references": references,
+        "groups": groups,
+        "objectives": [{"id": o.pk, "name": o.name} for o in ProductionObjective.objects.all()],
+        # Animaux présents, pour une séance de pesée sans connexion (même sur un lot jamais ouvert).
+        "animals": [_animal_entry(a) for a in Animal.objects.filter(farm=farm, status=AnimalStatus.ACTIVE)],
+    }
+
+
+def _animal_entry(animal):
+    last = animal.weighings.order_by("-weighed_on").first()
+    return {
+        "id": animal.pk,
+        "tag_number": animal.tag_number,
+        "name": animal.name,
+        "group": animal.group_id,
+        "last_weight": {"weight_kg": str(last.weight_kg), "weighed_on": last.weighed_on.isoformat()}
+        if last
+        else None,
+    }

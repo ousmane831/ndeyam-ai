@@ -1,6 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { onSessionExpired, refreshAccessToken } from '@/services/api'
+import { setOutboxUser } from '@/features/offline/outbox'
+import { resetOfflineResultsCache } from '@/features/offline/offlineResults'
+import { loadUserSnapshot, persistQueries, restoreQueries, saveUserSnapshot } from '@/features/offline/queryPersistence'
+import { onSessionExpired, refreshAccessToken, toApiError } from '@/services/api'
 import { authService } from '@/services/auth'
 import { tokenStore } from '@/services/tokens'
 import type { RegisterPayload, User } from '@/types/auth'
@@ -35,18 +38,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await refreshAccessToken()
         const me = await authService.me()
         if (!cancelled) {
+          restoreQueries(queryClient, me.id)
           setUserState(me)
           setStatus('authenticated')
         }
-      } catch {
-        if (!cancelled) endSession(false)
+      } catch (error) {
+        if (cancelled) return
+        // Sans réseau, on rouvre la session avec le dernier profil connu et les données gardées sur
+        // l'appareil ; le jeton est renouvelé automatiquement à la première requête, au retour du réseau.
+        const snapshot = loadUserSnapshot()
+        if (toApiError(error).status === null && snapshot) {
+          restoreQueries(queryClient, snapshot.id)
+          setUserState(snapshot)
+          setStatus('authenticated')
+        } else {
+          endSession(false)
+        }
       }
     }
     restore()
     return () => {
       cancelled = true
     }
-  }, [endSession])
+  }, [endSession, queryClient])
+
+  // Profil, file d'envoi et copie locale des données suivent l'utilisateur connecté.
+  useEffect(() => {
+    setOutboxUser(user?.id ?? null)
+    resetOfflineResultsCache()
+    if (!user) return
+    saveUserSnapshot(user)
+    return persistQueries(queryClient, user.id)
+  }, [user, queryClient])
 
   useEffect(() => onSessionExpired(() => endSession(true)), [endSession])
 

@@ -63,3 +63,59 @@ def animal_history(animal):
     )
     events.sort(key=lambda e: e["date"], reverse=True)
     return events
+
+
+def group_profile(group):
+    """
+    Profil moyen d'un lot pour la formulation, déduit de ses animaux présents :
+    espèce, race, catégorie et stade les plus fréquents, poids moyen des dernières pesées, âge moyen.
+    Seules des données enregistrées sont utilisées ; ce qui manque reste vide et est signalé.
+    """
+    from collections import Counter
+    from decimal import Decimal
+
+    from .models import AnimalStatus
+
+    animals = list(
+        group.animals.filter(status=AnimalStatus.ACTIVE).select_related(
+            "species", "breed", "category", "physiological_stage"
+        )
+    )
+    profile = {"head_count": len(animals), "notes": []}
+    if not animals:
+        profile["notes"].append(f"Le lot « {group.name} » ne compte aucun animal présent.")
+        return profile
+
+    def majority(field, label):
+        values = Counter(getattr(a, field) for a in animals if getattr(a, field) is not None)
+        if not values:
+            return None
+        value, count = values.most_common(1)[0]
+        if count < len(animals):
+            profile["notes"].append(
+                f"Lot mixte, {label} : valeur la plus fréquente retenue "
+                f"({value}, {count} animaux sur {len(animals)})."
+            )
+        return value
+
+    profile["species"] = majority("species", "espèce") or group.species
+    profile["breed"] = majority("breed", "race")
+    profile["category"] = majority("category", "catégorie")
+    profile["physiological_stage"] = majority("physiological_stage", "stade")
+
+    weights = []
+    for a in animals:
+        last = a.weighings.order_by("-weighed_on").first()
+        weight = last.weight_kg if last else a.initial_weight_kg
+        if weight is not None:
+            weights.append(Decimal(weight))
+    if weights:
+        profile["weight_kg"] = (sum(weights) / len(weights)).quantize(Decimal("0.01"))
+        profile["notes"].append(
+            f"Poids moyen du lot : {str(profile['weight_kg']).replace('.', ',')} kg "
+            f"({len(weights)} animal(aux) pesé(s) sur {len(animals)})."
+        )
+    ages = [Decimal(a.age_in_days()) / Decimal("30.44") for a in animals if a.birth_date]
+    if ages:
+        profile["age_months"] = (sum(ages) / len(ages)).quantize(Decimal("0.1"))
+    return profile

@@ -1,4 +1,6 @@
 import clsx from 'clsx'
+import { InstallAppButton } from '@/features/pwa/InstallAppButton'
+import { OfflineSync } from '@/features/offline/OfflineSync'
 import { Bell, BookOpen, Calculator, ClipboardList, ExternalLink, FileSearch, FileText, Layers, LayoutDashboard, LogOut, Menu, PawPrint, Settings, TrendingUp, Users, Wheat, X } from 'lucide-react'
 import { Suspense, useState, type ReactNode } from 'react'
 import { NavLink, Outlet } from 'react-router'
@@ -103,6 +105,7 @@ export function AppLayout() {
           </>
         )}
       </nav>
+      <InstallAppButton />
       <p className="px-6 pt-3 font-mono text-xs tracking-[0.06em] text-brand-300 uppercase">Prototype · v0.1</p>
     </div>
   )
@@ -156,6 +159,7 @@ export function AppLayout() {
           </button>
         </header>
         <main className="mx-auto max-w-6xl px-4 pt-6 pb-28 sm:px-6 sm:pt-8">
+          <div className="mb-4 empty:hidden"><OfflineSync /></div>
           {/* Suspense local : la barre latérale reste affichée pendant le chargement d'une page. */}
           <Suspense fallback={<Spinner label="Chargement de la page…" />}>
             <Outlet />

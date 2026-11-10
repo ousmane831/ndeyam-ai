@@ -271,3 +271,84 @@ def test_estimated_formula_can_be_validated_by_invited_expert(world, expert, cli
     )
     assert response.status_code == 200 and response.json()["status"] == "VALIDATED"
     assert FeedFormula.objects.get(pk=fid).validated_at <= timezone.now()
+
+
+def test_group_profile_prefills_from_present_animals(world, farm, ovin):
+    from animals.models import Animal, AnimalGroup
+    from growth.models import Weighing
+
+    group = AnimalGroup.objects.create(farm=farm, name="Lot embouche", species=ovin)
+    for tag, weight in (("L-1", 30), ("L-2", 40)):
+        a = Animal.objects.create(farm=farm, species=ovin, tag_number=tag, sex="M", group=group)
+        Weighing.objects.create(animal=a, weighed_on=timezone.localdate(), weight_kg=weight)
+    Animal.objects.create(farm=farm, species=ovin, tag_number="L-3", sex="M", group=group, status="SOLD")
+    body = request(world, group=group.pk, species=None).json()
+    formula, result = body["formula"], body["result"]
+    assert formula["group"] == group.pk and formula["animal_weight_kg"] == "35.00"
+    assert result["profile"]["head_count"] == 2  # l'animal vendu n'est pas compté
+    assert any("Poids moyen du lot : 35,00 kg (2 animal(aux) pesé(s) sur 2)" in w for w in result["warnings"])
+    assert formula["items"][0]["ingredient_category"] is not None
+
+
+def test_empty_group_without_species_is_refused_clearly(world, farm):
+    from animals.models import AnimalGroup
+
+    group = AnimalGroup.objects.create(farm=farm, name="Lot vide")
+    response = request(world, group=group.pk, species=None)
+    assert response.status_code == 400 and "lot" in str(response.json())
+
+
+def test_offline_pack_contains_prepared_problems_and_group_profiles(world, farm, ovin):
+    from animals.models import Animal, AnimalGroup
+    from growth.models import Weighing
+
+    group = AnimalGroup.objects.create(farm=farm, name="Lot hors ligne", species=ovin)
+    a = Animal.objects.create(farm=farm, species=ovin, tag_number="H-1", sex="M", group=group)
+    Weighing.objects.create(animal=a, weighed_on=timezone.localdate(), weight_kg=30)
+    response = world["client"].get(f"/api/v1/formulas/offline-pack/?farm={farm.pk}")
+    assert response.status_code == 200
+    pack = response.json()
+    ref = next(r for r in pack["references"] if r["name"] == "Référence contrôlée")
+    problem = ref["problem"]
+    assert problem["dm_intake_min_kg"] == 1.0 and problem["requirements"][0]["min_value"] == 200.0
+    prices = {i["name"]: i["price_per_kg_as_fed"] for i in problem["ingredients"]}
+    assert prices == {"Ingrédient A": 100.0, "Ingrédient B": 300.0}  # derniers prix de l'exploitation
+    assert pack["groups"] == [
+        {
+            "id": group.pk,
+            "name": "Lot hors ligne",
+            "head_count": 1,
+            "notes": ["Poids moyen du lot : 30,00 kg (1 animal(aux) pesé(s) sur 1)."],
+            "species": ovin.pk,
+            "breed": None,
+            "category": None,
+            "physiological_stage": None,
+            "weight_kg": 30.0,
+            "age_months": None,
+        }
+    ]
+    assert {o["name"] for o in pack["objectives"]} >= {"Entretien"}
+
+
+def test_offline_pack_problem_gives_the_same_result_as_the_online_engine(world):
+    from formulations.engine import formulate
+    from formulations.engine_service import build_problem, deserialize_problem, serialize_problem
+
+    entries = [{"ingredient": world["a"]}, {"ingredient": world["b"]}]
+    problem, _w, _p = build_problem(
+        farm=world["farm"], reference=world["reference"], mode="ECONOMIC", entries=entries
+    )
+    direct = formulate(problem).to_dict()
+    problem, _w, _p = build_problem(
+        farm=world["farm"], reference=world["reference"], mode="ECONOMIC", entries=entries
+    )
+    roundtrip = formulate(deserialize_problem(serialize_problem(problem))).to_dict()
+    assert roundtrip["cost_per_day"] == direct["cost_per_day"] and roundtrip["items"] == direct["items"]
+
+
+def test_offline_pack_is_reserved_to_farm_writers(world, farm, expert, client_for, make_farm, make_user):
+    FarmMembership.objects.create(farm=farm, user=expert, role="EXPERT")
+    assert client_for(expert).get(f"/api/v1/formulas/offline-pack/?farm={farm.pk}").status_code == 404
+    other = make_farm(owner=make_user())
+    assert world["client"].get(f"/api/v1/formulas/offline-pack/?farm={other.pk}").status_code == 404
+    assert world["client"].get("/api/v1/formulas/offline-pack/?farm=abc").status_code == 404

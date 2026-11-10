@@ -26,7 +26,7 @@ envoyé par e-mail.
 | Mes troupeaux | Lots (groupes d'animaux) |
 | Suivi de croissance | Séances de pesée et GMD des lots |
 | Ingrédients alimentaires | Catalogue, ingrédients privés, compositions, prix |
-| Formulation des aliments | Calcul optimisé, ration saisie, formules enregistrées, comparaison |
+| Formulation des aliments | Formule rapide, calcul détaillé, ration saisie, formules enregistrées, comparaison |
 | Historique des rations | Rations en cours, distributions |
 | Alertes et rappels | Alertes ouvertes, résolues ou ignorées |
 | Références nutritionnelles | Besoins documentés utilisés par le moteur (consultation) |
@@ -37,6 +37,26 @@ envoyé par e-mail.
 Si vous gérez plusieurs exploitations, choisissez celle à consulter dans la liste en haut de l'écran
 (ou « Toutes les exploitations »). Sur téléphone et tablette, le menu s'ouvre avec le bouton ☰.
 Dans les formulaires, l'exploitation proposée par défaut est celle sélectionnée, sinon une exploitation active.
+
+**Installer l'application sur son téléphone.** Ndeyam AI s'installe comme une application, sans magasin
+d'applications : sur Android (Chrome), touchez **Installer l'application** en bas du menu, ou *Menu ⋮ → Installer
+l'application* ; sur iPhone (Safari), *Partager → Sur l'écran d'accueil*. L'icône du bélier apparaît alors sur l'écran
+d'accueil, et l'interface s'ouvre plus vite, même avec une connexion faible.
+
+**Sans réseau.** Cochez *Rester connecté* à la connexion. Ensuite, sans réseau :
+- l'application se rouvre, avec les données déjà consultées (bandeau **Hors ligne** en haut de l'écran) ;
+- les **pesées** (fiche d'un animal ou séance de pesée, même pour un lot jamais ouvert) sont gardées sur l'appareil ;
+- la **formule rapide** calcule la ration sur l'appareil, avec les mêmes données et les mêmes règles que le calcul en
+  ligne. Ce résultat est **provisoire** : au retour du réseau, le serveur le recalcule et l'enregistre (lien
+  *Voir la formule officielle*), et c'est de cette formule que l'on demande la vérification d'un expert.
+
+Au retour du réseau, tout est envoyé automatiquement, dans l'ordre. Si le serveur refuse une saisie (par exemple une
+pesée déjà enregistrée ce jour-là), elle reste affichée avec le motif : corrigez-la ou retirez-la. Les données de calcul
+hors ligne de chaque exploitation sont mises à jour à chaque connexion (*Paramètres → Hors ligne et consommation de
+données*).
+
+**Consommation de données** (mesurée sur la version de production) : environ 530 Ko à la première ouverture (une
+fois par version), puis 4 à 5 Ko par écran ; une semaine d'usage quotidien consomme moins de 1 Mo.
 
 ## 3. Tableau de bord
 
@@ -138,9 +158,25 @@ si vous le souhaitez, la quantité disponible.
 
 ## 9. Formulation des aliments
 
-**Formulation des aliments** comporte trois onglets.
+**Formulation des aliments** comporte quatre onglets.
 
-**Calcul optimisé**
+**Formule rapide** (onglet ouvert par défaut) : trois gestes.
+1. Touchez le **lot** à nourrir. Sa catégorie, son stade et son poids moyen sont repris des fiches de ses animaux
+   (dernière pesée de chacun) ; un lot mixte retient la valeur la plus fréquente, et la formule le signale.
+2. Choisissez l'**objectif** (par exemple *Préparation à la Tabaski*). Il est retenu pour ce lot sur votre appareil.
+3. Cochez vos **aliments** (avec leur dernier prix connu) puis **Calculer la ration**. Vos aliments sont retenus
+   pour la prochaine fois.
+
+Le calcul est économique et la référence est choisie automatiquement. Pour un seul animal, un prix ou un stock à
+préciser, utilisez le **Calcul détaillé**.
+
+**Carte « À donner chaque jour »** : en tête du résultat, en gros, la quantité de chaque aliment par jour pour tout
+le lot (avec un pictogramme par famille d'aliment), le total et le coût du jour, et le coût pour une semaine. Changez
+le nombre d'animaux avec − et +. **Partager sur WhatsApp** envoie la ration en texte ; **Imprimer la fiche** imprime
+la carte seule. La carte dit toujours ce que vous pouvez en faire : *à faire vérifier par un expert*, *vérifiée :
+vous pouvez la distribuer*, ou *ne pas utiliser* (rejet, données DEMO). Le détail du calcul par animal suit.
+
+**Calcul détaillé**
 1. Nommez la formule et choisissez le mode : **Économique** (coût minimal) ou **Équilibré** (au plus près des cibles
    des experts).
 2. Choisissez un animal (son profil est repris de sa fiche), un lot ou un profil type.

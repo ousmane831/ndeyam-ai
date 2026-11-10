@@ -1,0 +1,2549 @@
+[
+ {
+  "name": "economique_simple",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 1,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 200,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 2,
+     "name": "B",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 300,
+      "2": 1.1,
+      "3": 6
+     },
+     "price_per_kg_as_fed": 300,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.0,
+   "inclusion_bounds": [],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 200.0,
+   "items": {
+    "1": 0.5,
+    "2": 0.5
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "economique_teneur_et_plafond",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 1,
+     "expression": "DIET_CONCENTRATION",
+     "min_value": 150,
+     "target_value": null,
+     "max_value": 260
+    },
+    {
+     "nutrient_id": 3,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 3.5,
+     "target_value": null,
+     "max_value": 8
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 2,
+     "name": "B",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 300,
+      "2": 1.1,
+      "3": 6
+     },
+     "price_per_kg_as_fed": 300,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 3,
+     "name": "C",
+     "dm_g_per_kg_as_fed": 880,
+     "composition_per_kg_dm": {
+      "1": 450,
+      "2": 1.0,
+      "3": 3
+     },
+     "price_per_kg_as_fed": 260,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 4,
+     "name": "D",
+     "dm_g_per_kg_as_fed": 900,
+     "composition_per_kg_dm": {
+      "1": 60,
+      "2": 0.6,
+      "3": 4
+     },
+     "price_per_kg_as_fed": 40,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.1,
+   "dm_intake_max_kg": 1.4,
+   "inclusion_bounds": [
+    {
+     "label": "C plafonné",
+     "ingredient_ids": [
+      3
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 20
+    },
+    {
+     "label": "D minimum",
+     "ingredient_ids": [
+      4
+     ],
+     "min_pct_dm": 10,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0999999999999999,
+   "cost_per_day": 118.16666666666666,
+   "items": {
+    "4": 0.825,
+    "3": 0.22,
+    "2": 0.055
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "equilibre_cibles",
+  "problem": {
+   "mode": "BALANCED",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 1,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 150,
+     "target_value": 210,
+     "max_value": 260
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DIET_CONCENTRATION",
+     "min_value": 0.8,
+     "target_value": 0.95,
+     "max_value": 1.05
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 2,
+     "name": "B",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 300,
+      "2": 1.1,
+      "3": 6
+     },
+     "price_per_kg_as_fed": 300,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 3,
+     "name": "C",
+     "dm_g_per_kg_as_fed": 880,
+     "composition_per_kg_dm": {
+      "1": 450,
+      "2": 1.0,
+      "3": 3
+     },
+     "price_per_kg_as_fed": 260,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 4,
+     "name": "D",
+     "dm_g_per_kg_as_fed": 900,
+     "composition_per_kg_dm": {
+      "1": 60,
+      "2": 0.6,
+      "3": 4
+     },
+     "price_per_kg_as_fed": 40,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.3,
+   "inclusion_bounds": [],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 172.9090909090909,
+   "items": {
+    "1": 0.63,
+    "3": 0.24,
+    "2": 0.13
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "disponibilite_limitee",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 1,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 250,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 2,
+     "name": "B",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 300,
+      "2": 1.1,
+      "3": 6
+     },
+     "price_per_kg_as_fed": 300,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": 0.3
+    },
+    {
+     "id": 3,
+     "name": "C",
+     "dm_g_per_kg_as_fed": 880,
+     "composition_per_kg_dm": {
+      "1": 450,
+      "2": 1.0,
+      "3": 3
+     },
+     "price_per_kg_as_fed": 260,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.0,
+   "inclusion_bounds": [],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 183.76623404545452,
+   "items": {
+    "1": 0.57142857,
+    "3": 0.42857143
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "impossible",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 1,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 250,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 4,
+     "name": "D",
+     "dm_g_per_kg_as_fed": 900,
+     "composition_per_kg_dm": {
+      "1": 60,
+      "2": 0.6,
+      "3": 4
+     },
+     "price_per_kg_as_fed": 40,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.0,
+   "inclusion_bounds": [],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "INFEASIBLE",
+   "dm_intake_kg_day": null,
+   "cost_per_day": null,
+   "items": {},
+   "excluded": [],
+   "constraints_ok": null
+  }
+ },
+ {
+  "name": "refus_sans_besoin",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 2,
+     "name": "B",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 300,
+      "2": 1.1,
+      "3": 6
+     },
+     "price_per_kg_as_fed": 300,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.0,
+   "inclusion_bounds": [],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "REFUSED",
+   "dm_intake_kg_day": null,
+   "cost_per_day": null,
+   "items": {},
+   "excluded": [],
+   "constraints_ok": null
+  }
+ },
+ {
+  "name": "exclusions",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "1": {
+     "id": 1,
+     "code": "PROT",
+     "name": "Protéines test",
+     "amount_unit": "g",
+     "system": null
+    },
+    "2": {
+     "id": 2,
+     "code": "ENER",
+     "name": "Énergie test",
+     "amount_unit": "U",
+     "system": "TEST"
+    },
+    "3": {
+     "id": 3,
+     "code": "CA",
+     "name": "Calcium test",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 1,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 90,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 1,
+     "name": "A",
+     "dm_g_per_kg_as_fed": 1000,
+     "composition_per_kg_dm": {
+      "1": 100,
+      "2": 0.9,
+      "3": 2
+     },
+     "price_per_kg_as_fed": 100,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 5,
+     "name": "Sans MS",
+     "dm_g_per_kg_as_fed": null,
+     "composition_per_kg_dm": {
+      "1": 200
+     },
+     "price_per_kg_as_fed": 50,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 6,
+     "name": "Sans prix",
+     "dm_g_per_kg_as_fed": 900,
+     "composition_per_kg_dm": {
+      "1": 200
+     },
+     "price_per_kg_as_fed": null,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 7,
+     "name": "Sans PROT",
+     "dm_g_per_kg_as_fed": 900,
+     "composition_per_kg_dm": {
+      "2": 1
+     },
+     "price_per_kg_as_fed": 10,
+     "currency": "XOF",
+     "price_is_demo": false,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.0,
+   "inclusion_bounds": [],
+   "reference_label": "Référence test",
+   "reference_source": "",
+   "is_demo": false
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 100.0,
+   "items": {
+    "1": 1.0
+   },
+   "excluded": [
+    5,
+    6,
+    7
+   ],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_118_economic_tous",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.7,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 80.0,
+     "target_value": null,
+     "max_value": 180.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 4.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 2.5,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 243,
+     "name": "[DEMO] Coquilles d'huîtres broyées",
+     "dm_g_per_kg_as_fed": 990.0,
+     "composition_per_kg_dm": {
+      "2": 0.0,
+      "5": 0.0,
+      "8": 350.0,
+      "9": 0.0,
+      "10": 0.0
+     },
+     "price_per_kg_as_fed": 100.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.4,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "[DEMO] Coquilles d'huîtres broyées",
+     "ingredient_ids": [
+      243
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 2.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 129.71769323671498,
+   "items": {
+    "239": 0.53125,
+    "237": 0.25,
+    "238": 0.21875
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_118_economic_sans_premier",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.7,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 80.0,
+     "target_value": null,
+     "max_value": 180.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 4.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 2.5,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.4,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 129.71769323671498,
+   "items": {
+    "239": 0.53125,
+    "237": 0.25,
+    "238": 0.21875
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_118_balanced_tous",
+  "problem": {
+   "mode": "BALANCED",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.7,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 80.0,
+     "target_value": null,
+     "max_value": 180.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 4.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 2.5,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 243,
+     "name": "[DEMO] Coquilles d'huîtres broyées",
+     "dm_g_per_kg_as_fed": 990.0,
+     "composition_per_kg_dm": {
+      "2": 0.0,
+      "5": 0.0,
+      "8": 350.0,
+      "9": 0.0,
+      "10": 0.0
+     },
+     "price_per_kg_as_fed": 100.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.4,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "[DEMO] Coquilles d'huîtres broyées",
+     "ingredient_ids": [
+      243
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 2.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 145.56745329710145,
+   "items": {
+    "239": 0.37313433,
+    "238": 0.27145522,
+    "237": 0.25,
+    "240": 0.10541045
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_118_balanced_sans_premier",
+  "problem": {
+   "mode": "BALANCED",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.7,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 80.0,
+     "target_value": null,
+     "max_value": 180.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 4.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 2.5,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.0,
+   "dm_intake_max_kg": 1.4,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.0,
+   "cost_per_day": 145.56745329710145,
+   "items": {
+    "239": 0.37313433,
+    "238": 0.27145522,
+    "237": 0.25,
+    "240": 0.10541045
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_117_economic_tous",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.95,
+     "target_value": 1.05,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 130.0,
+     "target_value": 150.0,
+     "max_value": 220.0
+    },
+    {
+     "nutrient_id": 5,
+     "expression": "DIET_CONCENTRATION",
+     "min_value": null,
+     "target_value": null,
+     "max_value": 260.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 5.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 3.0,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 243,
+     "name": "[DEMO] Coquilles d'huîtres broyées",
+     "dm_g_per_kg_as_fed": 990.0,
+     "composition_per_kg_dm": {
+      "2": 0.0,
+      "5": 0.0,
+      "8": 350.0,
+      "9": 0.0,
+      "10": 0.0
+     },
+     "price_per_kg_as_fed": 100.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.1,
+   "dm_intake_max_kg": 1.5,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "[DEMO] Coquilles d'huîtres broyées",
+     "ingredient_ids": [
+      243
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 2.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Mouton d'embouche 25–45 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.26829268,
+   "cost_per_day": 175.97502015700482,
+   "items": {
+    "239": 0.82926829,
+    "237": 0.31707317,
+    "238": 0.12195122
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_117_economic_sans_premier",
+  "problem": {
+   "mode": "ECONOMIC",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.95,
+     "target_value": 1.05,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 130.0,
+     "target_value": 150.0,
+     "max_value": 220.0
+    },
+    {
+     "nutrient_id": 5,
+     "expression": "DIET_CONCENTRATION",
+     "min_value": null,
+     "target_value": null,
+     "max_value": 260.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 5.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 3.0,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.1,
+   "dm_intake_max_kg": 1.5,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Mouton d'embouche 25–45 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.26829268,
+   "cost_per_day": 175.97502015700482,
+   "items": {
+    "239": 0.82926829,
+    "237": 0.31707317,
+    "238": 0.12195122
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_117_balanced_tous",
+  "problem": {
+   "mode": "BALANCED",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.95,
+     "target_value": 1.05,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 130.0,
+     "target_value": 150.0,
+     "max_value": 220.0
+    },
+    {
+     "nutrient_id": 5,
+     "expression": "DIET_CONCENTRATION",
+     "min_value": null,
+     "target_value": null,
+     "max_value": 260.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 5.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 3.0,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 243,
+     "name": "[DEMO] Coquilles d'huîtres broyées",
+     "dm_g_per_kg_as_fed": 990.0,
+     "composition_per_kg_dm": {
+      "2": 0.0,
+      "5": 0.0,
+      "8": 350.0,
+      "9": 0.0,
+      "10": 0.0
+     },
+     "price_per_kg_as_fed": 100.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.1,
+   "dm_intake_max_kg": 1.5,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "[DEMO] Coquilles d'huîtres broyées",
+     "ingredient_ids": [
+      243
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 2.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Mouton d'embouche 25–45 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.3308584696,
+   "cost_per_day": 195.9077307995169,
+   "items": {
+    "239": 0.98839907,
+    "237": 0.33271462,
+    "240": 0.0097447796
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ },
+ {
+  "name": "pack_117_balanced_sans_premier",
+  "problem": {
+   "mode": "BALANCED",
+   "nutrients": {
+    "10": {
+     "id": 10,
+     "code": "UFL",
+     "name": "Unité fourragère lait",
+     "amount_unit": "UFL",
+     "system": "INRA"
+    },
+    "2": {
+     "id": 2,
+     "code": "MAT",
+     "name": "Matières azotées totales (protéines brutes)",
+     "amount_unit": "g",
+     "system": null
+    },
+    "5": {
+     "id": 5,
+     "code": "CB",
+     "name": "Cellulose brute",
+     "amount_unit": "g",
+     "system": null
+    },
+    "8": {
+     "id": 8,
+     "code": "CA",
+     "name": "Calcium",
+     "amount_unit": "g",
+     "system": null
+    },
+    "9": {
+     "id": 9,
+     "code": "P",
+     "name": "Phosphore",
+     "amount_unit": "g",
+     "system": null
+    }
+   },
+   "requirements": [
+    {
+     "nutrient_id": 10,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 0.95,
+     "target_value": 1.05,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 2,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 130.0,
+     "target_value": 150.0,
+     "max_value": 220.0
+    },
+    {
+     "nutrient_id": 5,
+     "expression": "DIET_CONCENTRATION",
+     "min_value": null,
+     "target_value": null,
+     "max_value": 260.0
+    },
+    {
+     "nutrient_id": 8,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 5.0,
+     "target_value": null,
+     "max_value": null
+    },
+    {
+     "nutrient_id": 9,
+     "expression": "DAILY_AMOUNT",
+     "min_value": 3.0,
+     "target_value": null,
+     "max_value": null
+    }
+   ],
+   "ingredients": [
+    {
+     "id": 237,
+     "name": "[DEMO] Fane d'arachide",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 300.0,
+      "8": 12.0,
+      "9": 2.0,
+      "10": 0.6
+     },
+     "price_per_kg_as_fed": 150.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 241,
+     "name": "[DEMO] Graine de coton",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 230.0,
+      "5": 230.0,
+      "8": 2.0,
+      "9": 7.0,
+      "10": 0.95
+     },
+     "price_per_kg_as_fed": 200.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 242,
+     "name": "[DEMO] Mélasse de canne",
+     "dm_g_per_kg_as_fed": 750.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 0.0,
+      "8": 8.0,
+      "9": 1.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 175.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 238,
+     "name": "[DEMO] Paille de mil",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 40.0,
+      "5": 400.0,
+      "8": 3.0,
+      "9": 1.0,
+      "10": 0.45
+     },
+     "price_per_kg_as_fed": 60.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 239,
+     "name": "[DEMO] Son de mil",
+     "dm_g_per_kg_as_fed": 900.0,
+     "composition_per_kg_dm": {
+      "2": 110.0,
+      "5": 90.0,
+      "8": 1.0,
+      "9": 9.0,
+      "10": 0.85
+     },
+     "price_per_kg_as_fed": 125.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    },
+    {
+     "id": 240,
+     "name": "[DEMO] Tourteau d'arachide",
+     "dm_g_per_kg_as_fed": 920.0,
+     "composition_per_kg_dm": {
+      "2": 480.0,
+      "5": 70.0,
+      "8": 2.0,
+      "9": 6.0,
+      "10": 1.05
+     },
+     "price_per_kg_as_fed": 300.0,
+     "currency": "XOF",
+     "price_is_demo": true,
+     "max_as_fed_kg_per_day": null
+    }
+   ],
+   "dm_intake_min_kg": 1.1,
+   "dm_intake_max_kg": 1.5,
+   "inclusion_bounds": [
+    {
+     "label": "[DEMO] Tourteau d'arachide",
+     "ingredient_ids": [
+      240
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 25.0
+    },
+    {
+     "label": "[DEMO] Mélasse de canne",
+     "ingredient_ids": [
+      242
+     ],
+     "min_pct_dm": null,
+     "max_pct_dm": 10.0
+    },
+    {
+     "label": "Fourrages",
+     "ingredient_ids": [
+      237
+     ],
+     "min_pct_dm": 25.0,
+     "max_pct_dm": null
+    }
+   ],
+   "reference_label": "[DEMO] Mouton d'embouche 25–45 kg (valeurs fictives) [INRA]",
+   "reference_source": "[DEMO] Table de composition fictive pour la démonstration (2026)",
+   "is_demo": true
+  },
+  "expected": {
+   "status": "ESTIMATED",
+   "dm_intake_kg_day": 1.3308584696,
+   "cost_per_day": 195.9077307995169,
+   "items": {
+    "239": 0.98839907,
+    "237": 0.33271462,
+    "240": 0.0097447796
+   },
+   "excluded": [],
+   "constraints_ok": true
+  }
+ }
+]

@@ -11,7 +11,7 @@ from core.viewsets import FarmScopedViewSet
 from farms.access import membership_for
 from governance.activity import log_activity
 
-from .engine_service import run_formulation
+from .engine_service import offline_pack, run_formulation
 from .models import FeedFormula, FormulaStatus
 from .serializers import CalculationRequestSerializer, FeedFormulaSerializer, FormulaReviewSerializer
 
@@ -30,7 +30,7 @@ class FeedFormulaViewSet(FarmScopedViewSet):
     """
 
     queryset = FeedFormula.objects.select_related("farm", "species", "validated_by").prefetch_related(
-        "items__ingredient"
+        "items__ingredient__category"
     )
     serializer_class = FeedFormulaSerializer
     filterset_fields = ["species", "mode", "status", "animal", "group", "is_demo"]
@@ -87,6 +87,27 @@ class FeedFormulaViewSet(FarmScopedViewSet):
         return Response(self.get_serializer(formula).data)
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter("farm", int, required=True, description="Exploitation (écriture requise)")
+        ],
+        responses=OpenApiTypes.OBJECT,
+        summary="Paquet de calcul hors ligne : références utilisables, problèmes préparés, profils des lots",
+    )
+    @action(detail=False, methods=["get"], url_path="offline-pack")
+    def offline_pack(self, request):
+        from farms.access import can_write_farm
+        from farms.models import Farm
+
+        try:
+            farm = Farm.objects.get(pk=int(request.query_params.get("farm", "")), is_active=True)
+        except (ValueError, Farm.DoesNotExist):
+            return Response({"detail": "Exploitation introuvable."}, status=status.HTTP_404_NOT_FOUND)
+        if not can_write_farm(request.user, farm):
+            # Même règle que le calcul en ligne : réservé aux propriétaires et gestionnaires.
+            return Response({"detail": "Exploitation introuvable."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(offline_pack(farm))
+
+    @extend_schema(
         request=CalculationRequestSerializer,
         responses=OpenApiTypes.OBJECT,
         summary="Calculer une formule avec le moteur d'optimisation (économique ou équilibré)",
@@ -104,6 +125,8 @@ class FeedFormulaViewSet(FarmScopedViewSet):
             "weight_kg": data.get("animal_weight_kg"),
             "age_months": data.get("animal_age_months"),
         }
+        if data.get("group") is not None:
+            profile["head_count"] = data.get("group_head_count")
         formula, result = run_formulation(
             farm=data["farm"],
             user=request.user,
@@ -118,6 +141,7 @@ class FeedFormulaViewSet(FarmScopedViewSet):
             animal=data.get("animal"),
             group=data.get("group"),
             notes=data["notes"],
+            extra_warnings=data.get("group_notes", []),
             save=data["save"],
         )
         if formula is not None:

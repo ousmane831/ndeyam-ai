@@ -87,7 +87,7 @@ Les ressources d'exploitation acceptent le filtre `farm=<id>`.
 | Ressource | Route | Particularités |
 |---|---|---|
 | Sources documentaires | `/sources/` | Suppression refusée (409) si la source est utilisée |
-| Ingrédients | `/ingredients/` | `ready_for_engine` (liste) : matière sèche utilisable par le moteur. `?scope=catalog\|private`. Catalogue commun : experts ; ingrédient privé (`farm`) : éleveurs de l'exploitation. Le détail contient `composition_table` (une ligne par nutriment, valeur inconnue explicite) |
+| Ingrédients | `/ingredients/` | `category_code` ; `ready_for_engine` (liste) : matière sèche utilisable par le moteur. `?scope=catalog\|private`. Catalogue commun : experts ; ingrédient privé (`farm`) : éleveurs de l'exploitation. Le détail contient `composition_table` (une ligne par nutriment, valeur inconnue explicite) |
 | Compositions | `/compositions/` | `POST /compositions/import/` (CSV, experts) |
 | Références nutritionnelles | `/nutritional-references/` | Besoins inclus en lecture |
 | Besoins | `/requirements/?reference=` | Toute modification remet la référence validée en brouillon |
@@ -153,7 +153,8 @@ Les alertes sont réévaluées après chaque pesée, à la demande, et par la co
 
 | Route | Description |
 |---|---|
-| `POST /formulas/calculate/` | Calcul par optimisation (`mode` : `ECONOMIC` ou `BALANCED`). Profil d'animal, ingrédients avec prix et disponibilités facultatifs. Enregistre la formule (statut `ESTIMATED`, `INFEASIBLE` ou `REFUSED`) sauf `save: false`. Détail complet : [moteur-formulation.md](moteur-formulation.md) |
+| `GET /formulas/offline-pack/?farm=` | Paquet de calcul hors ligne (propriétaire ou gestionnaire ; 404 sinon) : références utilisables avec leurs critères et le problème préparé par `build_problem` (mêmes données et règles que le calcul en ligne), profil de chaque lot, objectifs, animaux présents avec leur dernier poids. Quelques Ko |
+| `POST /formulas/calculate/` | Calcul par optimisation (`mode` : `ECONOMIC` ou `BALANCED`). Avec `group` (sans `animal`) : profil déduit des animaux présents du lot (espèce, race, catégorie et stade les plus fréquents, poids moyen des dernières pesées, âge moyen ; les valeurs transmises restent prioritaires), effectif dans `result_snapshot.profile.head_count`, explications dans `warnings`. Lignes de formule : `ingredient_category` (code). Profil d'animal, ingrédients avec prix et disponibilités facultatifs. Enregistre la formule (statut `ESTIMATED`, `INFEASIBLE` ou `REFUSED`) sauf `save: false`. Détail complet : [moteur-formulation.md](moteur-formulation.md) |
 
 Une formule `ESTIMATED` peut être soumise à un expert (`submit-review`) ; une formule refusée ou impossible ne le peut pas.
 

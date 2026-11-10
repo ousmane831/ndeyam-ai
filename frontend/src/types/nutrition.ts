@@ -50,6 +50,7 @@ export interface Ingredient extends ValidatedFields {
   local_names: string
   category: number
   category_name: string
+  category_code?: string
   description: string
   farm: number | null
   scope: 'catalog' | 'private'
