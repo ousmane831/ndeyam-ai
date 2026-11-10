@@ -1,4 +1,5 @@
 import { lazy, Suspense, type ComponentType } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router'
 import { Spinner } from '@/components/ui/Spinner'
 import { FarmProvider } from '@/contexts/FarmContext'
@@ -38,11 +39,16 @@ const DocumentsPage = page(() => import('@/pages/documents/DocumentsPage'), 'Doc
 const AssistantPage = page(() => import('@/pages/assistant/AssistantPage'), 'AssistantPage')
 const NotFoundPage = page(() => import('@/pages/NotFoundPage'), 'NotFoundPage')
 
-const loading = (
-  <div className="flex min-h-[40vh] items-center justify-center">
-    <Spinner label="Chargement de la page…" />
-  </div>
-)
+function PageLoader() {
+  const { t } = useTranslation()
+  return (
+    <div className="flex min-h-[40vh] items-center justify-center">
+      <Spinner label={t('Chargement de la page…')} />
+    </div>
+  )
+}
+
+const loading = <PageLoader />
 
 export function AppRoutes() {
   return (

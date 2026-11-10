@@ -8,15 +8,18 @@ import { TextField } from '@/components/ui/Field'
 import { useAuth } from '@/hooks/useAuth'
 import { authService } from '@/services/auth'
 import { applyServerErrors } from '@/utils/forms'
+import { tk } from '@/i18n'
+import { useTranslation } from 'react-i18next'
 
 const schema = z.object({
-  first_name: z.string().trim().min(1, 'Le prénom est obligatoire.'),
-  last_name: z.string().trim().min(1, 'Le nom est obligatoire.'),
-  phone: z.string().trim().max(32, '32 caractères maximum.'),
+  first_name: z.string().trim().min(1, tk('Le prénom est obligatoire.')),
+  last_name: z.string().trim().min(1, tk('Le nom est obligatoire.')),
+  phone: z.string().trim().max(32, tk('32 caractères maximum.')),
 })
 type FormValues = z.infer<typeof schema>
 
 export function ProfileForm() {
+  const { t } = useTranslation()
   const { user, setUser } = useAuth()
   const [message, setMessage] = useState<{ tone: 'success' | 'error'; text: string } | null>(null)
   const {
@@ -36,7 +39,7 @@ export function ProfileForm() {
       const updated = await authService.updateProfile(values)
       setUser(updated)
       reset(values)
-      setMessage({ tone: 'success', text: 'Profil mis à jour.' })
+      setMessage({ tone: 'success', text: t('Profil mis à jour.') })
     } catch (error) {
       const text = applyServerErrors(error, setError, ['first_name', 'last_name', 'phone'])
       if (text) setMessage({ tone: 'error', text })
@@ -44,21 +47,21 @@ export function ProfileForm() {
   })
 
   return (
-    <Card title="Mon profil">
+    <Card title={t('Mon profil')}>
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {message && <Alert tone={message.tone}>{message.text}</Alert>}
         <div className="grid gap-4 sm:grid-cols-2">
-          <TextField label="Prénom" required error={errors.first_name?.message} {...register('first_name')} />
-          <TextField label="Nom" required error={errors.last_name?.message} {...register('last_name')} />
+          <TextField label={t('Prénom')} required error={errors.first_name?.message} {...register('first_name')} />
+          <TextField label={t('Nom', { context: 'person' })} required error={errors.last_name?.message} {...register('last_name')} />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <TextField label="Adresse e-mail" value={user?.email ?? ''} disabled hint="Contactez un administrateur pour la modifier." readOnly />
-          <TextField label="Téléphone" type="tel" error={errors.phone?.message} {...register('phone')} />
+          <TextField label={t('Adresse e-mail')} value={user?.email ?? ''} disabled hint={t('Contactez un administrateur pour la modifier.')} readOnly />
+          <TextField label={t('Téléphone')} type="tel" error={errors.phone?.message} {...register('phone')} />
         </div>
-        <TextField label="Rôle" value={user?.role_label ?? ''} disabled readOnly />
+        <TextField label={t('Rôle')} value={user?.role_label ? t(user.role_label) : ''} disabled readOnly />
         <div className="flex justify-end">
           <Button type="submit" loading={isSubmitting} disabled={!isDirty}>
-            Enregistrer
+            {t('Enregistrer')}
           </Button>
         </div>
       </form>

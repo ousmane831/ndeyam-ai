@@ -5,6 +5,13 @@
   `python manage.py spectacular --file ../docs/openapi.yaml --validate` (dossier `backend`).
 - Préfixe : `/api/v1/`. Format : JSON. Langue des messages : français.
 
+
+**Langue des réponses.** Avec l'en-tête `Accept-Language: en`, les messages de l'API sont en anglais : messages
+natifs de Django / DRF, et messages propres au projet traduits à la sortie par `core.renderers.LocalizedJSONRenderer`
+à partir du catalogue `core/locale_en.py` (y compris les messages déjà enregistrés : avertissements des formules,
+alertes). Les champs de données saisies (`core.i18n_messages.USER_DATA_KEYS`) ne sont jamais traduits. Sans en-tête,
+ou avec `fr`, les réponses restent en français.
+
 ## Authentification
 
 JWT (SimpleJWT). Envoyer `Authorization: Bearer <jeton d'accès>`.

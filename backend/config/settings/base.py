@@ -135,7 +135,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # --- Internationalisation : interface en français, fuseau de Dakar -----------
 LANGUAGE_CODE = "fr"
-LANGUAGES = [("fr", "Français")]
+# L'anglais est servi aux applications qui le demandent (Accept-Language) : messages Django/DRF natifs
+# et catalogue des messages du serveur (core/locale_en.py, traduit à la sortie de l'API).
+LANGUAGES = [("fr", "Français"), ("en", "English")]
 TIME_ZONE = "Africa/Dakar"
 USE_I18N = True
 USE_TZ = True
@@ -159,6 +161,10 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "core.renderers.LocalizedJSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_PAGINATION_CLASS": "core.pagination.StandardPagination",
     "PAGE_SIZE": 20,

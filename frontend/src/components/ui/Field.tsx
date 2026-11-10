@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { Eye, EyeOff } from 'lucide-react'
 import { forwardRef, useId, useState, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const CONTROL =
   'block w-full rounded-md border bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus:outline-none focus:ring-2 disabled:bg-slate-50'
@@ -24,6 +25,7 @@ interface FieldShellProps {
 }
 
 function FieldShell({ id, label, error, hint, required, children }: FieldShellProps) {
+  const { t } = useTranslation()
   return (
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm font-medium text-slate-700">
@@ -33,7 +35,7 @@ function FieldShell({ id, label, error, hint, required, children }: FieldShellPr
       {children}
       {error ? (
         <p id={`${id}-error`} role="alert" className="text-sm text-red-600">
-          {error}
+          {t(error)}
         </p>
       ) : (
         hint && (
@@ -78,6 +80,7 @@ export const PasswordField = forwardRef<HTMLInputElement, TextFieldProps>(functi
 ) {
   const autoId = useId()
   const fieldId = id ?? autoId
+  const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   return (
     <FieldShell id={fieldId} label={label} error={error} hint={hint} required={required}>
@@ -95,7 +98,7 @@ export const PasswordField = forwardRef<HTMLInputElement, TextFieldProps>(functi
           type="button"
           onClick={() => setVisible((v) => !v)}
           className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-500 hover:text-slate-600"
-          aria-label={visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+          aria-label={visible ? t('Masquer le mot de passe') : t('Afficher le mot de passe')}
         >
           {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
         </button>

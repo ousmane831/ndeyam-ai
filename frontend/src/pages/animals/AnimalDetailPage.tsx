@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Archive, ArrowLeft, Pencil, RotateCcw, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, Badge, Card, AnimalTag } from '@/components/ui/Feedback'
@@ -21,6 +22,7 @@ import { formatAge, formatDate, formatNumber } from '@/utils/format'
 type TabId = 'general' | 'weighings' | 'feeding' | 'rations' | 'observations' | 'alerts'
 
 function ArchiveModal({ animal, open, onClose }: { animal: Animal; open: boolean; onClose: () => void }) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [status, setStatus] = useState<'SOLD' | 'DEAD' | 'ARCHIVED'>('SOLD')
   const [note, setNote] = useState('')
@@ -36,39 +38,40 @@ function ArchiveModal({ animal, open, onClose }: { animal: Animal; open: boolean
   return (
     <Modal
       open={open}
-      title={`Sortie de ${animal.tag_number}`}
+      title={t('Sortie de {{tag}}', { tag: animal.tag_number })}
       onClose={onClose}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
-            Annuler
+            {t('Annuler')}
           </Button>
           <Button onClick={() => archive.mutate()} loading={archive.isPending}>
-            Confirmer la sortie
+            {t('Confirmer la sortie')}
           </Button>
         </>
       }
     >
       <div className="space-y-4">
         {archive.isError && <Alert tone="error">{archive.error.message}</Alert>}
-        <p className="text-sm text-slate-600">L'animal n'apparaîtra plus parmi les animaux présents ; son historique est conservé.</p>
+        <p className="text-sm text-slate-600">{t("L'animal n'apparaîtra plus parmi les animaux présents ; son historique est conservé.")}</p>
         <SelectField
-          label="Motif"
+          label={t('Motif')}
           value={status}
           onChange={(e) => setStatus(e.target.value as typeof status)}
           options={[
-            { value: 'SOLD', label: 'Vendu' },
-            { value: 'DEAD', label: 'Mort' },
-            { value: 'ARCHIVED', label: 'Archivé (autre motif)' },
+            { value: 'SOLD', label: t('Vendu') },
+            { value: 'DEAD', label: t('Mort') },
+            { value: 'ARCHIVED', label: t('Archivé (autre motif)') },
           ]}
         />
-        <TextField label="Précision (facultatif)" value={note} onChange={(e) => setNote(e.target.value)} />
+        <TextField label={t('Précision (facultatif)')} value={note} onChange={(e) => setNote(e.target.value)} />
       </div>
     </Modal>
   )
 }
 
 export function AnimalDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const animalId = Number(id)
   const navigate = useNavigate()
@@ -107,7 +110,7 @@ export function AnimalDetailPage() {
       <div className="space-y-4">
         <Alert tone="error">{animal.error.message}</Alert>
         <Link to="/animaux" className="text-sm font-medium text-brand-700 hover:underline">
-          Retour à la liste
+          {t('Retour à la liste')}
         </Link>
       </div>
     )
@@ -119,14 +122,14 @@ export function AnimalDetailPage() {
   return (
     <div className="space-y-6">
       <Link to="/animaux" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700">
-        <ArrowLeft className="size-4" /> Mes animaux
+        <ArrowLeft className="size-4" /> {t('Mes animaux')}
       </Link>
       <PageHeader
         title={<span className="inline-flex flex-wrap items-center gap-3"><AnimalTag size="lg">{a.tag_number}</AnimalTag>{a.name && <span>{a.name}</span>}</span>}
         description={
           <span className="flex flex-wrap items-center gap-2">
-            {a.species_name} · {a.sex_label} · {formatAge(a.age_days, a.birth_date_is_estimated)}
-            <Badge tone={a.status === 'ACTIVE' ? 'brand' : 'neutral'}>{a.status_label}</Badge>
+            {t(a.species_name)} · {t(a.sex_label)} · {formatAge(a.age_days, a.birth_date_is_estimated)}
+            <Badge tone={a.status === 'ACTIVE' ? 'brand' : 'neutral'}>{t(a.status_label)}</Badge>
             {a.is_demo && <Badge tone="demo">DEMO</Badge>}
           </span>
         }
@@ -134,36 +137,36 @@ export function AnimalDetailPage() {
           writable && (
             <>
               <Button variant="secondary" icon={<Pencil className="size-4" />} onClick={() => navigate(`/animaux/${a.id}/modifier`)}>
-                Modifier
+                {t('Modifier')}
               </Button>
               {a.status === 'ACTIVE' ? (
                 <Button variant="secondary" icon={<Archive className="size-4" />} onClick={() => setArchiveOpen(true)}>
-                  Sortie
+                  {t('Sortie')}
                 </Button>
               ) : (
                 <Button variant="secondary" icon={<RotateCcw className="size-4" />} loading={restore.isPending} onClick={() => restore.mutate()}>
-                  Remettre présent
+                  {t('Remettre présent')}
                 </Button>
               )}
               <Button variant="ghost" icon={<Trash2 className="size-4" />} onClick={() => setDeleteOpen(true)}>
-                Supprimer
+                {t('Supprimer')}
               </Button>
             </>
           )
         }
       />
-      {!writable && <Alert tone="info">Accès en lecture seule à cette exploitation.</Alert>}
+      {!writable && <Alert tone="info">{t('Accès en lecture seule à cette exploitation.')}</Alert>}
 
       <Tabs<TabId>
         active={tab}
         onChange={setTab}
         tabs={[
-          { id: 'general', label: 'Informations générales' },
-          { id: 'weighings', label: 'Pesées et croissance' },
-          { id: 'feeding', label: 'Historique alimentaire' },
-          { id: 'rations', label: 'Rations' },
-          { id: 'observations', label: 'Observations' },
-          { id: 'alerts', label: 'Suivi et alertes', count: openAlerts },
+          { id: 'general', label: t('Informations générales') },
+          { id: 'weighings', label: t('Pesées et croissance') },
+          { id: 'feeding', label: t('Historique alimentaire') },
+          { id: 'rations', label: t('Rations') },
+          { id: 'observations', label: t('Observations') },
+          { id: 'alerts', label: t('Suivi et alertes'), count: openAlerts },
         ]}
       />
 
@@ -171,30 +174,36 @@ export function AnimalDetailPage() {
         <Card>
           <DefinitionList
             items={[
-              { label: 'Numéro / boucle', value: a.tag_number },
-              { label: 'Nom', value: a.name || '—' },
-              { label: 'Espèce', value: a.species_name },
-              { label: 'Race', value: a.breed_name ?? 'Non renseignée' },
-              { label: 'Sexe', value: a.sex_label },
+              { label: t('Numéro / boucle'), value: a.tag_number },
+              { label: t('Nom'), value: a.name || '—' },
+              { label: t('Espèce'), value: t(a.species_name) },
+              { label: t('Race'), value: a.breed_name ? t(a.breed_name) : t('Non renseignée') },
+              { label: t('Sexe'), value: t(a.sex_label) },
               {
-                label: 'Date de naissance',
-                value: a.birth_date ? `${formatDate(a.birth_date)}${a.birth_date_is_estimated ? ' (estimée)' : ''}` : 'Inconnue',
+                label: t('Date de naissance'),
+                value: a.birth_date
+                  ? a.birth_date_is_estimated
+                    ? t('{{date}} (estimée)', { date: formatDate(a.birth_date) })
+                    : formatDate(a.birth_date)
+                  : t('Inconnue'),
               },
-              { label: 'Poids initial', value: a.initial_weight_kg ? `${formatNumber(a.initial_weight_kg, 2)} kg` : 'Non renseigné' },
+              { label: t('Poids initial'), value: a.initial_weight_kg ? `${formatNumber(a.initial_weight_kg, 2)} kg` : t('Non renseigné') },
               {
-                label: 'Dernier poids',
-                value: a.last_weight ? `${formatNumber(a.last_weight.weight_kg, 2)} kg le ${formatDate(a.last_weight.weighed_on)}` : 'Aucune pesée',
+                label: t('Dernier poids'),
+                value: a.last_weight
+                  ? t('{{weight}} kg le {{date}}', { weight: formatNumber(a.last_weight.weight_kg, 2), date: formatDate(a.last_weight.weighed_on) })
+                  : t('Aucune pesée'),
               },
-              { label: 'Catégorie', value: a.category_name ?? 'Non renseignée' },
-              { label: 'Stade physiologique', value: a.physiological_stage_name ?? 'Non renseigné' },
-              { label: 'Lot', value: a.group_name ?? 'Aucun' },
-              { label: "Date d'enregistrement", value: formatDate(a.registered_on) },
-              { label: 'Observations', value: a.observations || '—' },
+              { label: t('Catégorie'), value: a.category_name ? t(a.category_name) : t('Non renseignée') },
+              { label: t('Stade physiologique'), value: a.physiological_stage_name ? t(a.physiological_stage_name) : t('Non renseigné') },
+              { label: t('Lot'), value: a.group_name ?? t('Aucun') },
+              { label: t("Date d'enregistrement"), value: formatDate(a.registered_on) },
+              { label: t('Observations'), value: a.observations || '—' },
             ]}
           />
           <details className="mt-5 border-t border-slate-100 pt-4 text-sm text-slate-600">
-            <summary className="cursor-pointer font-medium text-slate-700">Détails techniques</summary>
-            <p className="mt-2">Identifiant interne (synchronisation, exports) : <span className="font-mono text-xs">{a.uuid}</span></p>
+            <summary className="cursor-pointer font-medium text-slate-700">{t('Détails techniques')}</summary>
+            <p className="mt-2">{t('Identifiant interne (synchronisation, exports) :')} <span className="font-mono text-xs">{a.uuid}</span></p>
           </details>
         </Card>
       )}
@@ -203,17 +212,16 @@ export function AnimalDetailPage() {
       {tab === 'rations' && <RationsTab animalId={a.id} />}
       {tab === 'observations' && <ObservationsTab animalId={a.id} canWrite={writable} />}
       {tab === 'alerts' && (
-        <Card title="Alertes et rappels ouverts">
+        <Card title={t('Alertes et rappels ouverts')}>
           <p className="mb-4 text-xs text-slate-500">
-            Les alertes signalent des écarts par rapport à des réglages de suivi ou à des plages validées. Elles ne constituent pas un
-            diagnostic vétérinaire.
+            {t('Les alertes signalent des écarts par rapport à des réglages de suivi ou à des plages validées. Elles ne constituent pas un diagnostic vétérinaire.')}
           </p>
           {alerts.isPending ? (
             <Spinner />
           ) : alerts.isError ? (
             <Alert tone="error">{alerts.error.message}</Alert>
           ) : (
-            <AlertList alerts={alerts.data.results} canAct={() => writable} emptyTitle="Aucune alerte ouverte pour cet animal" />
+            <AlertList alerts={alerts.data.results} canAct={() => writable} emptyTitle={t('Aucune alerte ouverte pour cet animal')} />
           )}
         </Card>
       )}
@@ -221,15 +229,15 @@ export function AnimalDetailPage() {
       <ArchiveModal animal={a} open={archiveOpen} onClose={() => setArchiveOpen(false)} />
       <ConfirmDialog
         open={deleteOpen}
-        title="Supprimer définitivement cet animal ?"
+        title={t('Supprimer définitivement cet animal ?')}
         message={
           <>
-            Toutes ses pesées, observations et distributions seront supprimées. Pour un animal vendu ou mort, préférez la <strong>sortie</strong>,
-            qui conserve l'historique.
+            {t('Toutes ses pesées, observations et distributions seront supprimées. Pour un animal vendu ou mort, préférez la')}{' '}
+            <strong>{t('sortie')}</strong>, {t("qui conserve l'historique.")}
             {removal.isError && <span className="mt-2 block text-red-600">{removal.error.message}</span>}
           </>
         }
-        confirmLabel="Supprimer"
+        confirmLabel={t('Supprimer')}
         danger
         loading={removal.isPending}
         onConfirm={() => removal.mutate()}

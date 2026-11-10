@@ -539,46 +539,46 @@
    "id": 76,
    "name": "Agneaux 2026",
    "head_count": 3,
-   "notes": [
-    "Poids moyen du lot : 15,65 kg (2 animal(aux) pesé(s) sur 3)."
-   ],
    "species": 1,
    "breed": null,
    "category": 1,
    "physiological_stage": 1,
    "weight_kg": 15.65,
-   "age_months": 2.4
+   "age_months": 2.4,
+   "profile_notes": [
+    "Poids moyen du lot : 15,65 kg (2 animal(aux) pesé(s) sur 3)."
+   ]
   },
   {
    "id": 75,
    "name": "Brebis reproductrices",
    "head_count": 5,
-   "notes": [
-    "Lot mixte, race : valeur la plus fréquente retenue (Touabire, 3 animaux sur 5).",
-    "Lot mixte, stade : valeur la plus fréquente retenue (Entretien, 4 animaux sur 5).",
-    "Poids moyen du lot : 42,26 kg (5 animal(aux) pesé(s) sur 5)."
-   ],
    "species": 1,
    "breed": 2,
    "category": 4,
    "physiological_stage": 2,
    "weight_kg": 42.26,
-   "age_months": 35.5
+   "age_months": 35.5,
+   "profile_notes": [
+    "Lot mixte, race : valeur la plus fréquente retenue (Touabire, 3 animaux sur 5).",
+    "Lot mixte, stade : valeur la plus fréquente retenue (Entretien, 4 animaux sur 5).",
+    "Poids moyen du lot : 42,26 kg (5 animal(aux) pesé(s) sur 5)."
+   ]
   },
   {
    "id": 74,
    "name": "Embouche Tabaski",
    "head_count": 6,
-   "notes": [
-    "Lot mixte, race : valeur la plus fréquente retenue (Ladoum, 3 animaux sur 6).",
-    "Poids moyen du lot : 42,48 kg (6 animal(aux) pesé(s) sur 6)."
-   ],
    "species": 1,
    "breed": 3,
    "category": 6,
    "physiological_stage": 3,
    "weight_kg": 42.48,
-   "age_months": 12.1
+   "age_months": 12.1,
+   "profile_notes": [
+    "Lot mixte, race : valeur la plus fréquente retenue (Ladoum, 3 animaux sur 6).",
+    "Poids moyen du lot : 42,48 kg (6 animal(aux) pesé(s) sur 6)."
+   ]
   }
  ],
  "objectives": [

@@ -2,22 +2,25 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { Alert } from '@/components/ui/Feedback'
 import { PasswordField, TextField } from '@/components/ui/Field'
 import { useAuth } from '@/hooks/useAuth'
+import { tk } from '@/i18n'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { applyServerErrors } from '@/utils/forms'
 
 const schema = z.object({
-  email: z.email("Saisissez une adresse e-mail valide."),
-  password: z.string().min(1, 'Saisissez votre mot de passe.'),
+  email: z.email(tk('Saisissez une adresse e-mail valide.')),
+  password: z.string().min(1, tk('Saisissez votre mot de passe.')),
   remember: z.boolean(),
 })
 type FormValues = z.infer<typeof schema>
 
 export function LoginPage() {
+  const { t } = useTranslation()
   const { login, sessionExpired } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -43,23 +46,23 @@ export function LoginPage() {
 
   return (
     <AuthLayout
-      title="Connexion"
-      subtitle="Accédez à votre espace NDEYAM AI."
+      title={t('Connexion')}
+      subtitle={t('Accédez à votre espace NDEYAM AI.')}
       footer={
         <>
-          Pas encore de compte ?{' '}
+          {t('Pas encore de compte ?')}{' '}
           <Link to="/inscription" className="font-medium text-brand-700 hover:underline">
-            Créer un compte éleveur
+            {t('Créer un compte éleveur')}
           </Link>
         </>
       }
     >
       <form onSubmit={onSubmit} noValidate className="space-y-5">
-        {sessionExpired && !serverError && <Alert tone="warning">Votre session a expiré. Veuillez vous reconnecter.</Alert>}
+        {sessionExpired && !serverError && <Alert tone="warning">{t('Votre session a expiré. Veuillez vous reconnecter.')}</Alert>}
         {serverError && <Alert tone="error">{serverError}</Alert>}
-        <TextField label="Adresse e-mail" type="email" autoComplete="email" required error={errors.email?.message} {...register('email')} />
+        <TextField label={t('Adresse e-mail')} type="email" autoComplete="email" required error={errors.email?.message} {...register('email')} />
         <PasswordField
-          label="Mot de passe"
+          label={t('Mot de passe')}
           autoComplete="current-password"
           required
           error={errors.password?.message}
@@ -68,14 +71,14 @@ export function LoginPage() {
         <div className="flex items-center justify-between gap-3 text-sm">
           <label className="inline-flex items-center gap-2 text-slate-600">
             <input type="checkbox" className="size-4 rounded border-slate-300 accent-brand-600" {...register('remember')} />
-            Rester connecté
+            {t('Rester connecté')}
           </label>
           <Link to="/mot-de-passe-oublie" className="font-medium text-brand-700 hover:underline">
-            Mot de passe oublié ?
+            {t('Mot de passe oublié ?')}
           </Link>
         </div>
         <Button type="submit" className="w-full" loading={isSubmitting}>
-          Se connecter
+          {t('Se connecter')}
         </Button>
       </form>
     </AuthLayout>

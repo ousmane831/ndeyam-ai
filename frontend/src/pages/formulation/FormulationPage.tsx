@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { GitCompare } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, EmptyState } from '@/components/ui/Feedback'
@@ -19,6 +20,7 @@ type TabId = 'rapide' | 'calcul' | 'manuel' | 'formules'
 
 
 function FormulaList() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { selectedFarmId } = useFarm()
   const [page, setPage] = useState(1)
@@ -30,32 +32,32 @@ function FormulaList() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <select aria-label="Statut" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1) }} className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
-          <option value="">Tous statuts</option>
-          <option value="ESTIMATED">Estimations</option>
-          <option value="PENDING_REVIEW">En attente de vérification</option>
-          <option value="VALIDATED">Validées</option>
-          <option value="INFEASIBLE">Impossibles</option>
-          <option value="REFUSED">Refusées</option>
-          <option value="DRAFT">Saisies (brouillon)</option>
+        <select aria-label={t('Statut')} value={status} onChange={(e) => { setStatus(e.target.value); setPage(1) }} className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
+          <option value="">{t('Tous statuts')}</option>
+          <option value="ESTIMATED">{t('Estimations')}</option>
+          <option value="PENDING_REVIEW">{t('En attente de vérification')}</option>
+          <option value="VALIDATED">{t('Validées')}</option>
+          <option value="INFEASIBLE">{t('Impossibles')}</option>
+          <option value="REFUSED">{t('Refusées')}</option>
+          <option value="DRAFT">{t('Saisies (brouillon)')}</option>
         </select>
         <Button variant="secondary" icon={<GitCompare className="size-4" />} disabled={selected.length < 2}
-          onClick={() => navigate(`/formulation/comparer?ids=${selected.join(',')}`)}>Comparer ({selected.length})</Button>
+          onClick={() => navigate(`/formulation/comparer?ids=${selected.join(',')}`)}>{t('Comparer ({{count}})', { count: selected.length })}</Button>
       </div>
       <section className="overflow-hidden rounded-md border border-slate-200 bg-white">
         {list.isPending ? <div className="p-6"><Spinner /></div> : list.isError ? <div className="p-4"><Alert tone="error">{list.error.message}</Alert></div> : list.data.results.length === 0 ? (
-          <EmptyState title="Aucune formule enregistrée">Calculez une formule ou saisissez la ration que vous utilisez.</EmptyState>
+          <EmptyState title={t('Aucune formule enregistrée')}>{t('Calculez une formule ou saisissez la ration que vous utilisez.')}</EmptyState>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b border-slate-200 bg-slate-50"><tr><th className={th}>Comparer</th><th className={th}>Formule</th><th className={th}>Mode</th><th className={th}>Statut</th><th className={th}>Coût / animal / j</th><th className={th}>Date</th></tr></thead>
+                <thead className="border-b border-slate-200 bg-slate-50"><tr><th className={th}>{t('Comparer')}</th><th className={th}>{t('Formule')}</th><th className={th}>{t('Mode')}</th><th className={th}>{t('Statut')}</th><th className={th}>{t('Coût / animal / j')}</th><th className={th}>{t('Date')}</th></tr></thead>
                 <tbody className="divide-y divide-slate-100">
                   {list.data.results.map((f) => (
                     <tr key={f.id} className="hover:bg-slate-50/70">
-                      <td className={td}><input type="checkbox" aria-label={`Comparer ${f.name}`} checked={selected.includes(f.id)} onChange={() => toggle(f.id)} className="size-5 accent-brand-700" /></td>
+                      <td className={td}><input type="checkbox" aria-label={t('Comparer {{name}}', { name: f.name })} checked={selected.includes(f.id)} onChange={() => toggle(f.id)} className="size-5 accent-brand-700" /></td>
                       <td className={td}><Link to={`/formulation/${f.id}`} className="font-medium text-brand-700 hover:underline">{f.name}</Link></td>
-                      <td className={td}>{f.mode_label}</td>
+                      <td className={td}>{t(f.mode_label)}</td>
                       <td className={td}><FormulaStatus status={f.status} label={f.status_label} isDemo={f.is_demo} /></td>
                       <td className={td}>{formatMoney(f.cost_per_day, f.currency)}</td>
                       <td className={td}>{formatDateTime(f.created_at)}</td>
@@ -73,14 +75,15 @@ function FormulaList() {
 }
 
 export function FormulationPage() {
+  const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
   const tab = (params.get('onglet') as TabId) || 'rapide'
   return (
     <div className="space-y-6">
-      <PageHeader title="Formulation des aliments"
-        description="Le moteur calcule une ration à partir des seules données validées (références, compositions, contraintes). Le résultat est une estimation mathématique jusqu'à la vérification d'un expert." />
+      <PageHeader title={t('Formulation des aliments')}
+        description={t("Le moteur calcule une ration à partir des seules données validées (références, compositions, contraintes). Le résultat est une estimation mathématique jusqu'à la vérification d'un expert.")} />
       <Tabs<TabId> active={tab} onChange={(id) => setParams({ onglet: id })}
-        tabs={[{ id: 'rapide', label: 'Formule rapide' }, { id: 'calcul', label: 'Calcul détaillé' }, { id: 'manuel', label: 'Ration saisie' }, { id: 'formules', label: 'Formules enregistrées' }]} />
+        tabs={[{ id: 'rapide', label: t('Formule rapide') }, { id: 'calcul', label: t('Calcul détaillé') }, { id: 'manuel', label: t('Ration saisie') }, { id: 'formules', label: t('Formules enregistrées') }]} />
       {tab === 'rapide' && <QuickForm />}
       {tab === 'calcul' && <CalculationForm />}
       {tab === 'manuel' && <ManualForm />}

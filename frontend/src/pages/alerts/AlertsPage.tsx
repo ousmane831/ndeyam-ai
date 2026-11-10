@@ -1,6 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { RefreshCw } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert as Notice, Card } from '@/components/ui/Feedback'
@@ -15,6 +16,7 @@ import { alertService, type AlertFilters } from '@/services/alerts'
 const select = 'rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm'
 
 export function AlertsPage() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { user } = useAuth()
   const { selectedFarmId, canWrite, writableFarms } = useFarm()
@@ -36,43 +38,46 @@ export function AlertsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Alertes et rappels"
-        description="Chaque alerte indique la règle appliquée et les valeurs qui l'ont déclenchée. Elle ne constitue jamais un diagnostic vétérinaire."
+        title={t('Alertes et rappels')}
+        description={t("Chaque alerte indique la règle appliquée et les valeurs qui l'ont déclenchée. Elle ne constitue jamais un diagnostic vétérinaire.")}
         actions={
           (writableFarms.length > 0 || user?.role === 'EXPERT') && (
             <Button variant="secondary" icon={<RefreshCw className="size-4" />} loading={evaluate.isPending} onClick={() => evaluate.mutate()}>
-              Vérifier maintenant
+              {t('Vérifier maintenant')}
             </Button>
           )
         }
       />
       {evaluate.isSuccess && (
         <Notice tone="success">
-          Vérification terminée : {evaluate.data.created} nouvelle(s), {evaluate.data.resolved} résolue(s) automatiquement.
+          {t('Vérification terminée : {{created}} nouvelle(s), {{resolved}} résolue(s) automatiquement.', {
+            created: evaluate.data.created,
+            resolved: evaluate.data.resolved,
+          })}
         </Notice>
       )}
       {evaluate.isError && <Notice tone="error">{evaluate.error.message}</Notice>}
 
       <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-3">
-        <select aria-label="Statut" className={select} value={filters.status ?? ''} onChange={(e) => set('status', e.target.value)}>
-          <option value="">Ouvertes</option>
-          <option value="RESOLVED">Résolues</option>
-          <option value="DISMISSED">Ignorées</option>
+        <select aria-label={t('Statut')} className={select} value={filters.status ?? ''} onChange={(e) => set('status', e.target.value)}>
+          <option value="">{t('Ouvertes')}</option>
+          <option value="RESOLVED">{t('Résolues')}</option>
+          <option value="DISMISSED">{t('Ignorées')}</option>
         </select>
-        <select aria-label="Niveau" className={select} value={filters.severity ?? ''} onChange={(e) => set('severity', e.target.value)}>
-          <option value="">Tous les niveaux</option>
-          <option value="CRITICAL">Important</option>
-          <option value="WARNING">Attention</option>
-          <option value="INFO">Information</option>
+        <select aria-label={t('Niveau')} className={select} value={filters.severity ?? ''} onChange={(e) => set('severity', e.target.value)}>
+          <option value="">{t('Tous les niveaux')}</option>
+          <option value="CRITICAL">{t('Important')}</option>
+          <option value="WARNING">{t('Attention')}</option>
+          <option value="INFO">{t('Information')}</option>
         </select>
-        <select aria-label="Type" className={select} value={filters.alert_type ?? ''} onChange={(e) => set('alert_type', e.target.value)}>
-          <option value="">Tous les types</option>
-          <option value="WEIGHING_REMINDER">Rappel de pesée</option>
-          <option value="FOLLOW_UP_REMINDER">Rappel de suivi</option>
-          <option value="MISSING_DATA">Information manquante</option>
-          <option value="GROWTH_OUT_OF_RANGE">Croissance hors plage de suivi</option>
-          <option value="FORMULA_TO_REVIEW">Formulation à vérifier</option>
-          <option value="REFERENCE_TO_VALIDATE">Donnée de référence à valider</option>
+        <select aria-label={t('Type')} className={select} value={filters.alert_type ?? ''} onChange={(e) => set('alert_type', e.target.value)}>
+          <option value="">{t('Tous les types')}</option>
+          <option value="WEIGHING_REMINDER">{t('Rappel de pesée')}</option>
+          <option value="FOLLOW_UP_REMINDER">{t('Rappel de suivi')}</option>
+          <option value="MISSING_DATA">{t('Information manquante')}</option>
+          <option value="GROWTH_OUT_OF_RANGE">{t('Croissance hors plage de suivi')}</option>
+          <option value="FORMULA_TO_REVIEW">{t('Formulation à vérifier')}</option>
+          <option value="REFERENCE_TO_VALIDATE">{t('Donnée de référence à valider')}</option>
         </select>
       </div>
 
@@ -86,7 +91,7 @@ export function AlertsPage() {
             <AlertList
               alerts={alerts.data.results}
               canAct={(a) => (a.farm ? canWrite(a.farm) : true)}
-              emptyTitle={filters.status ? 'Aucune alerte dans cette catégorie' : 'Aucune alerte ouverte'}
+              emptyTitle={filters.status ? t('Aucune alerte dans cette catégorie') : t('Aucune alerte ouverte')}
             />
             <div className="-mx-5 -mb-5 mt-4">
               <Pagination page={filters.page ?? 1} pageSize={20} count={alerts.data.count} onPageChange={(page) => setFilters((f) => ({ ...f, page }))} />

@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { t } from '@/i18n'
 import { ApiError } from '@/services/api'
 import { weighingService } from '@/services/animals'
 import { formulaService } from '@/services/formulas'
@@ -95,7 +96,7 @@ export function syncOutbox(): Promise<{ sent: number; failed: number }> {
       } catch (e) {
         if (isNetworkError(e)) break
         failed += 1
-        const message = e instanceof ApiError ? [e.message, ...Object.values(e.fieldErrors).flat()].join(' ') : 'Envoi refusé.'
+        const message = e instanceof ApiError ? [e.message, ...Object.values(e.fieldErrors).flat()].join(' ') : t('Envoi refusé.')
         entries = entries.map((x) => (x.id === entry.id ? { ...x, error: message } : x))
         save()
       }

@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, Card } from '@/components/ui/Feedback'
@@ -49,6 +50,7 @@ export function AnimalFormPage() {
 }
 
 function AnimalForm({ animal, defaultSpecies }: { animal?: Animal; defaultSpecies?: number }) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { writableFarms, defaultWritableFarmId } = useFarm()
@@ -97,55 +99,56 @@ function AnimalForm({ animal, defaultSpecies }: { animal?: Animal; defaultSpecie
   })
 
   if (writableFarms.length === 0) {
-    return <Alert tone="warning">Vous n'avez accès en écriture à aucune exploitation : impossible d'ajouter un animal.</Alert>
+    return <Alert tone="warning">{t("Vous n'avez accès en écriture à aucune exploitation : impossible d'ajouter un animal.")}</Alert>
   }
 
-  const opt = (items: { id: number; name: string }[] | undefined, empty: string) => [
+  // Les noms de la nomenclature (espèces, races…) sont traduits ; ceux des exploitations et des lots, non.
+  const opt = (items: { id: number; name: string }[] | undefined, empty: string, translate = false) => [
     { value: '', label: empty },
-    ...(items ?? []).map((i) => ({ value: String(i.id), label: i.name })),
+    ...(items ?? []).map((i) => ({ value: String(i.id), label: translate ? t(i.name) : i.name })),
   ]
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={animal ? `Modifier ${animal.tag_number}` : 'Ajouter un animal'}
-        description="Les champs marqués d'un astérisque sont obligatoires."
+        title={animal ? t('Modifier {{tag}}', { tag: animal.tag_number }) : t('Ajouter un animal')}
+        description={t("Les champs marqués d'un astérisque sont obligatoires.")}
       />
       <form onSubmit={onSubmit} noValidate className="space-y-6">
         {serverError && <Alert tone="error">{serverError}</Alert>}
 
-        <Card title="Identification">
+        <Card title={t('Identification')}>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {!editing && writableFarms.length > 1 && (
-              <SelectField label="Exploitation" required error={errors.farm?.message} options={opt(writableFarms, 'Choisir…')} {...register('farm')} />
+              <SelectField label={t('Exploitation')} required error={errors.farm?.message} options={opt(writableFarms, t('Choisir…'))} {...register('farm')} />
             )}
-            <TextField label="Numéro / boucle" required error={errors.tag_number?.message} {...register('tag_number')} />
-            <TextField label="Nom" error={errors.name?.message} {...register('name')} />
-            <SelectField label="Espèce" required error={errors.species?.message} options={opt(species.data, 'Choisir…')} {...register('species')} />
-            <SelectField label="Race" options={opt(breeds.data, 'Non renseignée')} {...register('breed')} error={errors.breed?.message} />
+            <TextField label={t('Numéro / boucle')} required error={errors.tag_number?.message} {...register('tag_number')} />
+            <TextField label={t('Nom')} error={errors.name?.message} {...register('name')} />
+            <SelectField label={t('Espèce')} required error={errors.species?.message} options={opt(species.data, t('Choisir…'), true)} {...register('species')} />
+            <SelectField label={t('Race')} options={opt(breeds.data, t('Non renseignée'), true)} {...register('breed')} error={errors.breed?.message} />
             <SelectField
-              label="Sexe"
+              label={t('Sexe')}
               required
               error={errors.sex?.message}
               options={[
-                { value: '', label: 'Choisir…' },
-                { value: 'F', label: 'Femelle' },
-                { value: 'M', label: 'Mâle' },
+                { value: '', label: t('Choisir…') },
+                { value: 'F', label: t('Femelle') },
+                { value: 'M', label: t('Mâle') },
               ]}
               {...register('sex')}
             />
           </div>
         </Card>
 
-        <Card title="Âge et poids">
+        <Card title={t('Âge et poids')}>
           <div className="space-y-4">
             <fieldset>
-              <legend className="mb-2 text-sm font-medium text-slate-700">Âge</legend>
+              <legend className="mb-2 text-sm font-medium text-slate-700">{t('Âge')}</legend>
               <div className="flex flex-wrap gap-4 text-sm">
                 {[
-                  ['date', 'Date de naissance connue'],
-                  ['age', 'Âge estimé'],
-                  ['unknown', 'Inconnu'],
+                  ['date', t('Date de naissance connue')],
+                  ['age', t('Âge estimé')],
+                  ['unknown', t('Inconnu')],
                 ].map(([value, label]) => (
                   <label key={value} className="inline-flex items-center gap-2">
                     <input type="radio" value={value} className="accent-brand-600" {...register('birth_mode')} />
@@ -157,45 +160,45 @@ function AnimalForm({ animal, defaultSpecies }: { animal?: Animal; defaultSpecie
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {birthMode === 'date' && (
                 <TextField
-                  label="Date de naissance"
+                  label={t('Date de naissance')}
                   type="date"
                   max={todayIso()}
                   required
-                  hint={animal?.birth_date_is_estimated ? 'Date actuellement estimée.' : undefined}
+                  hint={animal?.birth_date_is_estimated ? t('Date actuellement estimée.') : undefined}
                   error={errors.birth_date?.message}
                   {...register('birth_date')}
                 />
               )}
               {birthMode === 'age' && (
                 <TextField
-                  label="Âge estimé (mois)"
+                  label={t('Âge estimé (mois)')}
                   inputMode="decimal"
                   required
-                  hint="La date de naissance sera calculée et marquée « estimée »."
+                  hint={t('La date de naissance sera calculée et marquée « estimée ».')}
                   error={errors.estimated_age_months?.message}
                   {...register('estimated_age_months')}
                 />
               )}
-              <TextField label="Poids initial (kg)" inputMode="decimal" error={errors.initial_weight_kg?.message} {...register('initial_weight_kg')} />
-              <TextField label="Date d'enregistrement" type="date" required error={errors.registered_on?.message} {...register('registered_on')} />
+              <TextField label={t('Poids initial (kg)')} inputMode="decimal" error={errors.initial_weight_kg?.message} {...register('initial_weight_kg')} />
+              <TextField label={t("Date d'enregistrement")} type="date" required error={errors.registered_on?.message} {...register('registered_on')} />
             </div>
           </div>
         </Card>
 
-        <Card title="Classement">
+        <Card title={t('Classement')}>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <SelectField label="Catégorie" options={opt(categories.data, 'Non renseignée')} error={errors.category?.message} {...register('category')} />
+            <SelectField label={t('Catégorie')} options={opt(categories.data, t('Non renseignée'), true)} error={errors.category?.message} {...register('category')} />
             <SelectField
-              label="Stade physiologique"
-              options={opt(stages.data, 'Non renseigné')}
+              label={t('Stade physiologique')}
+              options={opt(stages.data, t('Non renseigné'), true)}
               error={errors.physiological_stage?.message}
               {...register('physiological_stage')}
             />
-            <SelectField label="Lot" options={opt(groups.data?.results, 'Aucun lot')} error={errors.group?.message} {...register('group')} />
+            <SelectField label={t('Lot')} options={opt(groups.data?.results, t('Aucun lot'))} error={errors.group?.message} {...register('group')} />
           </div>
           <div className="mt-4 space-y-1.5">
             <label htmlFor="observations" className="block text-sm font-medium text-slate-700">
-              Observations
+              {t('Observations')}
             </label>
             <textarea id="observations" rows={3} className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" {...register('observations')} />
           </div>
@@ -206,10 +209,10 @@ function AnimalForm({ animal, defaultSpecies }: { animal?: Animal; defaultSpecie
             to={animal ? `/animaux/${animal.id}` : '/animaux'}
             className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            Annuler
+            {t('Annuler')}
           </Link>
           <Button type="submit" loading={isSubmitting}>
-            {animal ? 'Enregistrer' : "Ajouter l'animal"}
+            {animal ? t('Enregistrer') : t("Ajouter l'animal")}
           </Button>
         </div>
       </form>

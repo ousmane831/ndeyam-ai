@@ -5,11 +5,14 @@ import { Bell, BookOpen, Calculator, ClipboardList, ExternalLink, FileSearch, Fi
 import { Suspense, useState, type ReactNode } from 'react'
 import { NavLink, Outlet } from 'react-router'
 import { FarmSelector } from '@/components/FarmSelector'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { Badge } from '@/components/ui/Feedback'
 import { Wordmark } from '@/components/ui/Logo'
 import { Spinner } from '@/components/ui/Spinner'
 import { AssistantLauncher } from '@/features/assistant/AssistantLauncher'
 import { useAuth } from '@/hooks/useAuth'
+import { tk } from '@/i18n'
+import { useTranslation } from 'react-i18next'
 
 interface NavItem {
   to: string
@@ -23,25 +26,26 @@ interface NavItem {
  * sont ajoutées au fur et à mesure de leur développement.
  */
 const MAIN_NAV: NavItem[] = [
-  { to: '/', label: 'Tableau de bord', icon: <LayoutDashboard className="size-5" /> },
-  { to: '/animaux', label: 'Mes animaux', icon: <PawPrint className="size-5" /> },
-  { to: '/troupeaux', label: 'Mes troupeaux', icon: <Layers className="size-5" /> },
-  { to: '/ingredients', label: 'Ingrédients alimentaires', icon: <Wheat className="size-5" /> },
-  { to: '/formulation', label: 'Formulation des aliments', icon: <Calculator className="size-5" /> },
-  { to: '/suivi-croissance', label: 'Suivi de croissance', icon: <TrendingUp className="size-5" /> },
-  { to: '/rations', label: 'Historique des rations', icon: <ClipboardList className="size-5" /> },
-  { to: '/alertes', label: 'Alertes et rappels', icon: <Bell className="size-5" /> },
-  { to: '/references', label: 'Références nutritionnelles', icon: <BookOpen className="size-5" /> },
-  { to: '/documents', label: 'Base documentaire', icon: <FileText className="size-5" /> },
-  { to: '/parametres', label: 'Paramètres', icon: <Settings className="size-5" /> },
+  { to: '/', label: tk('Tableau de bord'), icon: <LayoutDashboard className="size-5" /> },
+  { to: '/animaux', label: tk('Mes animaux'), icon: <PawPrint className="size-5" /> },
+  { to: '/troupeaux', label: tk('Mes troupeaux'), icon: <Layers className="size-5" /> },
+  { to: '/ingredients', label: tk('Ingrédients alimentaires'), icon: <Wheat className="size-5" /> },
+  { to: '/formulation', label: tk('Formulation des aliments'), icon: <Calculator className="size-5" /> },
+  { to: '/suivi-croissance', label: tk('Suivi de croissance'), icon: <TrendingUp className="size-5" /> },
+  { to: '/rations', label: tk('Historique des rations'), icon: <ClipboardList className="size-5" /> },
+  { to: '/alertes', label: tk('Alertes et rappels'), icon: <Bell className="size-5" /> },
+  { to: '/references', label: tk('Références nutritionnelles'), icon: <BookOpen className="size-5" /> },
+  { to: '/documents', label: tk('Base documentaire'), icon: <FileText className="size-5" /> },
+  { to: '/parametres', label: tk('Paramètres'), icon: <Settings className="size-5" /> },
 ]
 
-const ADMIN_NAV: NavItem[] = [{ to: '/administration/utilisateurs', label: 'Utilisateurs', icon: <Users className="size-5" /> }]
-const REVIEW_NAV: NavItem[] = [{ to: '/tracabilite', label: 'Traçabilité des données', icon: <FileSearch className="size-5" /> }]
+const ADMIN_NAV: NavItem[] = [{ to: '/administration/utilisateurs', label: tk('Utilisateurs'), icon: <Users className="size-5" /> }]
+const REVIEW_NAV: NavItem[] = [{ to: '/tracabilite', label: tk('Traçabilité des données'), icon: <FileSearch className="size-5" /> }]
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
 function NavSection({ title, items, onNavigate }: { title?: string; items: NavItem[]; onNavigate: () => void }) {
+  const { t } = useTranslation()
   return (
     <div className="space-y-1">
       {title && <p className="px-3 pt-5 pb-1.5 font-mono text-xs font-semibold tracking-[0.1em] text-brand-300 uppercase">{title}</p>}
@@ -61,7 +65,7 @@ function NavSection({ title, items, onNavigate }: { title?: string; items: NavIt
           }
         >
           {item.icon}
-          {item.label}
+          {t(item.label)}
         </NavLink>
       ))}
     </div>
@@ -69,6 +73,7 @@ function NavSection({ title, items, onNavigate }: { title?: string; items: NavIt
 }
 
 export function AppLayout() {
+  const { t } = useTranslation()
   const { user, logout } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
@@ -85,14 +90,14 @@ export function AppLayout() {
         <Wordmark tone="light" />
       </div>
       <div className="weave-dark mb-4" aria-hidden />
-      <nav className="flex-1 overflow-y-auto px-3" aria-label="Navigation principale">
+      <nav className="flex-1 overflow-y-auto px-3" aria-label={t('Navigation principale')}>
         <NavSection items={MAIN_NAV} onNavigate={closeMenu} />
         {(user?.is_platform_admin || user?.role === 'EXPERT') && (
-          <NavSection title="Référentiel" items={REVIEW_NAV} onNavigate={closeMenu} />
+          <NavSection title={t('Référentiel')} items={REVIEW_NAV} onNavigate={closeMenu} />
         )}
         {user?.is_platform_admin && (
           <>
-            <NavSection title="Administration" items={ADMIN_NAV} onNavigate={closeMenu} />
+            <NavSection title={t('Administration')} items={ADMIN_NAV} onNavigate={closeMenu} />
             <a
               href={`${BACKEND_URL}/admin/`}
               target="_blank"
@@ -100,7 +105,7 @@ export function AppLayout() {
               className="mt-1 flex items-center gap-3 rounded-md px-3 py-2 text-[14.5px] font-medium text-brand-100/85 hover:bg-white/[0.05] hover:text-white [&>svg]:text-brand-300"
             >
               <ExternalLink className="size-5" />
-              Administration des données
+              {t('Administration des données')}
             </a>
           </>
         )}
@@ -124,7 +129,7 @@ export function AppLayout() {
             type="button"
             onClick={() => setMenuOpen(false)}
             className="absolute top-4 left-72 ml-2 rounded-lg bg-white p-2 text-slate-600"
-            aria-label="Fermer le menu"
+            aria-label={t('Fermer le menu')}
           >
             <X className="size-5" />
           </button>
@@ -137,12 +142,13 @@ export function AppLayout() {
             type="button"
             onClick={() => setMenuOpen(true)}
             className="rounded-md p-2.5 text-slate-600 hover:bg-slate-100 lg:hidden"
-            aria-label="Ouvrir le menu"
+            aria-label={t('Ouvrir le menu')}
           >
             <Menu className="size-5" />
           </button>
           <FarmSelector />
           <div className="flex-1" />
+          <LanguageSwitcher />
           <div className="hidden text-right md:block">
             <p className="text-sm font-semibold text-slate-800">{user ? `${user.first_name} ${user.last_name}`.trim() || user.email : ''}</p>
             <p className="text-xs text-slate-500">{user?.email}</p>
@@ -155,13 +161,13 @@ export function AppLayout() {
             className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-50"
           >
             <LogOut className="size-4" />
-            <span className="hidden sm:inline">Déconnexion</span>
+            <span className="hidden sm:inline">{t('Déconnexion')}</span>
           </button>
         </header>
         <main className="mx-auto max-w-6xl px-4 pt-6 pb-28 sm:px-6 sm:pt-8">
           <div className="mb-4 empty:hidden"><OfflineSync /></div>
           {/* Suspense local : la barre latérale reste affichée pendant le chargement d'une page. */}
-          <Suspense fallback={<Spinner label="Chargement de la page…" />}>
+          <Suspense fallback={<Spinner label={t('Chargement de la page…')} />}>
             <Outlet />
           </Suspense>
         </main>

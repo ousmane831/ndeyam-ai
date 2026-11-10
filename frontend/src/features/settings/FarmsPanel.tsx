@@ -13,9 +13,11 @@ import { useAuth } from '@/hooks/useAuth'
 import { farmService } from '@/services/farms'
 import type { Farm, FarmMember } from '@/types/farm'
 import { applyServerErrors } from '@/utils/forms'
+import { tk } from '@/i18n'
+import { useTranslation } from 'react-i18next'
 
 const farmSchema = z.object({
-  name: z.string().trim().min(1, "Le nom de l'exploitation est obligatoire."),
+  name: z.string().trim().min(1, tk("Le nom de l'exploitation est obligatoire.")),
   region: z.string().trim(),
   locality: z.string().trim(),
   description: z.string().trim(),
@@ -23,12 +25,13 @@ const farmSchema = z.object({
 type FarmValues = z.infer<typeof farmSchema>
 
 const memberSchema = z.object({
-  email: z.email('Saisissez une adresse e-mail valide.'),
+  email: z.email(tk('Saisissez une adresse e-mail valide.')),
   role: z.enum(['MANAGER', 'EXPERT']),
 })
 type MemberValues = z.infer<typeof memberSchema>
 
 function FarmFormModal({ farm, open, onClose }: { farm?: Farm; open: boolean; onClose: () => void }) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { reloadUser } = useAuth()
   const [serverError, setServerError] = useState<string | null>(null)
@@ -59,32 +62,33 @@ function FarmFormModal({ farm, open, onClose }: { farm?: Farm; open: boolean; on
     <Modal
       open={open}
       onClose={onClose}
-      title={farm ? "Modifier l'exploitation" : 'Nouvelle exploitation'}
+      title={farm ? t("Modifier l'exploitation") : t('Nouvelle exploitation')}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
-            Annuler
+            {t('Annuler')}
           </Button>
           <Button onClick={onSubmit} loading={isSubmitting}>
-            Enregistrer
+            {t('Enregistrer')}
           </Button>
         </>
       }
     >
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {serverError && <Alert tone="error">{serverError}</Alert>}
-        <TextField label="Nom" required error={errors.name?.message} {...register('name')} />
+        <TextField label={t('Nom')} required error={errors.name?.message} {...register('name')} />
         <div className="grid gap-4 sm:grid-cols-2">
-          <TextField label="Région" error={errors.region?.message} {...register('region')} />
-          <TextField label="Localité" error={errors.locality?.message} {...register('locality')} />
+          <TextField label={t('Région')} error={errors.region?.message} {...register('region')} />
+          <TextField label={t('Localité')} error={errors.locality?.message} {...register('locality')} />
         </div>
-        <TextField label="Description" error={errors.description?.message} {...register('description')} />
+        <TextField label={t('Description')} error={errors.description?.message} {...register('description')} />
       </form>
     </Modal>
   )
 }
 
 function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onClose: () => void }) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const canManage = farm.my_role === 'OWNER'
   const membersKey = ['farms', farm.id, 'members']
@@ -119,7 +123,7 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
   })
 
   return (
-    <Modal open={open} onClose={onClose} title={`Membres — ${farm.name}`}>
+    <Modal open={open} onClose={onClose} title={t('Membres — {{name}}', { name: farm.name })}>
       <div className="space-y-5">
         {members.isPending ? (
           <Spinner />
@@ -134,13 +138,13 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
                   <p className="truncate text-xs text-slate-500">{member.user_email}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
-                  <Badge tone={member.role === 'OWNER' ? 'indigo' : 'neutral'}>{member.role_label}</Badge>
+                  <Badge tone={member.role === 'OWNER' ? 'indigo' : 'neutral'}>{t(member.role_label)}</Badge>
                   {canManage && member.role !== 'OWNER' && (
                     <button
                       type="button"
                       onClick={() => setToRemove(member)}
                       className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600"
-                      aria-label={`Retirer ${member.user_email}`}
+                      aria-label={t('Retirer {{email}}', { email: member.user_email })}
                     >
                       <Trash2 className="size-4" />
                     </button>
@@ -154,18 +158,18 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
 
         {canManage ? (
           <form onSubmit={onAdd} noValidate className="space-y-3 border-t border-slate-100 pt-4">
-            <p className="text-sm font-medium text-slate-800">Inviter un membre</p>
+            <p className="text-sm font-medium text-slate-800">{t('Inviter un membre')}</p>
             <p className="text-xs text-slate-500">
-              La personne doit déjà avoir un compte. Un expert obtient un accès en lecture seule ; un gestionnaire peut modifier les données.
+              {t('La personne doit déjà avoir un compte. Un expert obtient un accès en lecture seule ; un gestionnaire peut modifier les données.')}
             </p>
             {serverError && <Alert tone="error">{serverError}</Alert>}
             <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-              <TextField label="Adresse e-mail" type="email" required error={errors.email?.message} {...register('email')} />
+              <TextField label={t('Adresse e-mail')} type="email" required error={errors.email?.message} {...register('email')} />
               <SelectField
-                label="Rôle"
+                label={t('Rôle')}
                 options={[
-                  { value: 'EXPERT', label: 'Expert (lecture seule)' },
-                  { value: 'MANAGER', label: 'Gestionnaire' },
+                  { value: 'EXPERT', label: t('Expert (lecture seule)') },
+                  { value: 'MANAGER', label: t('Gestionnaire') },
                 ]}
                 error={errors.role?.message}
                 {...register('role')}
@@ -173,24 +177,24 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
             </div>
             <div className="flex justify-end">
               <Button type="submit" size="sm" loading={isSubmitting} icon={<UserPlus className="size-4" />}>
-                Inviter
+                {t('Inviter')}
               </Button>
             </div>
           </form>
         ) : (
-          <p className="text-xs text-slate-500">Seul le propriétaire peut gérer les membres de cette exploitation.</p>
+          <p className="text-xs text-slate-500">{t('Seul le propriétaire peut gérer les membres de cette exploitation.')}</p>
         )}
       </div>
 
       <ConfirmDialog
         open={toRemove !== null}
-        title="Retirer ce membre ?"
+        title={t('Retirer ce membre ?')}
         message={
           <>
-            <strong>{toRemove?.user_email}</strong> n'aura plus accès aux données de l'exploitation « {farm.name} ».
+            <strong>{toRemove?.user_email}</strong> {t("n'aura plus accès aux données de l'exploitation « {{name}} ».", { name: farm.name })}
           </>
         }
-        confirmLabel="Retirer"
+        confirmLabel={t('Retirer')}
         danger
         loading={removal.isPending}
         onConfirm={() => toRemove && removal.mutate(toRemove)}
@@ -201,6 +205,7 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
 }
 
 export function FarmsPanel() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const farms = useQuery({ queryKey: ['farms'], queryFn: farmService.list })
   const [editing, setEditing] = useState<Farm | 'new' | null>(null)
@@ -209,11 +214,11 @@ export function FarmsPanel() {
 
   return (
     <Card
-      title="Mes exploitations"
+      title={t('Mes exploitations')}
       actions={
         canCreate && (
           <Button size="sm" variant="secondary" icon={<Plus className="size-4" />} onClick={() => setEditing('new')}>
-            Ajouter
+            {t('Ajouter')}
           </Button>
         )
       }
@@ -224,8 +229,8 @@ export function FarmsPanel() {
         ) : farms.isError ? (
           <Alert tone="error">{farms.error.message}</Alert>
         ) : farms.data.results.length === 0 ? (
-          <EmptyState title="Aucune exploitation">
-            {user?.role === 'EXPERT' ? "Vous n'avez été invité dans aucune exploitation." : 'Ajoutez votre exploitation pour commencer.'}
+          <EmptyState title={t('Aucune exploitation')}>
+            {user?.role === 'EXPERT' ? t("Vous n'avez été invité dans aucune exploitation.") : t('Ajoutez votre exploitation pour commencer.')}
           </EmptyState>
         ) : (
           <ul className="divide-y divide-slate-100">
@@ -236,18 +241,18 @@ export function FarmsPanel() {
                   <div className="min-w-0">
                     <p className="font-medium text-slate-800">{farm.name}</p>
                     <p className="text-sm text-slate-500">
-                      {[farm.locality, farm.region].filter(Boolean).join(' · ') || 'Localisation non renseignée'} · {farm.members_count} membre
-                      {farm.members_count > 1 ? 's' : ''}
+                      {[farm.locality, farm.region].filter(Boolean).join(' · ') || t('Localisation non renseignée')} ·{' '}
+                      {farm.members_count > 1 ? t('{{count}} membres', { count: farm.members_count }) : t('{{count}} membre', { count: farm.members_count })}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {farm.my_role_label && <Badge tone="indigo">{farm.my_role_label}</Badge>}
+                    {farm.my_role_label && <Badge tone="indigo">{t(farm.my_role_label)}</Badge>}
                     <Button size="sm" variant="ghost" icon={<Users className="size-4" />} onClick={() => setMembersOf(farm)}>
-                      Membres
+                      {t('Membres')}
                     </Button>
                     {canWrite && (
                       <Button size="sm" variant="secondary" onClick={() => setEditing(farm)}>
-                        Modifier
+                        {t('Modifier')}
                       </Button>
                     )}
                   </div>

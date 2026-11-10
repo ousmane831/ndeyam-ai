@@ -8,7 +8,7 @@ const CACHE = 'ndeyam-interface-__BUILD_ID__'
 const SHELL = ['/', '/manifest.webmanifest', '/favicon.svg', '/icons/icon-192.png', '/icons/icon-512.png']
 
 // À l'installation : toute l'interface (liste produite à la construction), pour qu'elle s'ouvre hors ligne,
-// y compris les écrans jamais visités (≈ 400 Ko compressés, une seule fois par version).
+// y compris les écrans jamais visités (≈ 450 Ko compressés, une seule fois par version).
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE).then(async (cache) => {

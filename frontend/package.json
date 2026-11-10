@@ -17,11 +17,13 @@
     "@tanstack/react-query": "^5.107.1",
     "axios": "^1.21.0",
     "clsx": "^2.1.1",
+    "i18next": "^26.5.10",
     "javascript-lp-solver": "^1.0.3",
     "lucide-react": "^1.70.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-hook-form": "^7.91.0",
+    "react-i18next": "^17.1.8",
     "react-router": "^8.5.1",
     "recharts": "^3.10.1",
     "zod": "^4.6.7"

@@ -1,3 +1,4 @@
+import { t } from '@/i18n'
 import { formulateOffline, restrictProblem, type Mode, type OfflineResult } from './engine'
 import type { OfflinePack, PackGroup, PackReference } from './pack'
 
@@ -29,18 +30,18 @@ export interface OfflineEstimate {
 export function estimateForGroup(pack: OfflinePack, groupId: number, objective: number | null, ingredientIds: number[], mode: Mode = 'ECONOMIC'): OfflineEstimate | null {
   const group = pack.groups.find((g) => g.id === groupId)
   if (!group) return null
-  const notes = [...group.notes]
+  const notes = [...group.profile_notes]
   const reference = matchReference(pack.references, { ...group, objective })
   if (!reference) {
     const result: OfflineResult = {
       status: 'REFUSED', mode, items: [], dm_intake_kg_day: null, as_fed_kg_day: null, cost_per_day: null, cost_per_kg_as_fed: null, currency: 'XOF',
       checks: [], warnings: [], excluded: [],
-      refusal_reasons: [pack.is_demo ? 'Aucune référence DEMO ne correspond à ce profil.'
-        : "Aucune référence nutritionnelle validée ne correspond à ce profil d'animal (espèce, catégorie, stade, objectif, poids, âge). Un expert doit d'abord saisir et valider une référence sourcée."],
+      refusal_reasons: [pack.is_demo ? t('Aucune référence DEMO ne correspond à ce profil.')
+        : t("Aucune référence nutritionnelle validée ne correspond à ce profil d'animal (espèce, catégorie, stade, objectif, poids, âge). Un expert doit d'abord saisir et valider une référence sourcée.")],
     }
     return { reference: null, group, result, notes }
   }
-  notes.push(`Référence retenue automatiquement : « ${reference.name} ».`, ...reference.warnings)
+  notes.push(t('Référence retenue automatiquement : « {{name}} ».', { name: reference.name }), ...reference.warnings)
   const result = formulateOffline(restrictProblem(reference.problem, ingredientIds, mode))
   return { reference, group, result, notes: [...notes, ...result.warnings] }
 }

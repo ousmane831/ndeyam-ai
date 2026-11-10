@@ -10,6 +10,7 @@
  * Parité vérifiée sur les cas de référence calculés par le moteur Python (engine-cases.fixture.json).
  */
 import solver from 'javascript-lp-solver'
+import { t } from '@/i18n'
 
 export type Mode = 'ECONOMIC' | 'BALANCED'
 type Expression = 'DAILY_AMOUNT' | 'DIET_CONCENTRATION'
@@ -89,33 +90,33 @@ function prepare(problem: PackProblem) {
   const reasons: string[] = []
   const warnings: string[] = []
   const excluded: OfflineResult['excluded'] = []
-  if (problem.requirements.length === 0) reasons.push("Aucun besoin nutritionnel validé n'est disponible pour ce profil d'animal.")
+  if (problem.requirements.length === 0) reasons.push(t("Aucun besoin nutritionnel validé n'est disponible pour ce profil d'animal."))
   if (problem.dm_intake_min_kg === null && problem.dm_intake_max_kg === null) {
-    reasons.push("L'ingestion de matière sèche (kg MS/jour) n'est pas renseignée dans la référence nutritionnelle : impossible de dimensionner la ration.")
+    reasons.push(t("L'ingestion de matière sèche (kg MS/jour) n'est pas renseignée dans la référence nutritionnelle : impossible de dimensionner la ration."))
   }
-  if (problem.ingredients.length === 0) reasons.push("Aucun ingrédient n'a été proposé.")
+  if (problem.ingredients.length === 0) reasons.push(t("Aucun ingrédient n'a été proposé."))
   const constrained = [...new Set(problem.requirements.map((r) => r.nutrient_id))].sort((a, b) => a - b)
   const kept: PackIngredient[] = []
   for (const ing of problem.ingredients) {
     const why: string[] = []
-    if (!dmFraction(ing)) why.push('teneur en matière sèche inconnue')
+    if (!dmFraction(ing)) why.push(t('teneur en matière sèche inconnue'))
     const missing = constrained.filter((n) => comp(ing, n) === undefined).map((n) => problem.nutrients[String(n)].code)
-    if (missing.length) why.push(`valeur(s) validée(s) inconnue(s) pour : ${missing.join(', ')}`)
-    if (problem.mode === 'ECONOMIC' && ing.price_per_kg_as_fed === null) why.push('prix inconnu (indispensable en mode économique)')
-    if (ing.max_as_fed_kg_per_day != null && ing.max_as_fed_kg_per_day <= 0) why.push('quantité disponible nulle')
+    if (missing.length) why.push(t('valeur(s) validée(s) inconnue(s) pour : {{nutrients}}', { nutrients: missing.join(', ') }))
+    if (problem.mode === 'ECONOMIC' && ing.price_per_kg_as_fed === null) why.push(t('prix inconnu (indispensable en mode économique)'))
+    if (ing.max_as_fed_kg_per_day != null && ing.max_as_fed_kg_per_day <= 0) why.push(t('quantité disponible nulle'))
     if (why.length) {
       excluded.push({ ingredient_id: ing.id, name: ing.name, reasons: why })
-      warnings.push(`« ${ing.name} » exclu : ${why.join(' ; ')}.`)
+      warnings.push(t('« {{name}} » exclu : {{reasons}}.', { name: ing.name, reasons: why.join(' ; ') }))
     } else {
       kept.push(ing)
-      if (ing.price_is_demo) warnings.push(`Le prix de « ${ing.name} » est une donnée DEMO.`)
+      if (ing.price_is_demo) warnings.push(t('Le prix de « {{name}} » est une donnée DEMO.', { name: ing.name }))
     }
   }
-  if (problem.ingredients.length && !kept.length) reasons.push('Aucun ingrédient proposé ne dispose de toutes les données validées nécessaires.')
+  if (problem.ingredients.length && !kept.length) reasons.push(t('Aucun ingrédient proposé ne dispose de toutes les données validées nécessaires.'))
   let useCost = true
   if (kept.length && kept.some((i) => i.price_per_kg_as_fed === null)) {
     useCost = false
-    warnings.push("Certains prix sont inconnus : le coût n'est pas pris en compte ni calculé.")
+    warnings.push(t("Certains prix sont inconnus : le coût n'est pas pris en compte ni calculé."))
   }
   return { kept, reasons, warnings, excluded, useCost }
 }
@@ -198,7 +199,7 @@ function buildResult(problem: PackProblem, kept: PackIngredient[], useCost: bool
   })
   const checks: RequirementCheck[] = []
   if (problem.dm_intake_min_kg !== null || problem.dm_intake_max_kg !== null) {
-    checks.push({ code: 'MS', label: 'Ingestion de matière sèche', value: totalDm, min: problem.dm_intake_min_kg, max: problem.dm_intake_max_kg, unit: 'kg MS/jour',
+    checks.push({ code: 'MS', label: t('Ingestion de matière sèche'), value: totalDm, min: problem.dm_intake_min_kg, max: problem.dm_intake_max_kg, unit: t('kg MS/jour'),
       status: within(totalDm, problem.dm_intake_min_kg, problem.dm_intake_max_kg) })
   }
   for (const r of problem.requirements) {
@@ -207,22 +208,22 @@ function buildResult(problem: PackProblem, kept: PackIngredient[], useCost: bool
     const daily = missing ? null : used.reduce((s, [id, q]) => s + q * comp(byId.get(id)!, r.nutrient_id), 0)
     const isDaily = r.expression === 'DAILY_AMOUNT'
     const value = daily === null ? null : isDaily ? daily : totalDm ? daily / totalDm : null
-    checks.push({ code: n.code, label: `${n.code} (${isDaily ? 'apport journalier' : 'teneur'})`, value, min: r.min_value, max: r.max_value,
-      unit: isDaily ? `${n.amount_unit}/jour` : `${n.amount_unit}/kg MS`, status: value === null ? 'unknown' : within(value, r.min_value, r.max_value) })
+    checks.push({ code: n.code, label: isDaily ? t('{{code}} (apport journalier)', { code: n.code }) : t('{{code}} (teneur)', { code: n.code }), value, min: r.min_value, max: r.max_value,
+      unit: isDaily ? t('{{unit}}/jour', { unit: n.amount_unit }) : t('{{unit}}/kg MS', { unit: n.amount_unit }), status: value === null ? 'unknown' : within(value, r.min_value, r.max_value) })
   }
   for (const b of problem.inclusion_bounds) {
     const share = totalDm ? (100 * b.ingredient_ids.reduce((s, id) => s + (quantities.get(id) ?? 0), 0)) / totalDm : 0
-    checks.push({ code: 'INCL', label: `Incorporation : ${b.label}`, value: share, min: b.min_pct_dm, max: b.max_pct_dm, unit: '% MS', status: within(share, b.min_pct_dm, b.max_pct_dm) })
+    checks.push({ code: 'INCL', label: t('Incorporation : {{label}}', { label: b.label }), value: share, min: b.min_pct_dm, max: b.max_pct_dm, unit: t('% MS'), status: within(share, b.min_pct_dm, b.max_pct_dm) })
   }
   for (const i of kept) {
     if (i.max_as_fed_kg_per_day != null) {
       const qAf = (quantities.get(i.id) ?? 0) / dmFraction(i)!
-      checks.push({ code: 'DISPO', label: `Disponibilité : ${i.name}`, value: qAf, min: null, max: i.max_as_fed_kg_per_day, unit: 'kg brut/jour', status: within(qAf, null, i.max_as_fed_kg_per_day) })
+      checks.push({ code: 'DISPO', label: t('Disponibilité : {{name}}', { name: i.name }), value: qAf, min: null, max: i.max_as_fed_kg_per_day, unit: t('kg brut/jour'), status: within(qAf, null, i.max_as_fed_kg_per_day) })
     }
   }
   const allOk = checks.every((c) => c.status === 'ok')
   const warnings = [...base.warnings]
-  if (!allOk) warnings.push("Le recalcul indépendant révèle une contrainte non respectée : la ration n'est pas conforme.")
+  if (!allOk) warnings.push(t("Le recalcul indépendant révèle une contrainte non respectée : la ration n'est pas conforme."))
   return {
     ...base,
     status: allOk ? 'ESTIMATED' : 'INFEASIBLE',
@@ -247,8 +248,7 @@ export function formulateOffline(problem: PackProblem): OfflineResult {
       ...base,
       status: 'INFEASIBLE',
       refusal_reasons: [
-        'Aucune ration ne permet de respecter simultanément toutes les contraintes avec les ingrédients proposés. '
-        + 'Ajoutez des ingrédients ou faites revoir les contraintes par un expert. Le diagnostic détaillé sera donné par le serveur à la reconnexion.',
+        t('Aucune ration ne permet de respecter simultanément toutes les contraintes avec les ingrédients proposés. Ajoutez des ingrédients ou faites revoir les contraintes par un expert. Le diagnostic détaillé sera donné par le serveur à la reconnexion.'),
       ],
     }
   }

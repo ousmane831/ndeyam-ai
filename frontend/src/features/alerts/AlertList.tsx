@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { AlertTriangle, Bell, CheckCircle2, Eye, Info, Scale, XCircle } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert as Notice, Badge, EmptyState } from '@/components/ui/Feedback'
@@ -16,11 +17,12 @@ const SEVERITY = {
 } as const
 
 function TriggerDetails({ data }: { data: Record<string, unknown> }) {
+  const { t } = useTranslation()
   const entries = Object.entries(data).filter(([, v]) => v !== null && typeof v !== 'object')
   if (!entries.length) return null
   return (
     <details className="mt-2 text-xs text-slate-500">
-      <summary className="cursor-pointer select-none">Pourquoi cette alerte ?</summary>
+      <summary className="cursor-pointer select-none">{t('Pourquoi cette alerte ?')}</summary>
       <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
         {entries.map(([k, v]) => (
           <div key={k} className="contents">
@@ -33,7 +35,8 @@ function TriggerDetails({ data }: { data: Record<string, unknown> }) {
   )
 }
 
-export function AlertList({ alerts, canAct, emptyTitle = 'Aucune alerte' }: { alerts: Alert[]; canAct: (a: Alert) => boolean; emptyTitle?: string }) {
+export function AlertList({ alerts, canAct, emptyTitle }: { alerts: Alert[]; canAct: (a: Alert) => boolean; emptyTitle?: string }) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [error, setError] = useState<string | null>(null)
   const action = useMutation({
@@ -46,7 +49,7 @@ export function AlertList({ alerts, canAct, emptyTitle = 'Aucune alerte' }: { al
     onError: (e: Error) => setError(e.message),
   })
 
-  if (alerts.length === 0) return <EmptyState icon={<Bell className="size-10" />} title={emptyTitle} />
+  if (alerts.length === 0) return <EmptyState icon={<Bell className="size-10" />} title={emptyTitle ?? t('Aucune alerte')} />
 
   return (
     <div className="space-y-3">
@@ -61,19 +64,19 @@ export function AlertList({ alerts, canAct, emptyTitle = 'Aucune alerte' }: { al
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="font-medium text-slate-800">{a.title}</p>
-                  <Badge>{a.alert_type_label}</Badge>
-                  {a.status !== 'OPEN' && <Badge tone="neutral">{a.status_label}</Badge>}
+                  <Badge>{t(a.alert_type_label)}</Badge>
+                  {a.status !== 'OPEN' && <Badge tone="neutral">{t(a.status_label)}</Badge>}
                 </div>
                 <p className="mt-1 text-sm text-slate-600">{a.message}</p>
                 <p className="mt-1 text-xs text-slate-500">
                   {a.farm_name && `${a.farm_name} · `}
                   {formatDateTime(a.created_at)}
-                  {a.due_date && ` · échéance ${formatDate(a.due_date)}`}
+                  {a.due_date && ` · ${t('échéance {{date}}', { date: formatDate(a.due_date) })}`}
                   {a.target?.type === 'animal' && (
                     <>
                       {' · '}
                       <Link to={`/animaux/${a.target.id}`} className="text-brand-700 hover:underline">
-                        voir l'animal
+                        {t("voir l'animal")}
                       </Link>
                     </>
                   )}
@@ -84,21 +87,21 @@ export function AlertList({ alerts, canAct, emptyTitle = 'Aucune alerte' }: { al
                     {a.alert_type === 'WEIGHING_REMINDER' && a.target?.type === 'animal' && (
                       <Link to={`/animaux/${a.target.id}?onglet=pesees`}
                         className="inline-flex items-center gap-2 rounded-md bg-brand-800 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700">
-                        <Scale className="size-4" aria-hidden /> Peser maintenant
+                        <Scale className="size-4" aria-hidden /> {t('Peser maintenant')}
                       </Link>
                     )}
                     {a.status === 'OPEN' && (
                       <Button size="sm" variant="secondary" icon={<Eye className="size-4" />} disabled={action.isPending}
                         onClick={() => action.mutate({ id: a.id, kind: 'acknowledge' })}>
-                        Prendre en compte
+                        {t('Prendre en compte')}
                       </Button>
                     )}
                     <Button size="sm" variant="secondary" icon={<CheckCircle2 className="size-4" />} disabled={action.isPending}
                       onClick={() => action.mutate({ id: a.id, kind: 'resolve' })}>
-                      Résolue
+                      {t('Résolue')}
                     </Button>
                     <Button size="sm" variant="ghost" disabled={action.isPending} onClick={() => action.mutate({ id: a.id, kind: 'dismiss' })}>
-                      Ignorer
+                      {t('Ignorer')}
                     </Button>
                   </div>
                 )}

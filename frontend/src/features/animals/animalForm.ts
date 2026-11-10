@@ -1,42 +1,43 @@
 import { z } from 'zod'
 import type { AnimalPayload } from '@/types/animal'
+import { tk } from '@/i18n'
 import { todayIso } from '@/utils/format'
 
 /** Schéma de validation et conversion du formulaire animal (création et modification). */
 
-const positiveDecimal = (label: string) =>
+const positiveDecimal = (message: string) =>
   z
     .string()
     .trim()
-    .refine((v) => v === '' || (!Number.isNaN(Number(v.replace(',', '.'))) && Number(v.replace(',', '.')) > 0), `${label} : nombre positif attendu.`)
+    .refine((v) => v === '' || (!Number.isNaN(Number(v.replace(',', '.'))) && Number(v.replace(',', '.')) > 0), message)
 
 export const animalSchema = z
   .object({
-    farm: z.string().min(1, "Choisissez l'exploitation."),
-    tag_number: z.string().trim().min(1, 'Le numéro est obligatoire.').max(64, '64 caractères maximum.'),
-    name: z.string().trim().max(120, '120 caractères maximum.'),
-    species: z.string().min(1, "Choisissez l'espèce."),
+    farm: z.string().min(1, tk("Choisissez l'exploitation.")),
+    tag_number: z.string().trim().min(1, tk('Le numéro est obligatoire.')).max(64, tk('64 caractères maximum.')),
+    name: z.string().trim().max(120, tk('120 caractères maximum.')),
+    species: z.string().min(1, tk("Choisissez l'espèce.")),
     breed: z.string(),
-    sex: z.enum(['M', 'F'], { error: 'Choisissez le sexe.' }),
+    sex: z.enum(['M', 'F'], { error: tk('Choisissez le sexe.') }),
     birth_mode: z.enum(['date', 'age', 'unknown']),
     birth_date: z.string(),
     estimated_age_months: z.string().trim(),
-    initial_weight_kg: positiveDecimal('Poids initial'),
+    initial_weight_kg: positiveDecimal(tk('Poids initial : nombre positif attendu.')),
     category: z.string(),
     physiological_stage: z.string(),
     group: z.string(),
-    registered_on: z.string().min(1, "La date d'enregistrement est obligatoire."),
+    registered_on: z.string().min(1, tk("La date d'enregistrement est obligatoire.")),
     observations: z.string(),
   })
   .superRefine((v, ctx) => {
     if (v.birth_mode === 'date') {
-      if (!v.birth_date) ctx.addIssue({ code: 'custom', path: ['birth_date'], message: 'Indiquez la date de naissance.' })
-      else if (v.birth_date > todayIso()) ctx.addIssue({ code: 'custom', path: ['birth_date'], message: 'La date ne peut pas être dans le futur.' })
+      if (!v.birth_date) ctx.addIssue({ code: 'custom', path: ['birth_date'], message: tk('Indiquez la date de naissance.') })
+      else if (v.birth_date > todayIso()) ctx.addIssue({ code: 'custom', path: ['birth_date'], message: tk('La date ne peut pas être dans le futur.') })
     }
     if (v.birth_mode === 'age') {
       const n = Number(v.estimated_age_months.replace(',', '.'))
       if (!v.estimated_age_months || Number.isNaN(n) || n < 0 || n > 240)
-        ctx.addIssue({ code: 'custom', path: ['estimated_age_months'], message: 'Âge estimé en mois (entre 0 et 240).' })
+        ctx.addIssue({ code: 'custom', path: ['estimated_age_months'], message: tk('Âge estimé en mois (entre 0 et 240).') })
     }
   })
 export type AnimalFormValues = z.infer<typeof animalSchema>

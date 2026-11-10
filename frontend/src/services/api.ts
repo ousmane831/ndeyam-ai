@@ -8,6 +8,7 @@
  */
 import axios, { AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios'
 import { reportNetworkFailure } from '@/features/offline/connectivity'
+import { currentLanguage, t } from '@/i18n'
 import { tokenStore } from './tokens'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
@@ -61,7 +62,7 @@ export function toApiError(error: unknown): ApiError {
     if (!err.response) {
       reportNetworkFailure()
       return new ApiError(
-        'Impossible de joindre le serveur. Vérifiez que le backend est démarré et votre connexion réseau.',
+        t('Impossible de joindre le serveur. Vérifiez que le backend est démarré et votre connexion réseau.'),
         null,
         'network_error',
       )
@@ -70,13 +71,13 @@ export function toApiError(error: unknown): ApiError {
     const status = err.response.status
     const fallback =
       status >= 500
-        ? 'Une erreur interne est survenue sur le serveur.'
+        ? t('Une erreur interne est survenue sur le serveur.')
         : status === 429
-          ? 'Trop de tentatives. Patientez une minute avant de réessayer.'
-          : 'La requête a échoué.'
+          ? t('Trop de tentatives. Patientez une minute avant de réessayer.')
+          : t('La requête a échoué.')
     return new ApiError(body.detail || fallback, status, body.code || 'error', normaliseFieldErrors(body.errors))
   }
-  return new ApiError('Une erreur inattendue est survenue.', null, 'unknown_error')
+  return new ApiError(t('Une erreur inattendue est survenue.'), null, 'unknown_error')
 }
 
 // --- Fin de session ---------------------------------------------------------------------
@@ -97,7 +98,7 @@ let refreshInFlight: Promise<string> | null = null
 
 export async function refreshAccessToken(): Promise<string> {
   const refresh = tokenStore.getRefresh()
-  if (!refresh) throw new ApiError('Session expirée. Veuillez vous reconnecter.', 401, 'session_expired')
+  if (!refresh) throw new ApiError(t('Session expirée. Veuillez vous reconnecter.'), 401, 'session_expired')
   refreshInFlight ??= axios
     .post<{ access: string; refresh: string }>(`${BASE_URL}/auth/refresh/`, { refresh })
     .then(({ data }) => {
@@ -111,6 +112,7 @@ export async function refreshAccessToken(): Promise<string> {
 }
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  config.headers.set('Accept-Language', currentLanguage())
   const token = tokenStore.getAccess()
   if (token) config.headers.set('Authorization', `Bearer ${token}`)
   return config
@@ -132,7 +134,7 @@ api.interceptors.response.use(
         } catch {
           tokenStore.clear()
           sessionListeners.forEach((listener) => listener())
-          return Promise.reject(new ApiError('Votre session a expiré. Veuillez vous reconnecter.', 401, 'session_expired'))
+          return Promise.reject(new ApiError(t('Votre session a expiré. Veuillez vous reconnecter.'), 401, 'session_expired'))
         }
       }
     }

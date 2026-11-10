@@ -1,5 +1,6 @@
 import { FileUp } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/Button'
 import { Alert } from '@/components/ui/Feedback'
 import { Modal } from '@/components/ui/Modal'
@@ -20,6 +21,7 @@ export function ImportCsvModal({
   onClose: () => void
   onImport: (file: File) => Promise<ImportBatch>
 }) {
+  const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -34,7 +36,7 @@ export function ImportCsvModal({
 
   const submit = async () => {
     if (!file) {
-      setError('Choisissez un fichier CSV.')
+      setError(t('Choisissez un fichier CSV.'))
       return
     }
     setBusy(true)
@@ -42,7 +44,7 @@ export function ImportCsvModal({
     try {
       setReport(await onImport(file))
     } catch (e) {
-      setError(e instanceof ApiError ? Object.values(e.fieldErrors).flat().join(' ') || e.message : e instanceof Error ? e.message : 'Import impossible.')
+      setError(e instanceof ApiError ? Object.values(e.fieldErrors).flat().join(' ') || e.message : e instanceof Error ? e.message : t('Import impossible.'))
     } finally {
       setBusy(false)
     }
@@ -55,14 +57,14 @@ export function ImportCsvModal({
       onClose={close}
       footer={
         report ? (
-          <Button onClick={close}>Fermer</Button>
+          <Button onClick={close}>{t('Fermer')}</Button>
         ) : (
           <>
             <Button variant="secondary" onClick={close}>
-              Annuler
+              {t('Annuler')}
             </Button>
             <Button onClick={submit} loading={busy} icon={<FileUp className="size-4" />}>
-              Importer
+              {t('Importer')}
             </Button>
           </>
         )
@@ -70,14 +72,18 @@ export function ImportCsvModal({
     >
       {report ? (
         <div className="space-y-3">
-          <Alert tone={report.error_rows ? 'warning' : 'success'} title={report.status_label}>
-            {report.created_rows} ligne(s) importée(s), {report.error_rows} en erreur sur {report.total_rows}.
+          <Alert tone={report.error_rows ? 'warning' : 'success'} title={t(report.status_label)}>
+            {t('{{created}} ligne(s) importée(s), {{errors}} en erreur sur {{total}}.', {
+              created: report.created_rows,
+              errors: report.error_rows,
+              total: report.total_rows,
+            })}
           </Alert>
           {report.errors.length > 0 && (
             <ul className="max-h-60 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-3 text-sm">
               {report.errors.map((e, i) => (
                 <li key={i}>
-                  <span className="font-medium text-slate-700">Ligne {e.line ?? '—'} :</span>{' '}
+                  <span className="font-medium text-slate-700">{t('Ligne {{line}} :', { line: e.line ?? '—' })}</span>{' '}
                   <span className="text-red-700">{e.error}</span>
                 </li>
               ))}
@@ -91,7 +97,7 @@ export function ImportCsvModal({
           <input
             type="file"
             accept=".csv,text/csv"
-            aria-label="Fichier CSV"
+            aria-label={t('Fichier CSV')}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             className="block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-3 file:py-2 file:font-medium file:text-brand-700"
           />

@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Scale, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { WeightChart } from '@/components/LazyChart'
 import { Button } from '@/components/ui/Button'
@@ -15,29 +16,32 @@ import { isOnline } from '@/features/offline/connectivity'
 import { isNetworkError, outbox } from '@/features/offline/outbox'
 import { animalService, weighingService } from '@/services/animals'
 import type { Animal, Weighing } from '@/types/animal'
+import { tk } from '@/i18n'
 import { applyServerErrors } from '@/utils/forms'
 import { METHOD_OPTIONS } from './constants'
 import { formatDate, formatNumber, todayIso } from '@/utils/format'
 
 
 const schema = z.object({
-  weighed_on: z.string().min(1, 'Date obligatoire.').refine((v) => v <= todayIso(), 'La date ne peut pas être dans le futur.'),
+  weighed_on: z.string().min(1, tk('Date obligatoire.')).refine((v) => v <= todayIso(), tk('La date ne peut pas être dans le futur.')),
   weight_kg: z
     .string()
     .trim()
-    .refine((v) => Number(v.replace(',', '.')) > 0, 'Poids positif attendu (kg).'),
+    .refine((v) => Number(v.replace(',', '.')) > 0, tk('Poids positif attendu (kg).')),
   method: z.enum(['SCALE', 'TAPE', 'VISUAL']),
   observations: z.string(),
 })
 type Values = z.infer<typeof schema>
 
 function AdgValue({ value }: { value: string | null }) {
+  const { t } = useTranslation()
   if (value === null) return <span className="text-slate-500">—</span>
   const n = Number(value)
-  return <span className={n < 0 ? 'text-red-700' : ''}>{formatNumber(n, 1)} g/j</span>
+  return <span className={n < 0 ? 'text-red-700' : ''}>{t('{{value}} g/j', { value: formatNumber(n, 1) })}</span>
 }
 
 export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: boolean }) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const growth = useQuery({ queryKey: ['growth', animal.id], queryFn: () => animalService.growth(animal.id) })
   const weighings = useQuery({ queryKey: ['weighings', animal.id], queryFn: () => weighingService.list({ animal: animal.id, page_size: 100 }) })
@@ -65,9 +69,13 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
     const payload = { ...values, animal: animal.id, weight_kg: values.weight_kg.replace(',', '.') }
     // Sans réseau, la pesée est gardée sur l'appareil et envoyée au retour de la connexion.
     const keepForLater = () => {
-      outbox.add({ kind: 'weighing', payload, label: `Pesée de ${animal.tag_number} (${payload.weight_kg.replace('.', ',')} kg, ${formatDate(values.weighed_on)})` })
+      outbox.add({
+        kind: 'weighing',
+        payload,
+        label: t('Pesée de {{tag}} ({{weight}} kg, {{date}})', { tag: animal.tag_number, weight: payload.weight_kg.replace('.', ','), date: formatDate(values.weighed_on) }),
+      })
       reset({ ...values, weight_kg: '', observations: '' })
-      setOfflineNote('Hors ligne : pesée gardée sur cet appareil, envoyée automatiquement au retour du réseau.')
+      setOfflineNote(t('Hors ligne : pesée gardée sur cet appareil, envoyée automatiquement au retour du réseau.'))
     }
     if (!isOnline()) return keepForLater()
     try {
@@ -92,56 +100,62 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
   return (
     <div className="space-y-6">
       {canWrite && animal.status === 'ACTIVE' && (
-        <Card title="Nouvelle pesée">
+        <Card title={t('Nouvelle pesée')}>
           <form onSubmit={onSubmit} noValidate className="space-y-4">
             {serverError && <Alert tone="error">{serverError}</Alert>}
             {offlineNote && <Alert tone="success">{offlineNote}</Alert>}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <TextField label="Date" type="date" max={todayIso()} required error={errors.weighed_on?.message} {...register('weighed_on')} />
-              <TextField label="Poids (kg)" inputMode="decimal" required error={errors.weight_kg?.message} {...register('weight_kg')} />
-              <SelectField label="Méthode" options={METHOD_OPTIONS} {...register('method')} />
-              <TextField label="Observation" {...register('observations')} />
+              <TextField label={t('Date')} type="date" max={todayIso()} required error={errors.weighed_on?.message} {...register('weighed_on')} />
+              <TextField label={t('Poids (kg)')} inputMode="decimal" required error={errors.weight_kg?.message} {...register('weight_kg')} />
+              <SelectField label={t('Méthode')} options={METHOD_OPTIONS.map((o) => ({ ...o, label: t(o.label) }))} {...register('method')} />
+              <TextField label={t('Observation')} {...register('observations')} />
             </div>
             <div className="flex justify-end">
               <Button type="submit" loading={isSubmitting} icon={<Scale className="size-4" />}>
-                Enregistrer la pesée
+                {t('Enregistrer la pesée')}
               </Button>
             </div>
           </form>
         </Card>
       )}
 
-      <Card title="Évolution du poids">
+      <Card title={t('Évolution du poids')}>
         {growth.isPending ? (
           <Spinner />
         ) : growth.isError ? (
           <Alert tone="error">{growth.error.message}</Alert>
         ) : g!.points.length === 0 ? (
-          <EmptyState icon={<Scale className="size-10" />} title="Aucune mesure de poids">
-            Enregistrez une première pesée pour suivre la croissance de cet animal.
+          <EmptyState icon={<Scale className="size-10" />} title={t('Aucune mesure de poids')}>
+            {t('Enregistrez une première pesée pour suivre la croissance de cet animal.')}
           </EmptyState>
         ) : (
           <div className="space-y-5">
             <WeightChart growth={g!} />
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-lg bg-slate-50 p-4">
-                <p className="text-xs font-medium text-slate-500 uppercase">GMD sur la période</p>
+                <p className="text-xs font-medium text-slate-500 uppercase">{t('GMD sur la période')}</p>
                 <p className="mt-1 text-xl font-semibold text-slate-900">
                   <AdgValue value={g!.overall?.adg_g_per_day ?? null} />
                 </p>
                 <p className="mt-1 text-xs text-slate-500">
-                  {g!.overall ? `${formatDate(g!.overall.from)} → ${formatDate(g!.overall.to)} (${g!.overall.days} j)` : g!.unavailable_reason}
+                  {g!.overall
+                    ? t('{{from}} → {{to}} ({{days}} j)', { from: formatDate(g!.overall.from), to: formatDate(g!.overall.to), days: g!.overall.days })
+                    : g!.unavailable_reason}
                 </p>
               </div>
               <div className="rounded-lg bg-slate-50 p-4">
-                <p className="text-xs font-medium text-slate-500 uppercase">Dernier intervalle</p>
+                <p className="text-xs font-medium text-slate-500 uppercase">{t('Dernier intervalle')}</p>
                 <p className="mt-1 text-xl font-semibold text-slate-900">
                   <AdgValue value={g!.latest_interval?.adg_g_per_day ?? null} />
                 </p>
                 {g!.latest_vs_range && (
                   <p className="mt-1">
                     <Badge tone={g!.latest_vs_range === 'within' ? 'brand' : 'warning'}>
-                      {g!.latest_vs_range === 'within' ? 'Dans la plage de suivi' : g!.latest_vs_range === 'below' ? 'Sous la plage de suivi' : 'Au-dessus de la plage de suivi'}
+                      {g!.latest_vs_range === 'within'
+                        ? t('Dans la plage de suivi')
+                        : g!.latest_vs_range === 'below'
+                          ? t('Sous la plage de suivi')
+                          : t('Au-dessus de la plage de suivi')}
                     </Badge>
                   </p>
                 )}
@@ -151,38 +165,44 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
                 <p className="mt-2">{g!.monitoring_note}</p>
                 {g!.monitoring_range && (
                   <p className="mt-1">
-                    Plage « {g!.monitoring_range.name} » : {g!.monitoring_range.adg_min_g ?? '—'} à {g!.monitoring_range.adg_max_g ?? '—'} g/j
-                    (source : {g!.monitoring_range.source}).
+                    {t('Plage « {{name}} » : {{min}} à {{max}} g/j (source : {{source}}).', {
+                      name: g!.monitoring_range.name,
+                      min: g!.monitoring_range.adg_min_g ?? '—',
+                      max: g!.monitoring_range.adg_max_g ?? '—',
+                      source: g!.monitoring_range.source,
+                    })}
                   </p>
                 )}
               </div>
             </div>
             {g!.intervals.some((i) => i.low_reliability) && (
-              <Alert tone="info">Certaines mesures sont des estimations visuelles : les GMD correspondants sont moins fiables.</Alert>
+              <Alert tone="info">{t('Certaines mesures sont des estimations visuelles : les GMD correspondants sont moins fiables.')}</Alert>
             )}
           </div>
         )}
       </Card>
 
-      <Card title="Historique des pesées">
+      <Card title={t('Historique des pesées')}>
         {weighings.isPending ? (
           <Spinner />
         ) : weighings.isError ? (
           <Alert tone="error">{weighings.error.message}</Alert>
         ) : weighings.data.results.length === 0 ? (
           <p className="text-sm text-slate-500">
-            Aucune pesée enregistrée{animal.initial_weight_kg ? ` (poids initial déclaré : ${formatNumber(animal.initial_weight_kg)} kg)` : ''}.
+            {animal.initial_weight_kg
+              ? t('Aucune pesée enregistrée (poids initial déclaré : {{weight}} kg).', { weight: formatNumber(animal.initial_weight_kg) })
+              : t('Aucune pesée enregistrée.')}
           </p>
         ) : (
           <div className="-mx-5 overflow-x-auto">
             <table className="w-full">
               <thead className="border-y border-slate-200 bg-slate-50">
                 <tr>
-                  <th className={th}>Date</th>
-                  <th className={th}>Poids</th>
-                  <th className={th}>Méthode</th>
-                  <th className={th}>Observation</th>
-                  <th className={th}>Saisie par</th>
+                  <th className={th}>{t('Date')}</th>
+                  <th className={th}>{t('Poids')}</th>
+                  <th className={th}>{t('Méthode')}</th>
+                  <th className={th}>{t('Observation')}</th>
+                  <th className={th}>{t('Saisie par')}</th>
                   {canWrite && <th className={th} />}
                 </tr>
               </thead>
@@ -191,7 +211,7 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
                   <tr key={w.id}>
                     <td className={td}>{formatDate(w.weighed_on)}</td>
                     <td className={`${td} font-medium`}>{formatNumber(w.weight_kg, 2)} kg</td>
-                    <td className={td}>{w.method_label}</td>
+                    <td className={td}>{t(w.method_label)}</td>
                     <td className={td}>{w.observations || '—'}</td>
                     <td className={td}>{w.recorded_by_email ?? '—'}</td>
                     {canWrite && (
@@ -200,7 +220,7 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
                           type="button"
                           onClick={() => setToDelete(w)}
                           className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600"
-                          aria-label={`Supprimer la pesée du ${formatDate(w.weighed_on)}`}
+                          aria-label={t('Supprimer la pesée du {{date}}', { date: formatDate(w.weighed_on) })}
                         >
                           <Trash2 className="size-4" />
                         </button>
@@ -216,9 +236,9 @@ export function WeighingsTab({ animal, canWrite }: { animal: Animal; canWrite: b
 
       <ConfirmDialog
         open={toDelete !== null}
-        title="Supprimer cette pesée ?"
-        message={`Pesée du ${formatDate(toDelete?.weighed_on)} : ${formatNumber(toDelete?.weight_kg, 2)} kg. Le GMD sera recalculé.`}
-        confirmLabel="Supprimer"
+        title={t('Supprimer cette pesée ?')}
+        message={t('Pesée du {{date}} : {{weight}} kg. Le GMD sera recalculé.', { date: formatDate(toDelete?.weighed_on), weight: formatNumber(toDelete?.weight_kg, 2) })}
+        confirmLabel={t('Supprimer')}
         danger
         loading={removal.isPending}
         onConfirm={() => toDelete && removal.mutate(toDelete)}

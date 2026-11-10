@@ -458,7 +458,16 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
 - Pesées et séances de pesée hors ligne, file d'envoi automatique, refus affichés avec leur motif.
 - Formule rapide hors ligne : paquet de calcul par exploitation, moteur porté dans le navigateur (parité testée sur
   15 cas du moteur Python), recalcul officiel par le serveur au retour du réseau.
-- Interface préchargée par le service worker ; consommation mesurée (≈ 530 Ko à l'installation, 4 à 5 Ko par écran),
+- Interface préchargée par le service worker ; consommation mesurée (≈ 600 Ko à l'installation, 4 à 5 Ko par écran),
   affichée dans Paramètres.
 - Vérifications : pytest 472, Vitest 114, lint, build, OpenAPI ; parcours hors ligne réel (version de production,
   coupure réseau, rechargement, pesée, calcul, retour du réseau) 18/18.
+
+## Lot 3 des retours clients : anglais (10/11/2026) ✅
+
+- Sélecteur FR | EN (en-tête et pages de connexion), langue gardée sur l'appareil, dates et nombres localisés.
+- Interface entièrement traduite (≈ 1 250 textes), test de complétude ; messages du serveur traduits à la sortie de
+  l'API (catalogue ≈ 540 entrées), y compris les avertissements et alertes déjà enregistrés.
+- Vérifications : pytest 486, Vitest 119, lint, build, OpenAPI ; balayage réel de tous les écrans en anglais
+  (éleveur sur téléphone et ordinateur, expert, administrateur, fenêtres et erreurs de formulaires) : seuls restent en
+  français les noms et descriptions saisis dans la base ; parcours lot 1 33/33 et hors ligne 18/18 relancés.

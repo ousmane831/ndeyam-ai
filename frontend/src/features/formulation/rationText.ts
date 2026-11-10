@@ -1,4 +1,5 @@
 import type { Formula } from '@/types/formula'
+import { t } from '@/i18n'
 import { formatDate, formatNumber } from '@/utils/format'
 
 /** Nom d'aliment sans le préfixe « [DEMO] » (le statut DEMO est signalé à part). */
@@ -15,12 +16,12 @@ type Verdict = { tone: 'ok' | 'wait' | 'stop'; text: string; share: string }
 
 /** Ce que l'éleveur a le droit d'en faire, dit simplement (même règle que la création de ration). */
 export function verdictOf(formula: Formula): Verdict {
-  if (formula.is_demo) return { tone: 'stop', text: 'Données fictives de démonstration : ne pas utiliser pour nourrir des animaux.', share: 'DÉMONSTRATION : données fictives, ne pas utiliser.' }
-  if (formula.status === 'VALIDATED') return { tone: 'ok', text: 'Vérifiée par un expert : vous pouvez la distribuer.', share: 'Ration vérifiée par un expert.' }
-  if (formula.status === 'REJECTED') return { tone: 'stop', text: 'Rejetée par un expert : ne pas utiliser.', share: 'Ration REJETÉE par un expert : ne pas utiliser.' }
-  if (formula.mode === 'MANUAL') return { tone: 'wait', text: 'Ration saisie : apports estimés, non vérifiés par un expert.', share: 'Ration saisie, non vérifiée par un expert.' }
-  return { tone: 'wait', text: 'Estimation : à faire vérifier par un expert avant de nourrir les animaux.', share: 'ESTIMATION non vérifiée par un expert : ne pas utiliser avant vérification.' }
+  if (formula.is_demo) return { tone: 'stop', text: t('Données fictives de démonstration : ne pas utiliser pour nourrir des animaux.'), share: t('DÉMONSTRATION : données fictives, ne pas utiliser.') }
+  if (formula.status === 'VALIDATED') return { tone: 'ok', text: t('Vérifiée par un expert : vous pouvez la distribuer.'), share: t('Ration vérifiée par un expert.') }
+  if (formula.status === 'REJECTED') return { tone: 'stop', text: t('Rejetée par un expert : ne pas utiliser.'), share: t('Ration REJETÉE par un expert : ne pas utiliser.') }
+  if (formula.mode === 'MANUAL') return { tone: 'wait', text: t('Ration saisie : apports estimés, non vérifiés par un expert.'), share: t('Ration saisie, non vérifiée par un expert.') }
+  return { tone: 'wait', text: t('Estimation : à faire vérifier par un expert avant de nourrir les animaux.'), share: t('ESTIMATION non vérifiée par un expert : ne pas utiliser avant vérification.') }
 }
 
 /** Nom par défaut d'une formule rapide : « Ration <lot> — jj/mm/aaaa ». */
-export const quickFormulaName = (group: string) => `Ration ${group} — ${formatDate(new Date().toISOString())}`
+export const quickFormulaName = (group: string) => t('Ration {{group}} — {{date}}', { group, date: formatDate(new Date().toISOString()) })

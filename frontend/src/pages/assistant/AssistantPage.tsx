@@ -12,19 +12,21 @@ import { useAssistantChat } from '@/features/assistant/useAssistantChat'
 import { useAuth } from '@/hooks/useAuth'
 import { assistantService } from '@/services/assistant'
 import { formatDateTime } from '@/utils/format'
+import { useTranslation } from 'react-i18next'
 
 export function NotConfiguredNotice({ admin }: { admin: boolean }) {
+  const { t } = useTranslation()
   return (
-    <Alert tone="info" title="Assistant non configuré">
-      L'assistant conversationnel n'est pas encore activé sur cette installation. Tous les autres modules restent utilisables,
-      et le bouton bélier en bas à droite ouvre un guide et un glossaire.
-      {admin && <> Pour l'activer, renseignez <code className="mx-1">LLM_PROVIDER</code> dans <code className="mx-1">backend/.env</code>.</>}
+    <Alert tone="info" title={t('Assistant non configuré')}>
+      {t("L'assistant conversationnel n'est pas encore activé sur cette installation. Tous les autres modules restent utilisables, et le bouton bélier en bas à droite ouvre un guide et un glossaire.")}
+      {admin && <> {t("Pour l'activer, renseignez")} <code className="mx-1">LLM_PROVIDER</code> {t('dans')} <code className="mx-1">backend/.env</code>.</>}
     </Alert>
   )
 }
 
 /** Vue plein écran de l'assistant (historique des conversations). Le panneau flottant reste l'accès principal. */
 export function AssistantPage() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const chat = useAssistantChat()
   const { user } = useAuth()
@@ -42,30 +44,29 @@ export function AssistantPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Assistant Ndeyam AI"
-        description="Posez vos questions sur vos animaux, vos rations, vos formules et la documentation technique validée." />
+      <PageHeader title={t('Assistant Ndeyam AI')}
+        description={t('Posez vos questions sur vos animaux, vos rations, vos formules et la documentation technique validée.')} />
 
       {chat.status.isLoading ? <Spinner /> : !chat.configured ? <NotConfiguredNotice admin={Boolean(user?.is_platform_admin)} /> : null}
 
       <Alert tone="warning">
-        L'assistant explique vos données et les résultats du moteur nutritionnel : il ne calcule aucune ration lui-même, ne pose
-        aucun diagnostic vétérinaire et ne remplace pas l'avis d'un vétérinaire ou d'un nutritionniste.
+        {t("L'assistant explique vos données et les résultats du moteur nutritionnel : il ne calcule aucune ration lui-même, ne pose aucun diagnostic vétérinaire et ne remplace pas l'avis d'un vétérinaire ou d'un nutritionniste.")}
       </Alert>
 
       <div className="grid gap-6 lg:grid-cols-[16rem_1fr]">
-        <Card title="Conversations" actions={
-          <Button size="sm" variant="secondary" icon={<MessageSquarePlus className="size-4" />} onClick={() => chat.open(null)}>Nouvelle</Button>}>
+        <Card title={t('Conversations')} actions={
+          <Button size="sm" variant="secondary" icon={<MessageSquarePlus className="size-4" />} onClick={() => chat.open(null)}>{t('Nouvelle')}</Button>}>
           {conversations.isLoading ? <Spinner /> : (conversations.data?.results.length ?? 0) === 0 ? (
-            <p className="text-sm text-slate-500">Aucune conversation.</p>
+            <p className="text-sm text-slate-500">{t('Aucune conversation.')}</p>
           ) : (
             <ul className="-mx-2 space-y-1">
               {conversations.data!.results.map((c) => (
                 <li key={c.id} className={clsx('group flex items-center gap-1 rounded-md', c.id === chat.activeId ? 'bg-brand-50' : 'hover:bg-slate-50')}>
                   <button type="button" className="min-w-0 flex-1 px-2 py-2 text-left" onClick={() => chat.open(c.id)} aria-current={c.id === chat.activeId || undefined}>
-                    <span className="block truncate text-sm font-medium text-slate-800">{c.title || 'Nouvelle conversation'}</span>
+                    <span className="block truncate text-sm font-medium text-slate-800">{c.title || t('Nouvelle conversation')}</span>
                     <span className="block text-xs text-slate-500">{formatDateTime(c.updated_at)}</span>
                   </button>
-                  <button type="button" className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={`Supprimer la conversation ${c.title}`}
+                  <button type="button" className="rounded-md p-2.5 text-slate-500 hover:text-red-600" aria-label={t('Supprimer la conversation {{title}}', { title: c.title })}
                     onClick={() => setToDelete(c.id)}>
                     <Trash2 className="size-4" />
                   </button>
@@ -75,14 +76,14 @@ export function AssistantPage() {
           )}
         </Card>
 
-        <section aria-label="Conversation" className="flex min-h-[28rem] flex-col overflow-hidden rounded-md ring-1 ring-slate-200">
+        <section aria-label={t('Conversation')} className="flex min-h-[28rem] flex-col overflow-hidden rounded-md ring-1 ring-slate-200">
           <ChatThread chat={chat} />
         </section>
       </div>
 
-      <ConfirmDialog open={toDelete !== null} title="Supprimer la conversation"
-        message="La conversation et tous ses messages seront définitivement supprimés."
-        confirmLabel="Supprimer" danger onConfirm={() => toDelete && remove.mutate(toDelete)} onCancel={() => setToDelete(null)} loading={remove.isPending} />
+      <ConfirmDialog open={toDelete !== null} title={t('Supprimer la conversation')}
+        message={t('La conversation et tous ses messages seront définitivement supprimés.')}
+        confirmLabel={t('Supprimer')} danger onConfirm={() => toDelete && remove.mutate(toDelete)} onCancel={() => setToDelete(null)} loading={remove.isPending} />
     </div>
   )
 }

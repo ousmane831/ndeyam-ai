@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { CHART, axisTick, niceTicks } from '@/features/charts/theme'
 import type { DashboardData } from '@/types/dashboard'
@@ -6,14 +7,15 @@ import { formatMonth, formatNumber } from '@/utils/format'
 const PALETTE = CHART.series
 
 export function DistributionChart({ data }: { data: { name: string; count: number }[] }) {
+  const { t } = useTranslation()
   return (
-    <div className="h-56 w-full" role="img" aria-label="Répartition des animaux">
+    <div className="h-56 w-full" role="img" aria-label={t('Répartition des animaux')}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 4, right: 24, bottom: 4, left: 8 }}>
           <CartesianGrid stroke={CHART.grid} horizontal={false} />
           <XAxis type="number" allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} />
           <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 12, fill: CHART.axisStrong }} tickLine={false} axisLine={{ stroke: CHART.grid }} />
-          <Tooltip formatter={(v) => [String(v), 'Animaux']} />
+          <Tooltip formatter={(v) => [String(v), t('Animaux')]} />
           <Bar dataKey="count" radius={[0, 2, 2, 0]} barSize={18} isAnimationActive={false}>
             {data.map((_, i) => (
               <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -26,9 +28,10 @@ export function DistributionChart({ data }: { data: { name: string; count: numbe
 }
 
 export function WeightTrendChart({ points }: { points: DashboardData['weight_trend']['points'] }) {
+  const { t } = useTranslation()
   const ticks = niceTicks(points.map((p) => Number(p.mean_weight_kg)))
   return (
-    <div className="h-56 w-full" role="img" aria-label="Évolution du poids moyen des pesées">
+    <div className="h-56 w-full" role="img" aria-label={t('Évolution du poids moyen des pesées')}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={points} margin={{ top: 22, right: 28, bottom: 4, left: 0 }}>
           <CartesianGrid stroke={CHART.grid} vertical={false} />
@@ -36,8 +39,8 @@ export function WeightTrendChart({ points }: { points: DashboardData['weight_tre
           <YAxis tick={axisTick} tickFormatter={(v: number) => formatNumber(v, 0)} ticks={ticks} tickLine={false} axisLine={false} domain={[ticks[0], ticks[ticks.length - 1]]} width={44} label={{ value: 'kg', position: 'insideTopLeft', offset: 0, dy: -10, dx: 6, style: { ...axisTick } }} />
           <Tooltip
             formatter={(value, _name, item) => [
-              `${formatNumber(Number(value), 1)} kg (${(item.payload as { weighings: number }).weighings} pesées)`,
-              'Poids moyen',
+              t('{{weight}} kg ({{count}} pesées)', { weight: formatNumber(Number(value), 1), count: (item.payload as { weighings: number }).weighings }),
+              t('Poids moyen'),
             ]}
             labelFormatter={(label) => formatMonth(String(label))}
           />

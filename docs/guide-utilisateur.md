@@ -38,6 +38,11 @@ Si vous gérez plusieurs exploitations, choisissez celle à consulter dans la li
 (ou « Toutes les exploitations »). Sur téléphone et tablette, le menu s'ouvre avec le bouton ☰.
 Dans les formulaires, l'exploitation proposée par défaut est celle sélectionnée, sinon une exploitation active.
 
+**Langue (français / English).** Le sélecteur **FR | EN**, en haut de chaque écran et sur la page de connexion,
+change la langue de toute l'application ; le choix est gardé sur l'appareil. En anglais, les messages du serveur
+(refus de calcul, avertissements, alertes, erreurs) sont aussi traduits, y compris ceux enregistrés auparavant. Les
+données saisies (noms d'animaux, d'aliments, observations) restent telles qu'elles ont été écrites.
+
 **Installer l'application sur son téléphone.** Ndeyam AI s'installe comme une application, sans magasin
 d'applications : sur Android (Chrome), touchez **Installer l'application** en bas du menu, ou *Menu ⋮ → Installer
 l'application* ; sur iPhone (Safari), *Partager → Sur l'écran d'accueil*. L'icône du bélier apparaît alors sur l'écran
@@ -55,7 +60,7 @@ pesée déjà enregistrée ce jour-là), elle reste affichée avec le motif : co
 hors ligne de chaque exploitation sont mises à jour à chaque connexion (*Paramètres → Hors ligne et consommation de
 données*).
 
-**Consommation de données** (mesurée sur la version de production) : environ 530 Ko à la première ouverture (une
+**Consommation de données** (mesurée sur la version de production) : environ 600 Ko à la première ouverture (une
 fois par version), puis 4 à 5 Ko par écran ; une semaine d'usage quotidien consomme moins de 1 Mo.
 
 ## 3. Tableau de bord

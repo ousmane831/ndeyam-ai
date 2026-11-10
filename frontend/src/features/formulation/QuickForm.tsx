@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Calculator, Check } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, Card } from '@/components/ui/Feedback'
@@ -70,6 +71,7 @@ const tile = 'flex min-h-14 w-full items-center gap-3 rounded-md border-2 px-4 p
  * est déduit des fiches du lot par le serveur ; la référence est choisie automatiquement ; mode économique.
  */
 export function QuickForm() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { writableFarms, defaultWritableFarmId, farms } = useFarm()
   const [farmId, setFarmId] = useState<number | null>(defaultWritableFarmId)
@@ -106,10 +108,10 @@ export function QuickForm() {
 
   const submit = async () => {
     setError(null)
-    if (farmId === null) return setError('Choisissez une exploitation.')
+    if (farmId === null) return setError(t('Choisissez une exploitation.'))
     const group = lots.find((g) => g.id === groupId)
-    if (!group) return setError('Choisissez le lot à nourrir.')
-    if (chosen.length === 0) return setError('Cochez au moins un aliment dont vous disposez.')
+    if (!group) return setError(t('Choisissez le lot à nourrir.'))
+    if (chosen.length === 0) return setError(t('Cochez au moins un aliment dont vous disposez.'))
     const payload: CalculationPayload = {
       farm: farmId,
       name: quickFormulaName(group.name),
@@ -126,7 +128,7 @@ export function QuickForm() {
       if (formula) navigate(`/formulation/${formula.id}`)
     } catch (err) {
       if (isNetworkError(err)) return calculateOffline(payload, group.id)
-      setError(err instanceof ApiError ? Object.values(err.fieldErrors).flat().join(' ') || err.message : 'Calcul impossible.')
+      setError(err instanceof ApiError ? Object.values(err.fieldErrors).flat().join(' ') || err.message : t('Calcul impossible.'))
     } finally {
       setBusy(false)
     }
@@ -136,12 +138,12 @@ export function QuickForm() {
   const calculateOffline = (payload: CalculationPayload, group: number) => {
     const current = farmId !== null ? loadPack(farmId) : null
     if (!current) {
-      setError("Calcul hors ligne impossible : les données de calcul n'ont pas encore été téléchargées sur cet appareil. Ouvrez l'application une fois avec du réseau.")
+      setError(t("Calcul hors ligne impossible : les données de calcul n'ont pas encore été téléchargées sur cet appareil. Ouvrez l'application une fois avec du réseau."))
       return
     }
     const estimate = estimateForGroup(current, group, payload.objective ?? null, payload.ingredients.map((i) => i.ingredient))
     if (!estimate) {
-      setError("Ce lot n'est pas dans les données hors ligne de cet appareil. Reconnectez-vous pour les mettre à jour.")
+      setError(t("Ce lot n'est pas dans les données hors ligne de cet appareil. Reconnectez-vous pour les mettre à jour."))
       return
     }
     const id = `local-${Date.now()}`
@@ -150,27 +152,27 @@ export function QuickForm() {
       referenceName: estimate.reference?.name ?? '', headCount: estimate.group.head_count, notes: estimate.notes, result: estimate.result,
       categories: Object.fromEntries(current.ingredients.map((i) => [i.id, i.category_code])),
     })
-    outbox.add({ kind: 'formula', payload, label: `Calcul « ${payload.name} »`, localResultId: id })
+    outbox.add({ kind: 'formula', payload, label: t('Calcul « {{name}} »', { name: payload.name }), localResultId: id })
     navigate(`/formulation/hors-ligne/${id}`)
   }
 
-  if (writableFarms.length === 0) return <Alert tone="info">Le calcul de formules est réservé aux propriétaires et gestionnaires d'exploitation.</Alert>
+  if (writableFarms.length === 0) return <Alert tone="info">{t("Le calcul de formules est réservé aux propriétaires et gestionnaires d'exploitation.")}</Alert>
 
   return (
     <div className="space-y-6">
       {error && <Alert tone="error">{error}</Alert>}
-      {demoFarm && <Alert tone="warning" title="Exploitation de démonstration">Le calcul utilisera uniquement des données DEMO : ne pas utiliser pour nourrir des animaux.</Alert>}
+      {demoFarm && <Alert tone="warning" title={t('Exploitation de démonstration')}>{t('Le calcul utilisera uniquement des données DEMO : ne pas utiliser pour nourrir des animaux.')}</Alert>}
       {writableFarms.length > 1 && (
-        <SelectField label="Exploitation" value={farmId ? String(farmId) : ''}
+        <SelectField label={t('Exploitation')} value={farmId ? String(farmId) : ''}
           onChange={(e) => { const id = Number(e.target.value); const m = recall(id); setFarmId(id); setMemory(m); setGroupId(null); setObjective(''); setPicked(new Set(m.ingredients)) }}
           options={writableFarms.map((f) => ({ value: String(f.id), label: f.name }))} />
       )}
 
-      <Card title="1. Quel lot nourrir ?">
+      <Card title={t('1. Quel lot nourrir ?')}>
         {lotsLoading ? <Spinner /> : lots.length === 0 ? (
-          <p className="text-sm text-slate-600">Aucun lot avec des animaux. Créez un lot dans <Link to="/troupeaux" className="font-semibold text-brand-700 underline">Mes troupeaux</Link>, ou utilisez le <Link to="/formulation?onglet=calcul" className="font-semibold text-brand-700 underline">calcul détaillé</Link>.</p>
+          <p className="text-sm text-slate-600">{t('Aucun lot avec des animaux. Créez un lot dans')} <Link to="/troupeaux" className="font-semibold text-brand-700 underline">{t('Mes troupeaux')}</Link>{t(', ou utilisez le')} <Link to="/formulation?onglet=calcul" className="font-semibold text-brand-700 underline">{t('calcul détaillé')}</Link>.</p>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" role="radiogroup" aria-label="Lot à nourrir">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" role="radiogroup" aria-label={t('Lot à nourrir')}>
             {lots.map((g) => {
               const on = g.id === groupId
               return (
@@ -178,7 +180,7 @@ export function QuickForm() {
                   className={clsx(tile, on ? 'border-brand-700 bg-brand-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
                   <span className="min-w-0 flex-1">
                     <span className="block font-semibold text-slate-900">{g.name}</span>
-                    <span className="text-sm text-slate-500">{g.animals_count > 1 ? `${g.animals_count} animaux` : '1 animal'}</span>
+                    <span className="text-sm text-slate-500">{g.animals_count > 1 ? t('{{count}} animaux', { count: g.animals_count }) : t('1 animal')}</span>
                   </span>
                   {on && <Check className="size-5 text-brand-700" aria-hidden />}
                 </button>
@@ -186,24 +188,24 @@ export function QuickForm() {
             })}
           </div>
         )}
-        <p className="mt-3 text-sm text-slate-500">La catégorie, le stade et le poids moyen sont repris des fiches des animaux du lot.</p>
+        <p className="mt-3 text-sm text-slate-500">{t('La catégorie, le stade et le poids moyen sont repris des fiches des animaux du lot.')}</p>
       </Card>
 
-      <Card title="2. Objectif pour ce lot">
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Objectif">
-          {[{ id: '', name: 'Non précisé' }, ...(objectives.data ?? pack?.objectives ?? []).map((o) => ({ id: String(o.id), name: o.name }))].map((o) => (
+      <Card title={t('2. Objectif pour ce lot')}>
+        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('Objectif')}>
+          {[{ id: '', name: t('Non précisé') }, ...(objectives.data ?? pack?.objectives ?? []).map((o) => ({ id: String(o.id), name: t(o.name) }))].map((o) => (
             <button key={o.id} type="button" role="radio" aria-checked={objective === o.id} onClick={() => setObjective(o.id)}
               className={clsx('min-h-11 rounded-full border px-4 text-sm font-medium', objective === o.id ? 'border-brand-700 bg-brand-700 text-white' : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50')}>
               {o.name}
             </button>
           ))}
         </div>
-        <p className="mt-3 text-sm text-slate-500">Les besoins dépendent de l'objectif : sans objectif, seules les références générales s'appliquent. Il est retenu pour ce lot sur cet appareil.</p>
+        <p className="mt-3 text-sm text-slate-500">{t("Les besoins dépendent de l'objectif : sans objectif, seules les références générales s'appliquent. Il est retenu pour ce lot sur cet appareil.")}</p>
       </Card>
 
-      <Card title="3. Vos aliments">
+      <Card title={t('3. Vos aliments')}>
         {ingredients.isPending && fromPack.ingredients.length === 0 ? <Spinner /> : ready.length === 0 ? (
-          <p className="text-sm text-slate-600">Aucun aliment n'a encore de données validées par un expert : le calcul serait refusé.</p>
+          <p className="text-sm text-slate-600">{t("Aucun aliment n'a encore de données validées par un expert : le calcul serait refusé.")}</p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {ready.map((i) => {
@@ -216,7 +218,7 @@ export function QuickForm() {
                   <span className="min-w-0 flex-1">
                     <span className="block font-semibold text-slate-900">{plainName(i.name)}</span>
                     {i.local_names && <span className="block text-sm text-slate-600">{i.local_names}</span>}
-                    <span className={clsx('text-sm', price ? 'text-slate-500' : 'text-mil-700')}>{price ? `${formatMoney(price.price_per_kg_as_fed, price.currency)} / kg` : 'Prix inconnu'}</span>
+                    <span className={clsx('text-sm', price ? 'text-slate-500' : 'text-mil-700')}>{price ? `${formatMoney(price.price_per_kg_as_fed, price.currency)} / kg` : t('Prix inconnu')}</span>
                   </span>
                   <span className={clsx('inline-flex size-6 shrink-0 items-center justify-center rounded border-2', on ? 'border-brand-700 bg-brand-700 text-white' : 'border-slate-300')}>
                     {on && <Check className="size-4" aria-hidden />}
@@ -226,21 +228,23 @@ export function QuickForm() {
             })}
           </div>
         )}
-        {notReady > 0 && <p className="mt-3 text-sm text-slate-500">{notReady} autre(s) aliment(s) sans données validées ne sont pas proposés.</p>}
+        {notReady > 0 && <p className="mt-3 text-sm text-slate-500">{t('{{count}} autre(s) aliment(s) sans données validées ne sont pas proposés.', { count: notReady })}</p>}
         {unpriced.length > 0 && (
           <p className="mt-3 text-sm font-medium text-mil-700">
-            Sans prix connu, {unpriced.map((i) => plainName(i.name)).join(', ')} {unpriced.length > 1 ? 'seront exclus' : 'sera exclu'} du calcul économique.
-            Saisissez un prix dans le <Link to="/formulation?onglet=calcul" className="underline">calcul détaillé</Link>.
+            {unpriced.length > 1
+              ? t('Sans prix connu, {{names}} seront exclus du calcul économique.', { names: unpriced.map((i) => plainName(i.name)).join(', ') })
+              : t('Sans prix connu, {{names}} sera exclu du calcul économique.', { names: unpriced.map((i) => plainName(i.name)).join(', ') })}{' '}
+            {t('Saisissez un prix dans le')} <Link to="/formulation?onglet=calcul" className="underline">{t('calcul détaillé')}</Link>.
           </p>
         )}
       </Card>
 
 
       <div className="sticky bottom-0 -mx-4 border-t border-slate-200 bg-white/95 px-4 py-3 pr-24 sm:static sm:mx-0 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:border-0 sm:bg-transparent sm:p-0">
-        <p className="mb-2 text-sm text-slate-500 sm:mb-0">Ration au moindre coût. Le résultat sera une estimation, à faire vérifier par un expert.</p>
-        <Button onClick={submit} loading={busy} icon={<Calculator className="size-4" />} className="w-full sm:w-auto">Calculer la ration</Button>
+        <p className="mb-2 text-sm text-slate-500 sm:mb-0">{t('Ration au moindre coût. Le résultat sera une estimation, à faire vérifier par un expert.')}</p>
+        <Button onClick={submit} loading={busy} icon={<Calculator className="size-4" />} className="w-full sm:w-auto">{t('Calculer la ration')}</Button>
       </div>
-      <p className="text-sm text-slate-500">Un seul animal, un prix ou un stock à préciser ? Utilisez le <Link to="/formulation?onglet=calcul" className="font-semibold text-brand-700 underline">calcul détaillé</Link>.</p>
+      <p className="text-sm text-slate-500">{t('Un seul animal, un prix ou un stock à préciser ? Utilisez le')} <Link to="/formulation?onglet=calcul" className="font-semibold text-brand-700 underline">{t('calcul détaillé')}</Link>.</p>
     </div>
   )
 }

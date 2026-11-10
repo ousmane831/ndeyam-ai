@@ -3,13 +3,14 @@ import { useState, type FormEvent } from 'react'
 import { useFarm } from '@/hooks/useFarm'
 import { ApiError } from '@/services/api'
 import { assistantService } from '@/services/assistant'
+import { t, tk } from '@/i18n'
 
 export const SUGGESTIONS = [
-  'Quel est le poids actuel de mes animaux ?',
-  'Pourquoi ma dernière formule a-t-elle été refusée ?',
-  'Quelles données manquent pour calculer une formule ?',
-  'Combien ont coûté les rations de ce mois-ci ?',
-  'Quelles alertes sont ouvertes ?',
+  tk('Quel est le poids actuel de mes animaux ?'),
+  tk('Pourquoi ma dernière formule a-t-elle été refusée ?'),
+  tk('Quelles données manquent pour calculer une formule ?'),
+  tk('Combien ont coûté les rations de ce mois-ci ?'),
+  tk('Quelles alertes sont ouvertes ?'),
 ]
 
 /** État et actions d'une conversation avec l'assistant (partagés par le panneau flottant et la page). */
@@ -47,7 +48,7 @@ export function useAssistantChat() {
     },
     onError: (e, content) => {
       setDraft(content)
-      setError(e instanceof ApiError ? e.message : "La question n'a pas pu être envoyée.")
+      setError(e instanceof ApiError ? e.message : t("La question n'a pas pu être envoyée."))
     },
     onSettled: (id) => {
       setPending(null)

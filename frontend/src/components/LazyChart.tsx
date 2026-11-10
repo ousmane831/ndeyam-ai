@@ -1,4 +1,5 @@
 import { lazy, Suspense, type ComponentProps } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Spinner } from '@/components/ui/Spinner'
 
 /* Les graphiques (Recharts) sont chargés à la demande pour alléger le chargement initial. */
@@ -10,11 +11,16 @@ const WeightTrendChartLazy = lazy(() =>
   import('@/features/dashboard/DashboardCharts').then((m) => ({ default: m.WeightTrendChart })),
 )
 
-const fallback = (
-  <div className="flex h-56 items-center justify-center">
-    <Spinner label="Chargement du graphique…" />
-  </div>
-)
+function ChartFallback() {
+  const { t } = useTranslation()
+  return (
+    <div className="flex h-56 items-center justify-center">
+      <Spinner label={t('Chargement du graphique…')} />
+    </div>
+  )
+}
+
+const fallback = <ChartFallback />
 
 export function WeightChart(props: ComponentProps<typeof WeightChartLazy>) {
   return (

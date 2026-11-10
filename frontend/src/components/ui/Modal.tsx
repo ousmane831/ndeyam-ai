@@ -1,5 +1,6 @@
 import { X } from 'lucide-react'
 import { useEffect, useId, useRef, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from './Button'
 
 export function Modal({
@@ -15,6 +16,7 @@ export function Modal({
   children: ReactNode
   footer?: ReactNode
 }) {
+  const { t } = useTranslation()
   const titleId = useId()
   const dialogRef = useRef<HTMLDivElement>(null)
   // La fonction de fermeture est lue via une référence : l'effet ne dépend que de l'ouverture.
@@ -52,7 +54,7 @@ export function Modal({
           <h2 id={titleId} className="font-semibold text-slate-800">
             {title}
           </h2>
-          <button type="button" onClick={onClose} className="rounded p-1 text-slate-500 hover:text-slate-600" aria-label="Fermer">
+          <button type="button" onClick={onClose} className="rounded p-1 text-slate-500 hover:text-slate-600" aria-label={t('Fermer')}>
             <X className="size-5" />
           </button>
         </header>
@@ -67,7 +69,7 @@ export function ConfirmDialog({
   open,
   title,
   message,
-  confirmLabel = 'Confirmer',
+  confirmLabel,
   danger = false,
   loading = false,
   onConfirm,
@@ -82,6 +84,7 @@ export function ConfirmDialog({
   onConfirm: () => void
   onCancel: () => void
 }) {
+  const { t } = useTranslation()
   return (
     <Modal
       open={open}
@@ -90,10 +93,10 @@ export function ConfirmDialog({
       footer={
         <>
           <Button variant="secondary" onClick={onCancel} disabled={loading}>
-            Annuler
+            {t('Annuler')}
           </Button>
           <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm} loading={loading}>
-            {confirmLabel}
+            {confirmLabel ?? t('Confirmer')}
           </Button>
         </>
       }

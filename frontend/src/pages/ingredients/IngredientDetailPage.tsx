@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Alert, Badge, Card } from '@/components/ui/Feedback'
@@ -16,12 +17,13 @@ import { compositionService, ingredientService, priceService, sourceService } fr
 import type { IngredientDetail } from '@/types/nutrition'
 import { formatDate, formatMoney, formatNumber, todayIso } from '@/utils/format'
 
-function errorText(e: unknown) {
+function errorText(e: unknown, fallback: string) {
   if (e instanceof ApiError) return Object.values(e.fieldErrors).flat().join(' ') || e.message
-  return e instanceof Error ? e.message : 'Action impossible.'
+  return e instanceof Error ? e.message : fallback
 }
 
 function AddCompositionForm({ ingredient, onDone }: { ingredient: IngredientDetail; onDone: () => void }) {
+  const { t } = useTranslation()
   const { isReviewer } = useRoles()
   const sources = useQuery({ queryKey: ['sources'], queryFn: () => sourceService.list() })
   const [nutrient, setNutrient] = useState('')
@@ -38,9 +40,9 @@ function AddCompositionForm({ ingredient, onDone }: { ingredient: IngredientDeta
     e.preventDefault()
     setError(null)
     const n = Number(value.replace(',', '.'))
-    if (!nutrient) return setError('Choisissez le nutriment.')
-    if (value.trim() === '' || Number.isNaN(n) || n < 0) return setError('Valeur positive ou nulle attendue.')
-    if (selected?.category === 'DRY_MATTER' && !(n > 0 && n <= 1000)) return setError('La matière sèche est comprise entre 0 et 1000 g/kg brut.')
+    if (!nutrient) return setError(t('Choisissez le nutriment.'))
+    if (value.trim() === '' || Number.isNaN(n) || n < 0) return setError(t('Valeur positive ou nulle attendue.'))
+    if (selected?.category === 'DRY_MATTER' && !(n > 0 && n <= 1000)) return setError(t('La matière sèche est comprise entre 0 et 1000 g/kg brut.'))
     setBusy(true)
     try {
       await compositionService.create({
@@ -50,7 +52,7 @@ function AddCompositionForm({ ingredient, onDone }: { ingredient: IngredientDeta
       setValue('')
       onDone()
     } catch (err) {
-      setError(errorText(err))
+      setError(errorText(err, t('Action impossible.')))
     } finally {
       setBusy(false)
     }
@@ -58,28 +60,31 @@ function AddCompositionForm({ ingredient, onDone }: { ingredient: IngredientDeta
 
   return (
     <form onSubmit={submit} noValidate className="space-y-3 rounded-lg border border-dashed border-slate-300 p-4">
-      <p className="text-sm font-medium text-slate-800">Ajouter une valeur</p>
+      <p className="text-sm font-medium text-slate-800">{t('Ajouter une valeur')}</p>
       {error && <Alert tone="error">{error}</Alert>}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <SelectField label="Nutriment" value={nutrient} onChange={(e) => setNutrient(e.target.value)}
-          options={[{ value: '', label: 'Choisir…' }, ...nutrients.map((n) => ({ value: String(n.id), label: `${n.code}${n.system_code ? ` (${n.system_code})` : ''} — ${n.unit_label}` }))]} />
-        <TextField label={`Valeur${selected ? ` (${selected.unit_label})` : ''}`} inputMode="decimal" value={value} onChange={(e) => setValue(e.target.value)} />
-        <SelectField label="Source" value={source} onChange={(e) => setSource(e.target.value)}
-          options={[{ value: '', label: 'Non renseignée' }, ...(sources.data?.results ?? []).map((s) => ({ value: String(s.id), label: s.title }))]} />
-        <TextField label="Date de référence" type="date" value={refDate} onChange={(e) => setRefDate(e.target.value)} />
-        <TextField label="Méthode d'analyse" value={method} onChange={(e) => setMethod(e.target.value)} />
+        <SelectField label={t('Nutriment')} value={nutrient} onChange={(e) => setNutrient(e.target.value)}
+          options={[{ value: '', label: t('Choisir…') }, ...nutrients.map((n) => ({ value: String(n.id), label: `${n.code}${n.system_code ? ` (${n.system_code})` : ''} — ${t(n.unit_label)}` }))]} />
+        <TextField label={selected ? t('Valeur ({{unit}})', { unit: t(selected.unit_label) }) : t('Valeur')} inputMode="decimal" value={value} onChange={(e) => setValue(e.target.value)} />
+        <SelectField label={t('Source')} value={source} onChange={(e) => setSource(e.target.value)}
+          options={[{ value: '', label: t('Non renseignée') }, ...(sources.data?.results ?? []).map((s) => ({ value: String(s.id), label: s.title }))]} />
+        <TextField label={t('Date de référence')} type="date" value={refDate} onChange={(e) => setRefDate(e.target.value)} />
+        <TextField label={t("Méthode d'analyse")} value={method} onChange={(e) => setMethod(e.target.value)} />
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-xs text-slate-500">
-          La valeur est enregistrée en brouillon{isReviewer ? '' : ' et doit être validée par un expert'}. Sans source, elle ne pourra pas être validée.
+          {isReviewer
+            ? t('La valeur est enregistrée en brouillon. Sans source, elle ne pourra pas être validée.')
+            : t('La valeur est enregistrée en brouillon et doit être validée par un expert. Sans source, elle ne pourra pas être validée.')}
         </p>
-        <Button type="submit" size="sm" loading={busy} icon={<Plus className="size-4" />}>Ajouter</Button>
+        <Button type="submit" size="sm" loading={busy} icon={<Plus className="size-4" />}>{t('Ajouter')}</Button>
       </div>
     </form>
   )
 }
 
 function PricesCard({ ingredient }: { ingredient: IngredientDetail }) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { writableFarms, defaultWritableFarmId, selectedFarmId, canWrite } = useFarm()
   const farmId = ingredient.farm ?? selectedFarmId ?? defaultWritableFarmId
@@ -97,7 +102,7 @@ function PricesCard({ ingredient }: { ingredient: IngredientDetail }) {
     e.preventDefault()
     setError(null)
     const n = Number(price.replace(',', '.'))
-    if (!(n > 0)) return setError('Prix positif attendu (par kg brut).')
+    if (!(n > 0)) return setError(t('Prix positif attendu (par kg brut).'))
     try {
       await priceService.create({ farm: farmId, ingredient: ingredient.id, price_per_kg_as_fed: String(n), valid_from: date, supplier,
         quantity_available_kg: stock ? stock.replace(',', '.') : null })
@@ -105,30 +110,30 @@ function PricesCard({ ingredient }: { ingredient: IngredientDetail }) {
       setStock('')
       queryClient.invalidateQueries({ queryKey: ['prices'] })
     } catch (err) {
-      setError(errorText(err))
+      setError(errorText(err, t('Action impossible.')))
     }
   }
 
-  if (farmId === null) return writableFarms.length ? null : <Card title="Prix"><p className="text-sm text-slate-500">Choisissez une exploitation pour voir ses prix.</p></Card>
+  if (farmId === null) return writableFarms.length ? null : <Card title={t('Prix')}><p className="text-sm text-slate-500">{t('Choisissez une exploitation pour voir ses prix.')}</p></Card>
   return (
-    <Card title="Prix dans votre exploitation">
+    <Card title={t('Prix dans votre exploitation')}>
       <div className="space-y-4">
         {prices.isPending ? <Spinner /> : prices.isError ? <Alert tone="error">{prices.error.message}</Alert> : prices.data.length === 0 ? (
-          <p className="text-sm text-slate-500">Aucun prix enregistré : l'ingrédient ne pourra pas être utilisé en mode économique.</p>
+          <p className="text-sm text-slate-500">{t("Aucun prix enregistré : l'ingrédient ne pourra pas être utilisé en mode économique.")}</p>
         ) : (
           <div className="-mx-5 overflow-x-auto">
             <table className="w-full">
-              <thead className="border-y border-slate-200 bg-slate-50"><tr><th className={th}>Date</th><th className={th}>Prix / kg brut</th><th className={th}>Fournisseur</th><th className={th}>Disponible</th>{writable && <th className={th} />}</tr></thead>
+              <thead className="border-y border-slate-200 bg-slate-50"><tr><th className={th}>{t('Date')}</th><th className={th}>{t('Prix / kg brut')}</th><th className={th}>{t('Fournisseur')}</th><th className={th}>{t('Disponible')}</th>{writable && <th className={th} />}</tr></thead>
               <tbody className="divide-y divide-slate-100">
                 {prices.data.map((p, i) => (
                   <tr key={p.id}>
-                    <td className={td}>{formatDate(p.valid_from)} {i === 0 && <Badge tone="brand">Actuel</Badge>}</td>
+                    <td className={td}>{formatDate(p.valid_from)} {i === 0 && <Badge tone="brand">{t('Actuel')}</Badge>}</td>
                     <td className={`${td} font-medium`}>{formatMoney(p.price_per_kg_as_fed, p.currency)}</td>
                     <td className={td}>{p.supplier || '—'}</td>
                     <td className={td}>{p.quantity_available_kg ? `${formatNumber(p.quantity_available_kg)} kg` : '—'}</td>
                     {writable && (
                       <td className={`${td} text-right`}>
-                        <button type="button" onClick={() => removal.mutate(p.id)} className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600" aria-label="Supprimer le prix">
+                        <button type="button" onClick={() => removal.mutate(p.id)} className="rounded-md p-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600" aria-label={t('Supprimer le prix')}>
                           <Trash2 className="size-4" />
                         </button>
                       </td>
@@ -143,12 +148,12 @@ function PricesCard({ ingredient }: { ingredient: IngredientDetail }) {
           <form onSubmit={add} noValidate className="space-y-3">
             {error && <Alert tone="error">{error}</Alert>}
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <TextField label="Prix par kg brut (FCFA)" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} />
-              <TextField label="Date du prix" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-              <TextField label="Fournisseur / marché" value={supplier} onChange={(e) => setSupplier(e.target.value)} />
-              <TextField label="Quantité disponible (kg brut)" inputMode="decimal" value={stock} onChange={(e) => setStock(e.target.value)} />
+              <TextField label={t('Prix par kg brut (FCFA)')} inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} />
+              <TextField label={t('Date du prix')} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <TextField label={t('Fournisseur / marché')} value={supplier} onChange={(e) => setSupplier(e.target.value)} />
+              <TextField label={t('Quantité disponible (kg brut)')} inputMode="decimal" value={stock} onChange={(e) => setStock(e.target.value)} />
             </div>
-            <div className="flex justify-end"><Button type="submit" size="sm" icon={<Plus className="size-4" />}>Enregistrer le prix</Button></div>
+            <div className="flex justify-end"><Button type="submit" size="sm" icon={<Plus className="size-4" />}>{t('Enregistrer le prix')}</Button></div>
           </form>
         )}
       </div>
@@ -157,6 +162,7 @@ function PricesCard({ ingredient }: { ingredient: IngredientDetail }) {
 }
 
 export function IngredientDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const ingredientId = Number(id)
   const queryClient = useQueryClient()
@@ -175,47 +181,46 @@ export function IngredientDetailPage() {
 
   return (
     <div className="space-y-6">
-      <Link to="/ingredients" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"><ArrowLeft className="size-4" /> Ingrédients</Link>
+      <Link to="/ingredients" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"><ArrowLeft className="size-4" /> {t('Ingrédients')}</Link>
       <PageHeader
         title={ing.name}
-        description={<span className="flex flex-wrap items-center gap-2">{ing.category_name} · {ing.scope === 'catalog' ? 'Catalogue commun' : 'Ingrédient privé'} <ValidationBadge status={ing.status} isDemo={ing.is_demo} /></span>}
+        description={<span className="flex flex-wrap items-center gap-2">{t(ing.category_name)} · {ing.scope === 'catalog' ? t('Catalogue commun') : t('Ingrédient privé')} <ValidationBadge status={ing.status} isDemo={ing.is_demo} /></span>}
         actions={<WorkflowActions status={ing.status} canSubmit={writable} isReviewer={isReviewer} onAction={(a, c) => ingredientService.act(ing.id, a, c).then(refresh)} />}
       />
-      {ing.validation_comment && <Alert tone={ing.status === 'REJECTED' ? 'warning' : 'info'} title="Commentaire de validation">{ing.validation_comment}</Alert>}
+      {ing.validation_comment && <Alert tone={ing.status === 'REJECTED' ? 'warning' : 'info'} title={t('Commentaire de validation')}>{ing.validation_comment}</Alert>}
 
       <Card>
         <DefinitionList items={[
-          { label: 'Noms locaux', value: ing.local_names || '—' },
-          { label: 'Source', value: ing.source?.title ?? 'Non renseignée' },
-          { label: 'Validé par', value: ing.validated_by_email ? `${ing.validated_by_email} (${formatDate(ing.validated_at)})` : '—' },
-          { label: 'Description', value: ing.description || '—' },
-          { label: 'Observations', value: ing.observations || '—' },
+          { label: t('Noms locaux'), value: ing.local_names || '—' },
+          { label: t('Source'), value: ing.source?.title ?? t('Non renseignée') },
+          { label: t('Validé par'), value: ing.validated_by_email ? `${ing.validated_by_email} (${formatDate(ing.validated_at)})` : '—' },
+          { label: t('Description'), value: ing.description || '—' },
+          { label: t('Observations'), value: ing.observations || '—' },
         ]} />
       </Card>
 
-      <Card title={`Composition nutritionnelle (${known} valeur(s) validée(s) sur ${ing.composition_table.length} nutriments)`}>
+      <Card title={t('Composition nutritionnelle ({{known}} valeur(s) validée(s) sur {{total}} nutriments)', { known, total: ing.composition_table.length })}>
         <div className="space-y-5">
           <p className="text-xs text-slate-500">
-            Valeurs par kg de matière sèche (MS), sauf la teneur en MS (g/kg de produit brut). Seules les valeurs validées et non DEMO sont
-            utilisées dans les calculs.
+            {t('Valeurs par kg de matière sèche (MS), sauf la teneur en MS (g/kg de produit brut). Seules les valeurs validées et non DEMO sont utilisées dans les calculs.')}
           </p>
           <div className="-mx-5 overflow-x-auto">
             <table className="w-full">
               <thead className="border-y border-slate-200 bg-slate-50">
-                <tr><th className={th}>Nutriment</th><th className={th}>Valeur utilisée</th><th className={th}>Valeurs enregistrées</th></tr>
+                <tr><th className={th}>{t('Nutriment')}</th><th className={th}>{t('Valeur utilisée')}</th><th className={th}>{t('Valeurs enregistrées')}</th></tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {ing.composition_table.map((row) => (
                   <tr key={row.nutrient.id} className="align-top">
                     <td className={td}>
                       <p className="font-medium text-slate-800">{row.nutrient.code}{row.nutrient.system_code && <span className="ml-1 text-xs text-slate-500">({row.nutrient.system_code})</span>}</p>
-                      <p className="text-xs text-slate-500">{row.nutrient.name} · {row.nutrient.unit_label}</p>
+                      <p className="text-xs text-slate-500">{t(row.nutrient.name)} · {t(row.nutrient.unit_label)}</p>
                     </td>
                     <td className={td}>
                       {row.validated_value !== null ? (
                         <span className="font-semibold text-slate-900">{formatNumber(row.validated_value, 4)}</span>
                       ) : (
-                        <span className="text-slate-500 italic">Inconnue</span>
+                        <span className="text-slate-500 italic">{t('Inconnue')}</span>
                       )}
                     </td>
                     <td className={td}>
@@ -226,9 +231,9 @@ export function IngredientDetailPage() {
                               <div className="flex flex-wrap items-center gap-2">
                                 <span className="font-medium">{formatNumber(c.value, 4)}</span>
                                 <ValidationBadge status={c.status} isDemo={c.is_demo} />
-                                <span className="text-xs text-slate-500">{c.source?.title ?? 'sans source'}{c.reference_date ? ` · ${formatDate(c.reference_date)}` : ''}</span>
+                                <span className="text-xs text-slate-500">{c.source?.title ?? t('sans source')}{c.reference_date ? ` · ${formatDate(c.reference_date)}` : ''}</span>
                                 {writable && c.status !== 'VALIDATED' && (
-                                  <button type="button" onClick={() => setToDelete(c.id)} className="rounded p-1 text-slate-500 hover:text-red-600" aria-label="Supprimer la valeur">
+                                  <button type="button" onClick={() => setToDelete(c.id)} className="rounded p-1 text-slate-500 hover:text-red-600" aria-label={t('Supprimer la valeur')}>
                                     <Trash2 className="size-3.5" />
                                   </button>
                                 )}
@@ -251,7 +256,7 @@ export function IngredientDetailPage() {
 
       <PricesCard ingredient={ing} />
 
-      <ConfirmDialog open={toDelete !== null} title="Supprimer cette valeur ?" message="La valeur non validée sera supprimée." confirmLabel="Supprimer" danger
+      <ConfirmDialog open={toDelete !== null} title={t('Supprimer cette valeur ?')} message={t('La valeur non validée sera supprimée.')} confirmLabel={t('Supprimer')} danger
         loading={removeComp.isPending} onConfirm={() => toDelete && removeComp.mutate(toDelete)} onCancel={() => setToDelete(null)} />
     </div>
   )

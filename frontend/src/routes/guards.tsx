@@ -1,13 +1,15 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate, useLocation } from 'react-router'
 import { Spinner } from '@/components/ui/Spinner'
 import { useAuth } from '@/hooks/useAuth'
 import type { UserRole } from '@/types/auth'
 
 function FullPageLoader() {
+  const { t } = useTranslation()
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <Spinner label="Chargement de votre session…" />
+      <Spinner label={t('Chargement de votre session…')} />
     </div>
   )
 }

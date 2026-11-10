@@ -352,3 +352,16 @@ Retour client : zones mal couvertes, formulation indispensable sur le terrain.
   provisoire : le calcul est rejoué par le serveur, qui enregistre la formule officielle.
 - **Interface** : le service worker précharge toute l'interface (liste produite à la construction) et change de cache
   à chaque version. Le solveur n'est chargé qu'avec l'écran de formulation.
+
+## DT-72 — Interface bilingue français / anglais, prête pour d'autres langues
+Retour client : toucher l'Afrique de l'Ouest anglophone, puis les langues locales.
+- **Interface** : i18next ; la clé est le texte français (`t('Mes animaux')`), donc aucun texte ne disparaît s'il manque
+  une traduction, et le rendu français est inchangé. Traductions anglaises par domaine dans `src/locales/en/*.json`
+  (≈ 1 250 textes), glossaire `src/i18n/GLOSSAIRE-EN.md`. `tk()` marque les textes déclarés hors composants.
+  Le test `i18n.test.ts` échoue si un texte n'a pas sa traduction ou si les variables `{{…}}` diffèrent. Dates et
+  nombres selon la langue (fr-FR, en-GB). Ajouter une langue = un dossier `src/locales/<code>/`.
+- **Serveur** : les messages sont écrits en français et certains sont enregistrés (formules, alertes). Ils sont donc
+  traduits à la sortie de l'API (catalogue d'expressions, `core/locale_en.py`, ≈ 540 entrées testées sur les vrais
+  chemins de code) plutôt qu'avec gettext, qui ne couvrirait pas l'historique. Les données saisies ne sont jamais
+  traduites.
+- **Wolof** : pas de traduction automatique ; à faire avec des locuteurs (textes relus, messages audio).

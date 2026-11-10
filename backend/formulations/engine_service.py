@@ -553,7 +553,7 @@ def offline_pack(farm):
                 "id": group.pk,
                 "name": group.name,
                 "head_count": profile["head_count"],
-                "notes": profile["notes"],
+                "profile_notes": profile["notes"],
                 "species": ident(profile.get("species")),
                 "breed": ident(profile.get("breed")),
                 "category": ident(profile.get("category")),

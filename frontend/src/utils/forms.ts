@@ -1,4 +1,5 @@
 import type { FieldValues, Path, UseFormSetError } from 'react-hook-form'
+import { t } from '@/i18n'
 import { ApiError } from '@/services/api'
 
 /**
@@ -10,7 +11,7 @@ export function applyServerErrors<T extends FieldValues>(
   setError: UseFormSetError<T>,
   knownFields: readonly Path<T>[],
 ): string | null {
-  if (!(error instanceof ApiError)) return 'Une erreur inattendue est survenue.'
+  if (!(error instanceof ApiError)) return t('Une erreur inattendue est survenue.')
   const unmatched: string[] = []
   for (const [field, messages] of Object.entries(error.fieldErrors)) {
     if ((knownFields as readonly string[]).includes(field)) {

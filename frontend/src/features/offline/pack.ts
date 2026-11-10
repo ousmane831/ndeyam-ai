@@ -24,7 +24,7 @@ export interface PackGroup {
   id: number
   name: string
   head_count: number
-  notes: string[]
+  profile_notes: string[]
   species: number | null
   breed: number | null
   category: number | null

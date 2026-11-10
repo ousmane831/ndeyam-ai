@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Bot, Database, RefreshCw, Server } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Logo } from '@/components/ui/Logo'
 import { Spinner } from '@/components/ui/Spinner'
 import { fetchHealth } from '@/services/system'
@@ -12,6 +13,7 @@ import type { ApiError } from '@/services/api'
  * Elle sera remplacée par la page de connexion à l'étape 3 et restera accessible sur /statut.
  */
 export function SystemStatusPage() {
+  const { t } = useTranslation()
   const { data, error, isPending, isFetching, refetch } = useQuery({
     queryKey: ['health'],
     queryFn: fetchHealth,
@@ -26,13 +28,13 @@ export function SystemStatusPage() {
           <Logo />
           <div>
             <h1 className="text-xl font-semibold text-brand-800">NDEYAM AI</h1>
-            <p className="text-sm text-slate-500">État de la plateforme — prototype en cours de développement</p>
+            <p className="text-sm text-slate-500">{t('État de la plateforme — prototype en cours de développement')}</p>
           </div>
         </header>
 
         <section className="rounded-md border border-slate-200 bg-white">
           <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-            <h2 className="font-medium text-slate-800">Services</h2>
+            <h2 className="font-medium text-slate-800">{t('Services')}</h2>
             <button
               type="button"
               onClick={() => refetch()}
@@ -40,40 +42,40 @@ export function SystemStatusPage() {
               className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
             >
               <RefreshCw className={isFetching ? 'size-4 animate-spin' : 'size-4'} aria-hidden />
-              Vérifier à nouveau
+              {t('Vérifier à nouveau')}
             </button>
           </div>
 
           <div className="divide-y divide-slate-100">
             {isPending ? (
               <div className="px-5 py-6">
-                <Spinner label="Vérification des services…" />
+                <Spinner label={t('Vérification des services…')} />
               </div>
             ) : apiError || !data ? (
               <StatusRow
                 icon={<Server className="size-5" />}
-                label="API Django"
+                label={t('API Django')}
                 ok={false}
-                detail={apiError?.message ?? 'Réponse vide du serveur.'}
+                detail={apiError?.message ?? t('Réponse vide du serveur.')}
               />
             ) : (
               <>
-                <StatusRow icon={<Server className="size-5" />} label="API Django" ok detail={`Version ${data.version}`} />
+                <StatusRow icon={<Server className="size-5" />} label={t('API Django')} ok detail={t('Version {{version}}', { version: data.version })} />
                 <StatusRow
                   icon={<Database className="size-5" />}
-                  label="Base de données"
+                  label={t('Base de données')}
                   ok={data.database.connected}
-                  detail={data.database.connected ? data.database.engine ?? 'Connectée' : 'Inaccessible'}
+                  detail={data.database.connected ? data.database.engine ?? t('Connectée') : t('Inaccessible')}
                 />
                 <StatusRow
                   icon={<Bot className="size-5" />}
-                  label="Assistant IA"
+                  label={t('Assistant IA')}
                   ok={data.assistant.configured}
                   warning={!data.assistant.configured}
                   detail={
                     data.assistant.configured
-                      ? `Fournisseur : ${data.assistant.provider}`
-                      : "Non configuré — les autres modules restent utilisables."
+                      ? t('Fournisseur : {{provider}}', { provider: data.assistant.provider })
+                      : t('Non configuré — les autres modules restent utilisables.')
                   }
                 />
               </>
@@ -82,7 +84,7 @@ export function SystemStatusPage() {
         </section>
 
         <p className="mt-6 text-center text-xs text-slate-500">
-          Documentation de l'API : <a className="underline hover:text-brand-600" href="/api/docs/">/api/docs/</a>
+          {t("Documentation de l'API :")} <a className="underline hover:text-brand-600" href="/api/docs/">/api/docs/</a>
         </p>
       </div>
     </main>
@@ -102,8 +104,9 @@ function StatusRow({
   warning?: boolean
   detail: string
 }) {
+  const { t } = useTranslation()
   const tone = ok ? 'bg-brand-50 text-brand-700' : warning ? 'bg-mil-50 text-mil-700' : 'bg-red-50 text-red-700'
-  const badge = ok ? 'Opérationnel' : warning ? 'Non configuré' : 'Indisponible'
+  const badge = ok ? t('Opérationnel') : warning ? t('Non configuré') : t('Indisponible')
   return (
     <div className="flex items-start gap-4 px-5 py-4">
       <span className="mt-0.5 text-slate-500">{icon}</span>
