@@ -247,18 +247,51 @@ def rule_follow_up(farm, params, today):
         )
 
 
+def review_due(formula):
+    """Réponse attendue de l'expert : demande de vérification + délai convenu (réglage du serveur)."""
+    from datetime import timedelta
+
+    from django.conf import settings
+
+    requested = formula.review_requested_at or formula.updated_at
+    return requested + timedelta(hours=settings.FORMULA_REVIEW_DEADLINE_HOURS)
+
+
 def rule_formula_to_review(farm, params, today):
+    from django.conf import settings
+
     from formulations.models import FormulaStatus
 
+    hours = settings.FORMULA_REVIEW_DEADLINE_HOURS
     for formula in farm.formulas.filter(status=FormulaStatus.PENDING_REVIEW):
+        due = review_due(formula)
+        due_text = timezone.localtime(due).strftime("%d/%m/%Y à %H:%M")
+        trigger = {"formula_id": formula.pk, "due_at": due.isoformat(), "deadline_hours": hours}
+        if timezone.now() > due:
+            # Délai dépassé : nouvelle alerte (autre clé), plus visible ; les administrateurs sont relancés.
+            yield Candidate(
+                dedup_key=f"formula_review_overdue:{formula.pk}",
+                alert_type=AlertType.FORMULA_TO_REVIEW,
+                severity=AlertSeverity.CRITICAL,
+                title=f"Vérification en retard : {formula.name}",
+                message=(
+                    f"Le délai de réponse convenu ({hours} h) est dépassé depuis le {due_text}. "
+                    "Les administrateurs de la plateforme ont été relancés. Vous pouvez aussi inviter un "
+                    "autre nutritionniste ou zootechnicien, ou utiliser une ration type validée."
+                ),
+                rule_code="formula_review_overdue",
+                trigger_data={**trigger, "overdue": True},
+                target=formula,
+            )
+            continue
         yield Candidate(
             dedup_key=f"formula_review:{formula.pk}",
             alert_type=AlertType.FORMULA_TO_REVIEW,
             title=f"Formule en attente de vérification : {formula.name}",
             message="Cette formule a été soumise à un expert. Elle ne doit pas être considérée comme validée "
-            "tant que l'expert ne s'est pas prononcé.",
+            f"tant que l'expert ne s'est pas prononcé. Réponse attendue avant le {due_text}.",
             rule_code="formula_pending_review",
-            trigger_data={"formula_id": formula.pk, "submitted_at": formula.updated_at.isoformat()},
+            trigger_data=trigger,
             target=formula,
         )
 
@@ -349,6 +382,37 @@ def evaluate_farm(farm, today=None):
     return _sync({"farm": farm}, candidates, active_types, rules)
 
 
+def _overdue_reviews_for_admin(admin):
+    """Relance des administrateurs : formules réelles dont le délai de vérification convenu est dépassé."""
+    from formulations.models import FeedFormula, FormulaStatus
+
+    late = [
+        f
+        for f in FeedFormula.objects.filter(
+            status=FormulaStatus.PENDING_REVIEW, is_demo=False
+        ).select_related("farm")
+        if timezone.now() > review_due(f)
+    ]
+    if not late:
+        return []
+    farms = sorted({f.farm.name for f in late})
+    ids = "-".join(str(pk) for pk in sorted(f.pk for f in late))
+    return [
+        Candidate(
+            dedup_key=f"formula_overdue:{admin.pk}:{ids}",
+            alert_type=AlertType.FORMULA_TO_REVIEW,
+            severity=AlertSeverity.CRITICAL,
+            title=f"{len(late)} vérification(s) de ration en retard",
+            message=(
+                "Délai de réponse dépassé pour : " + ", ".join(farms) + ". "
+                "Validez la ou les formules, ou trouvez un autre nutritionniste / zootechnicien."
+            ),
+            rule_code="formula_review_overdue_admin",
+            trigger_data={"formulas": [f.pk for f in late]},
+        )
+    ]
+
+
 @transaction.atomic
 def evaluate_reviewers():
     """Une alerte par expert / administrateur actif, résumant les données en attente de validation."""
@@ -402,10 +466,12 @@ def evaluate_reviewers():
                     trigger_data={"pending": pending, "total": total},
                 )
             )
+        if reviewer.is_platform_admin:
+            candidates.extend(_overdue_reviews_for_admin(reviewer))
         result = _sync(
             {"recipient": reviewer, "farm": None},
             candidates,
-            [AlertType.REFERENCE_TO_VALIDATE],
+            [AlertType.REFERENCE_TO_VALIDATE, AlertType.FORMULA_TO_REVIEW],
             {AlertType.REFERENCE_TO_VALIDATE: rule},
         )
         for k in stats:

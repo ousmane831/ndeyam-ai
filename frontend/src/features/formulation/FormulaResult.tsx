@@ -87,7 +87,7 @@ function NutrientTable({ nutrients }: { nutrients: NutrientSupply[] }) {
         <tbody className={stack.tbody}>
           {nutrients.map((n) => (
             <tr key={n.code} className={clsx('align-top', stack.tr)}>
-              <td className={clsx(td, stack.title)}><span className="font-medium">{n.code}</span>{n.system && <span className="ml-1 text-xs text-slate-500">({n.system})</span>}<p className="text-xs text-slate-500">{n.name}</p></td>
+              <td className={clsx(td, stack.title)}><span className="font-medium">{n.code}</span>{n.system && <span className="ml-1 text-xs text-slate-500">({n.system})</span>}<p className="text-xs text-slate-500">{t(n.name)}</p></td>
               <td className={clsx(td, stack.cell)} data-label={t('Apport / jour')}>{n.daily_amount !== null ? `${formatNumber(n.daily_amount, 3)} ${n.daily_unit}` : <span className="text-slate-500">{t('Inconnu')}</span>}</td>
               <td className={clsx(td, stack.cell)} data-label={t('Teneur / kg MS')}>{n.concentration_dm !== null ? `${formatNumber(n.concentration_dm, 3)} ${n.concentration_unit}` : '—'}</td>
               <td className={clsx(td, stack.cell)} data-label={t('Besoin de référence')}>{n.requirements?.length ? n.requirements.map((r, i) => <p key={i}>{bounds(t, r.min, r.target, r.max)} {r.unit}</p>) : '—'}</td>

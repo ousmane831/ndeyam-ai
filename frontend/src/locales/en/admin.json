@@ -242,5 +242,6 @@
   "Par": "By",
   "Action": "Action",
   "Objet": "Object",
-  "Exploitation": "Farm"
+  "Exploitation": "Farm",
+  "La personne doit déjà avoir un compte. Le gestionnaire peut modifier les données ; chaque spécialiste agit dans son domaine et consulte le reste.": "The person must already have an account. A manager can edit the data; each specialist works in their own field and can view the rest."
 }

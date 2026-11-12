@@ -28,6 +28,7 @@ envoyé par e-mail.
 | Ingrédients alimentaires | Catalogue, ingrédients privés, compositions, prix |
 | Formulation des aliments | Formule rapide, calcul détaillé, ration saisie, formules enregistrées, comparaison |
 | Historique des rations | Rations en cours, distributions |
+| Saisons | Calendrier, disponibilité et prix habituels des aliments par saison, conseils de saison validés |
 | Alertes et rappels | Alertes ouvertes, résolues ou ignorées |
 | Références nutritionnelles | Besoins documentés utilisés par le moteur (consultation) |
 | Base documentaire | Recherche dans les documents techniques validés |
@@ -271,3 +272,45 @@ servir à nourrir des animaux.
 | **Référence nutritionnelle** | Besoins documentés et sourcés d'un type d'animal, validés par un expert |
 
 Les nutriments d'un système (INRA ou NRC) ne sont jamais mélangés avec ceux de l'autre dans un même calcul.
+
+## Saisons
+
+Le menu **Saisons** montre le calendrier (saison sèche fraîche, saison sèche chaude ou soudure, hivernage), indicatif
+et ajustable selon la zone par l'administration.
+
+- **Disponibilité et prix habituels** : pour chaque saison, indiquez si un aliment est abondant, disponible, rare ou
+  indisponible, et son prix habituel. La formule rapide affiche « Rare / Indisponible en cette saison » sur les
+  aliments concernés, et le calcul utilise le prix habituel de la saison (sinon le dernier prix relevé).
+- **Saison du calcul** : la formule rapide calcule pour la saison en cours ; touchez une autre saison pour préparer
+  la suivante. Une référence de besoins propre à une saison (par exemple en saison chaude) n'est utilisée que pour
+  cette saison, et seulement après validation par un expert.
+- **Conseils de saison** (eau, horaires, abri, alimentation) : rédigés par un spécialiste, ils ne sont montrés aux
+  éleveurs qu'une fois **validés**. L'accueil affiche la saison en cours et ses conseils validés.
+
+## Spécialistes invités sur une exploitation
+
+Dans **Paramètres → Mes exploitations → Membres**, le propriétaire invite :
+
+| Rôle | Peut faire | Compte nécessaire |
+|---|---|---|
+| Gestionnaire | Modifier toutes les données | Éleveur |
+| Nutritionniste / zootechnicien | **Valider ou rejeter les rations** ; consulter le reste | Expert |
+| Vétérinaire | Enregistrer des observations de santé ; consulter le reste | Expert |
+| Technicien d'élevage | Enregistrer pesées et observations ; consulter le reste | Éleveur ou Expert |
+
+## Rations types validées et délai de vérification
+
+**Rations types.** Un nutritionniste ou zootechnicien valide **une fois** une ration pour un cas courant (espèce,
+catégorie, stade, objectif, saison, tranche de poids). Dans la **formule rapide**, dès que le lot et l'objectif
+correspondent, l'encadré vert « Rations types pour ce lot » apparaît : **Utiliser cette ration type** crée une formule
+**déjà validée**, et une ration peut être créée tout de suite. Seuls les quantités (selon la matière sèche validée
+de vos aliments) et le coût (vos prix du jour) sont recalculés ; les proportions et l'ingestion validées ne changent
+pas. Une ration type ne s'applique jamais hors de son cas (par exemple hors de sa tranche de poids).
+
+Pour en créer une, le nutritionniste ouvre une formule validée, choisit **Enregistrer comme ration type** (nom,
+tranche de poids, conditions d'emploi), puis la valide dans l'onglet **Rations types** de la formulation.
+
+**Délai de vérification.** Une demande de vérification affiche la réponse attendue (48 h par défaut). Au-delà,
+l'alerte passe en « Vérification en retard », les administrateurs de la plateforme sont relancés, et l'éleveur peut
+inviter un autre nutritionniste ou utiliser une ration type validée. Une exploitation peut inviter plusieurs
+nutritionnistes : le premier disponible se prononce.

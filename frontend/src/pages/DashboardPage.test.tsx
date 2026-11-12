@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { alertService, dashboardService } from '@/services/alerts'
+import { seasonService } from '@/services/seasons'
 import * as system from '@/services/system'
 import { breeder, fakeAuth, renderWithProviders } from '@/test/utils'
 import type { Alert } from '@/types/alert'
@@ -40,6 +41,12 @@ describe('DashboardPage', () => {
       status: 'ok', app: 'NDEYAM AI', version: '0.1.0', database: { connected: true }, assistant: { configured: false, provider: null },
     })
     vi.spyOn(alertService, 'list').mockResolvedValue(page([]))
+    vi.spyOn(seasonService, 'current').mockResolvedValue({
+      date: '2026-04-10', next_season: null, pending_advice: 0,
+      season: { id: 2, code: 'SECHE_CHAUDE', name: 'Saison sèche chaude (soudure)', start_month: 3, end_month: 6, months: [3, 4, 5, 6], is_hot: true, description: 'Forte chaleur.', sort_order: 20 },
+      advice: [{ id: 1, season: 2, season_name: '', species: null, topic: 'WATER', topic_label: 'Eau', title: 'Eau propre à volonté', text: 'Abreuvoirs à l’ombre.', source: 1,
+        reference_date: null, is_demo: false, status: 'VALIDATED', status_label: 'Validé', validated_by_email: null, validated_at: null, validation_comment: '', created_at: '' }],
+    })
   })
 
   it('affiche des états vides explicites sans inventer de statistiques', async () => {
@@ -51,6 +58,9 @@ describe('DashboardPage', () => {
     expect(screen.queryByText(/FCFA/)).not.toBeInTheDocument()
     expect(screen.queryByText('graphique-poids')).not.toBeInTheDocument()
     expect(await screen.findByText(/Rien d'urgent/)).toBeInTheDocument()
+    // Saison en cours et ses conseils validés
+    expect(await screen.findByRole('heading', { name: 'Saison sèche chaude (soudure)' })).toBeInTheDocument()
+    expect(screen.getByText('Eau propre à volonté')).toBeInTheDocument()
     // L'état technique des services n'est montré qu'aux administrateurs.
     expect(screen.queryByText('Services')).not.toBeInTheDocument()
   })

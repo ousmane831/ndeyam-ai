@@ -7,6 +7,7 @@ import { Alert, AnimalTag, Card, EmptyState } from '@/components/ui/Feedback'
 import { PageHeader, StatCard } from '@/components/ui/Layout'
 import { Spinner } from '@/components/ui/Spinner'
 import { TodayTasks } from '@/features/dashboard/TodayTasks'
+import { SeasonCard } from '@/features/seasons/SeasonCard'
 import { useAuth } from '@/hooks/useAuth'
 import { useFarm } from '@/hooks/useFarm'
 import { dashboardService } from '@/services/alerts'
@@ -60,7 +61,10 @@ export function DashboardPage() {
         description={scope ? t("Vue d'ensemble : {{scope}}.", { scope }) : undefined}
       />
 
-      <TodayTasks farmId={selectedFarmId} />
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
+        <TodayTasks farmId={selectedFarmId} />
+        <SeasonCard farmId={selectedFarmId} />
+      </div>
 
       <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <StatCard label={t('Animaux présents')} value={d.animals.total} icon={<PawPrint className="size-5" />}

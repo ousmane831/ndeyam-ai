@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from animals.models import Animal, AnimalGroup, AnimalStatus
 from core.csv_io import csv_response
 from core.viewsets import FarmScopedViewSet, ValidationWorkflowMixin
-from farms.access import can_write_farm, readable_farms
+from farms.access import can_record_weighings, readable_farms
 from governance.activity import log_activity
 from governance.views import ReadAllWriteReviewers
 
@@ -63,10 +63,11 @@ class WeighingViewSet(FarmScopedViewSet):
     ordering_fields = ["weighed_on", "weight_kg", "created_at"]
     ordering = ["-weighed_on"]
     activity_prefix = "weighing"
+    write_access = staticmethod(can_record_weighings)  # technicien d'élevage compris
 
     def perform_create(self, serializer):
         animal = serializer.validated_data["animal"]
-        if not can_write_farm(self.request.user, animal.farm):
+        if not can_record_weighings(self.request.user, animal.farm):
             raise PermissionDenied("Vous ne pouvez pas enregistrer de pesée dans cette exploitation.")
         weighing = serializer.save(recorded_by=self.request.user, is_demo=animal.is_demo)
         self._log("created", weighing)
@@ -103,7 +104,7 @@ class WeighingViewSet(FarmScopedViewSet):
                     errors[str(index)] = serializer.errors
                     continue
                 animal = serializer.validated_data["animal"]
-                if not can_write_farm(request.user, animal.farm):
+                if not can_record_weighings(request.user, animal.farm):
                     errors[str(index)] = {"animal": ["Vous ne pouvez pas modifier cette exploitation."]}
                     continue
                 created.append(serializer.save(recorded_by=request.user, is_demo=animal.is_demo))

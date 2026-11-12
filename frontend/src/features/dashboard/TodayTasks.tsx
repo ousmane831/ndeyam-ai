@@ -86,7 +86,7 @@ export function TodayTasks({ farmId }: { farmId: number | null }) {
         <ul className="-my-2 divide-y divide-slate-100">
           {tasks.map((task) => (
             <li key={task.key} className="flex items-center gap-3 py-3">
-              <span className={task.urgent ? 'flex size-10 shrink-0 items-center justify-center rounded-md bg-mil-100 text-mil-700' : 'flex size-10 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand-700'}>
+              <span className={task.urgent ? 'flex size-12 shrink-0 items-center justify-center rounded-full bg-mil-100 text-mil-700 [&>svg]:size-6' : 'flex size-12 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 [&>svg]:size-6'}>
                 {task.icon}
               </span>
               <div className="min-w-0 flex-1">

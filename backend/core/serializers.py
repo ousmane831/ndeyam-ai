@@ -8,6 +8,13 @@ from farms.access import writable_farms
 
 # Messages des contraintes CHECK de la base susceptibles d'être atteintes par une saisie.
 CHECK_MESSAGES = {
+    "template_weight_positive": "Le poids minimal doit être strictement positif.",
+    "template_weight_ordered": "Le poids minimal doit être inférieur ou égal au poids maximal.",
+    "template_intake_positive": "La matière sèche par animal et par jour doit être strictement positive.",
+    "templateitem_pct_range": (
+        "La part d'un aliment dans la matière sèche doit être comprise entre 0 et 100 %."
+    ),
+    "season_months_valid": "Les mois d'une saison vont de 1 (janvier) à 12 (décembre).",
     "sourcedocument_year_plausible": "L'année de la source n'est pas plausible.",
     "animal_initial_weight_positive": "Le poids initial doit être strictement positif.",
     "composition_value_non_negative": "Une teneur ne peut pas être négative.",

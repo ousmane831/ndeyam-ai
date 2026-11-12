@@ -21,6 +21,7 @@ env = environ.Env(
     DB_PORT=(int, 5432),
     JWT_ACCESS_MINUTES=(int, 15),
     JWT_REFRESH_DAYS=(int, 7),
+    FORMULA_REVIEW_DEADLINE_HOURS=(int, 48),
     LLM_PROVIDER=(str, "none"),
     LLM_MODEL=(str, ""),
     LLM_API_KEY=(str, ""),
@@ -71,6 +72,7 @@ LOCAL_APPS = [
     "alerts",
     "knowledge_base",
     "assistant",
+    "seasons",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -254,3 +256,8 @@ LOGGING = {
     "root": {"handlers": ["console"], "level": "INFO"},
     "loggers": {"django.db.backends": {"level": "WARNING"}},
 }
+
+# --- Vérification des rations ------------------------------------------------------------------
+# Délai de réponse convenu avec les experts : au-delà, l'alerte passe en « en retard » et les administrateurs
+# de la plateforme sont relancés (ils peuvent valider ou trouver un autre expert).
+FORMULA_REVIEW_DEADLINE_HOURS = env("FORMULA_REVIEW_DEADLINE_HOURS")

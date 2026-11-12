@@ -50,4 +50,4 @@ class FarmObjectPermission(BasePermission):
             view, "review_actions", ()
         ):
             return can_read_farm(request.user, farm)
-        return can_write_farm(request.user, farm)
+        return getattr(view, "write_access", can_write_farm)(request.user, farm)

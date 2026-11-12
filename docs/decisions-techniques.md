@@ -365,3 +365,29 @@ Retour client : toucher l'Afrique de l'Ouest anglophone, puis les langues locale
   chemins de code) plutôt qu'avec gettext, qui ne couvrirait pas l'historique. Les données saisies ne sont jamais
   traduites.
 - **Wolof** : pas de traduction automatique ; à faire avec des locuteurs (textes relus, messages audio).
+
+## DT-73 — Spécialistes invités : chacun agit dans son domaine
+Retour client : « qui valide une ration ? ». Le rôle « expert invité » unique est remplacé par trois rôles de
+membre : nutritionniste / zootechnicien (`EXPERT`, seul à valider les rations, compte Expert), vétérinaire
+(`VETERINARIAN`, observations, compte Expert) et technicien d'élevage (`TECHNICIAN`, pesées et observations).
+Les droits sont centralisés dans `farms/access.py` (`can_record_weighings`, `can_record_observations`,
+`can_review_rations`) ; une vue peut élargir l'écriture à un domaine (`write_access`).
+
+## DT-74 — Module « Saison » sans règle inventée
+Retour client : chaleur, saison sèche, prix et disponibilité qui changent. Application `seasons` : calendrier
+indicatif (dates, pas de valeurs nutritionnelles), disponibilité déclarée par l'exploitation (signalée, jamais
+imposée), prix habituels de saison (prioritaires dans le calcul), références de besoins par saison et conseils de
+saison soumis au circuit de validation habituel (source obligatoire, jamais montrés avant validation ; les exemples
+DEMO restent dans les exploitations DEMO). Sans données validées, le calcul est celui de toute l'année.
+
+## DT-75 — Rations types validées : la sécurité sans l'attente
+Retour client : la validation au cas par cas ralentit l'éleveur. Une ration type (`RationTemplate`) fige ce que
+l'expert valide : la part de chaque aliment dans la matière sèche et l'ingestion de MS par animal, pour un cas
+(espèce, catégorie, stade, objectif, saison, tranche de poids). L'appliquer ne fait que des conversions avec les
+données de l'exploitation (MS validée, prix du jour, mêmes règles que le calcul) ; la formule obtenue est validée
+d'emblée et rattachée à la ration type (traçabilité : qui a validé, quand, source). Hors de son cas, refus.
+
+## DT-76 — Délai de vérification convenu et relances
+`FORMULA_REVIEW_DEADLINE_HOURS` (48 h par défaut). La demande est datée (`review_requested_at`) ; l'alerte de
+l'exploitation indique la réponse attendue, puis devient « Vérification en retard » (critique) ; les administrateurs
+reçoivent une relance groupée. Les alertes se résolvent automatiquement à la décision de l'expert.

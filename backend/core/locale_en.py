@@ -6,6 +6,75 @@ Les modèles utilisent les noms de groupes entre accolades ; les accolades litt�
 """
 
 EXACT = {
+    # --- Rations types et délai de vérification -------------------------------------------------------
+    "Le poids minimal doit être strictement positif.": "The minimum weight must be greater than zero.",
+    "La matière sèche par animal et par jour doit être strictement positive.": (
+        "The dry matter per animal per day must be greater than zero."
+    ),
+    "La part d'un aliment dans la matière sèche doit être comprise entre 0 et 100 %.": (
+        "A feed's share of the dry matter must be between 0 and 100%."
+    ),
+    "Ration type appliquée": "Ration template applied",
+    "Ration type": "Ration template",
+    "rations types": "ration templates",
+    "aliments de la ration type": "ration template feeds",
+    "Indiquez au moins un aliment.": "Give at least one feed.",
+    "Le poids maximal doit être supérieur au poids minimal.": (
+        "The maximum weight must be higher than the minimum weight."
+    ),
+    "Choisissez un lot ou un animal.": "Choose a group or an animal.",
+    "Une ration type DEMO ne s'applique qu'à une exploitation DEMO, et inversement.": (
+        "A DEMO ration template only applies to a DEMO farm, and vice versa."
+    ),
+    (
+        "Cette ration type ne correspond pas au profil de ces animaux (espèce, catégorie, stade, "
+        "objectif, saison ou tranche de poids)."
+    ): (
+        "This ration template does not match these animals (species, category, stage, objective, "
+        "season or weight range)."
+    ),
+    "Seule une formule validée par un expert peut devenir une ration type.": (
+        "Only a formula validated by an expert can become a ration template."
+    ),
+    "La formule doit indiquer la matière sèche de chaque aliment et l'ingestion.": (
+        "The formula must state the dry matter of each feed and the intake."
+    ),
+    "Seul un nutritionniste / zootechnicien de l'exploitation peut créer une ration type.": (
+        "Only a nutritionist / animal scientist of the farm can create a ration template."
+    ),
+    "Ration type DEMO (jamais validée).": "DEMO ration template (never validated).",
+    "Certains prix sont inconnus : le coût n'est pas calculé.": (
+        "Some prices are unknown: the cost is not calculated."
+    ),
+    "saison sèche fraîche": "cool dry season",
+    "saison sèche chaude (soudure)": "hot dry season (lean period)",
+    "hivernage": "rainy season",
+    # --- Saisons (seasons) ---------------------------------------------------------------------------------
+    "Saison sèche fraîche": "Cool dry season",
+    "Saison sèche chaude (soudure)": "Hot dry season (lean period)",
+    "Hivernage": "Rainy season",
+    "Novembre à février : après les récoltes, fanes et résidus de culture encore disponibles.": (
+        "November to February: after the harvest, haulms and crop residues are still available."
+    ),
+    "Mars à juin : forte chaleur, fourrages rares et plus chers, période de soudure.": (
+        "March to June: intense heat, forage scarce and more expensive, lean period."
+    ),
+    "Juillet à octobre : saison des pluies, herbe verte disponible, humidité.": (
+        "July to October: rainy season, green grass available, humidity."
+    ),
+    "Abondant": "Plentiful",
+    "Disponible": "Available",
+    "Rare": "Scarce",
+    "Indisponible": "Unavailable",
+    "Eau": "Water",
+    "Horaires": "Feeding times",
+    "Abri et ombre": "Shelter and shade",
+    "saisons": "seasons",
+    "disponibilités saisonnières": "seasonal availability",
+    "conseils de saison": "seasonal advice",
+    "Les mois d'une saison vont de 1 (janvier) à 12 (décembre).": (
+        "Season months run from 1 (January) to 12 (December)."
+    ),
     # --- Erreurs génériques de l'API (core/exceptions.py, core/permissions.py, core/viewsets.py) ------------
     "Les données envoyées sont invalides.": "The data sent is invalid.",
     "Ressource introuvable.": "Resource not found.",
@@ -135,11 +204,11 @@ EXACT = {
         "The farm owner cannot be changed here."
     ),
     "Le rôle est obligatoire.": "The role is required.",
-    "Seul un compte de type Expert peut être invité comme expert.": (
-        "Only an Expert account can be invited as an expert."
+    "Seul un compte de type Expert peut être invité comme nutritionniste ou vétérinaire.": (
+        "Only an Expert account can be invited as a nutritionist or a veterinarian."
     ),
-    "Un compte Expert ne peut être invité qu'en lecture seule (rôle Expert).": (
-        "An Expert account can only be invited as read-only (Expert role)."
+    "Un compte Expert ne peut pas être gestionnaire : invitez-le comme spécialiste.": (
+        "An Expert account cannot be a manager: invite them as a specialist."
     ),
     "Seuls les éleveurs et les administrateurs peuvent créer une exploitation.": (
         "Only farmers and administrators can create a farm."
@@ -153,7 +222,11 @@ EXACT = {
     # Rôles dans une exploitation
     "Propriétaire": "Owner",
     "Gestionnaire": "Manager",
-    "Expert invité (lecture seule)": "Invited expert (read-only)",
+    "Nutritionniste / zootechnicien (vérifie les rations)": (
+        "Nutritionist / animal scientist (reviews rations)"
+    ),
+    "Vétérinaire (santé)": "Veterinarian (health)",
+    "Technicien d'élevage (pesées, suivi)": "Livestock technician (weighings, monitoring)",
     # --- Animaux, lots, observations (animals) --------------------------------------------------------------
     "La race ne correspond pas à l'espèce choisie.": "The breed does not match the chosen species.",
     "La catégorie ne correspond pas à l'espèce choisie.": "The category does not match the chosen species.",
@@ -649,13 +722,6 @@ EXACT = {
     "Réglages de suivi propres à l'exploitation, pas des recommandations zootechniques.": (
         "Monitoring settings specific to the farm, not zootechnical recommendations."
     ),
-    (
-        "Cette formule a été soumise à un expert. Elle ne doit pas être considérée comme validée "
-        "tant que l'expert ne s'est pas prononcé."
-    ): (
-        "This formula has been submitted to an expert. It must not be considered validated until the "
-        "expert has decided."
-    ),
     "aucune distribution enregistrée": "no feeding recorded",
     "automatique : condition plus remplie": "automatic: condition no longer met",
     "Cette règle concerne uniquement les experts (plateforme).": (
@@ -847,6 +913,61 @@ _GROWTH_EN = (
 )
 
 PATTERNS = [
+    (
+        r"Cette formule a été soumise à un expert\. Elle ne doit pas être considérée comme validée "
+        r"tant que l'expert ne s'est pas prononcé\. Réponse attendue avant le (?P<due>.+)\.",
+        "This formula has been submitted to an expert. It must not be considered validated until the "
+        "expert has decided. Answer expected by {due}.",
+    ),
+    (
+        r"Vérification en retard : (?P<name>.+)",
+        "Review overdue: {name}",
+    ),
+    (
+        r"Le délai de réponse convenu \((?P<hours>\d+) h\) est dépassé depuis le (?P<due>.+?)\. "
+        r"Les administrateurs de la plateforme ont été relancés\. Vous pouvez aussi inviter un "
+        r"autre nutritionniste ou zootechnicien, ou utiliser une ration type validée\.",
+        "The agreed response time ({hours} h) has been exceeded since {due}. The platform administrators "
+        "have been reminded. You can also invite another nutritionist or animal scientist, or use a "
+        "validated ration template.",
+    ),
+    (
+        r"(?P<count>\d+) vérification\(s\) de ration en retard",
+        "{count} overdue ration review(s)",
+    ),
+    (
+        r"Délai de réponse dépassé pour : (?P<farms>.+?)\. Validez la ou les formules, ou trouvez un autre "
+        r"nutritionniste / zootechnicien\.",
+        "Response time exceeded for: {farms}. Validate the formula(s), or find another nutritionist / "
+        "animal scientist.",
+    ),
+    (
+        r"(?P<day>\d{2}/\d{2}/\d{4}) à (?P<time>\d{2}:\d{2})",
+        "{day} at {time}",
+    ),
+    (
+        r"Ration type validée « (?P<name>.+) »",
+        "Validated ration template “{name}”",
+    ),
+    (
+        r"Teneur en matière sèche validée inconnue pour : (?P<names>.+)\. La ration type ne peut pas être "
+        r"convertie en quantités pour cette exploitation\.",
+        "Validated dry matter content unknown for: {names}. The ration template cannot be converted into "
+        "quantities for this farm.",
+    ),
+    (
+        r"« (?P<name>.+) » est déclaré rare en (?P<season>.+)\.",
+        "“{name}” is reported as scarce in the {season}.",
+    ),
+    (
+        r"« (?P<name>.+) » est déclaré indisponible en (?P<season>.+)\.",
+        "“{name}” is reported as unavailable in the {season}.",
+    ),
+    (
+        r"Prix de « (?P<name>.+) » : prix habituel déclaré pour la saison "
+        r"\((?P<price>[\d.,]+) par kg brut\)\.",
+        "Price of “{name}”: usual price declared for the season ({price} per kg as fed).",
+    ),
     # --- Erreurs génériques ---------------------------------------------------------------------------------
     (
         r"Suppression impossible : cet élément est encore utilisé \((?P<what>.+)\)\.",

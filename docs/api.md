@@ -224,3 +224,28 @@ Voir [architecture-ia.md](architecture-ia.md#2-assistant-conversationnel--étape
 ## Santé
 
 `GET /health/` (public) : état de PostgreSQL et configuration de l'assistant (sans jamais exposer de clé).
+
+## Saisons et spécialistes
+
+| Ressource | Route | Notes |
+|---|---|---|
+| Saisons | `GET /seasons/`, `GET /seasons/current/?farm=&date=` | Calendrier ; saison en cours, suivante, conseils visibles (validés ; DEMO pour une exploitation DEMO) |
+| Disponibilité saisonnière | `/ingredient-availability/` | Par exploitation, ingrédient et saison : `ABUNDANT`, `AVAILABLE`, `SCARCE`, `UNAVAILABLE` |
+| Conseils de saison | `/seasonal-advice/` | Experts et administrateurs ; circuit de validation (`submit`, `validate`, `reject`, `revert`) ; source obligatoire pour valider |
+| Prix | `/ingredient-prices/` | Champ `season` (prix habituel de la saison) ; `?latest=true` ne renvoie que les prix relevés, `?season=` les prix de saison |
+| Références | `/references/` | Champ `season` : besoins propres à une saison |
+| Calcul | `POST /formulas/calculate/` | `season` (par défaut la saison en cours) : prix de saison prioritaire, disponibilité signalée, référence de saison retenue ; `season`/`season_name` sur la formule |
+| Membres | `/farms/{id}/members/` | Rôles `MANAGER`, `EXPERT` (nutritionniste / zootechnicien : valide les rations), `VETERINARIAN` (observations), `TECHNICIAN` (pesées, observations) |
+
+## Rations types et délai de vérification
+
+| Ressource | Route | Notes |
+|---|---|---|
+| Rations types | `/ration-templates/` | Experts et administrateurs ; circuit de validation (source obligatoire). Éleveurs : rations validées (et DEMO) seulement |
+| Rations applicables | `GET /ration-templates/matching/?farm=&group=\|animal=&objective=&season=` | Profil du lot (valeurs les plus fréquentes, poids moyen) ou de l'animal |
+| Appliquer | `POST /ration-templates/{id}/apply/ {farm, group\|animal, objective?, season?, name?}` | Formule `mode=TEMPLATE`, `VALIDATED` d'emblée (sauf DEMO) ; 400 hors du cas de la ration type ou sans matière sèche validée |
+| Depuis une formule | `POST /ration-templates/from-formula/ {formula, name, weight_min_kg, weight_max_kg, conditions?}` | Nutritionniste de l'exploitation ; formule validée ; brouillon à valider |
+| Formules | `/formulas/` | `review_requested_at`, `review_due_at`, `review_overdue`, `template`, `template_name` |
+
+Le délai se règle par `FORMULA_REVIEW_DEADLINE_HOURS` (48 par défaut). Planifier `evaluate_alerts` au moins toutes
+les heures pour que les retards soient signalés à temps.

@@ -226,9 +226,9 @@ class CompositionViewSet(ValidationWorkflowMixin, viewsets.ModelViewSet):
 
 
 class IngredientPriceViewSet(FarmScopedViewSet):
-    queryset = IngredientPrice.objects.select_related("ingredient", "farm")
+    queryset = IngredientPrice.objects.select_related("ingredient", "farm", "season")
     serializer_class = IngredientPriceSerializer
-    filterset_fields = ["ingredient", "currency", "is_demo"]
+    filterset_fields = ["ingredient", "currency", "is_demo", "season"]
     ordering_fields = ["valid_from", "price_per_kg_as_fed"]
     ordering = ["-valid_from", "-created_at"]
     activity_prefix = "price"
@@ -236,7 +236,10 @@ class IngredientPriceViewSet(FarmScopedViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         if self.request.query_params.get("latest") == "true":
-            # Dernier prix connu de chaque ingrédient, par exploitation.
+            # Dernier prix RELEVÉ de chaque ingrédient, par exploitation (les prix habituels de saison
+            # se consultent avec ?season=…).
+            if not self.request.query_params.get("season"):
+                qs = qs.filter(season__isnull=True)
             qs = qs.order_by("farm_id", "ingredient_id", "-valid_from", "-created_at").distinct(
                 "farm_id", "ingredient_id"
             )

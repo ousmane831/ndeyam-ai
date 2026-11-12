@@ -54,14 +54,20 @@ def match_reference(
     objective=None,
     weight_kg=None,
     age_months=None,
+    season=None,
 ):
-    """Référence la plus spécifique applicable au profil. Une borne de poids ou d'âge exige la donnée."""
+    """
+    Référence la plus spécifique applicable au profil. Une borne de poids ou d'âge exige la donnée.
+    Saison : une référence propre à une saison (ex. chaleur) n'est retenue que pour cette saison ;
+    une référence sans saison vaut toute l'année.
+    """
     qs = _reference_pool(demo).filter(species=species)
     for field, value in (
         ("breed", breed),
         ("category", category),
         ("physiological_stage", stage),
         ("objective", objective),
+        ("season", season),
     ):
         qs = (
             qs.filter(Q(**{f"{field}__isnull": True}) | Q(**{field: value}))
@@ -87,6 +93,7 @@ def match_reference(
                 ref.category_id,
                 ref.physiological_stage_id,
                 ref.objective_id,
+                ref.season_id,
                 ref.weight_min_kg,
                 ref.weight_max_kg,
                 ref.age_min_months,
@@ -102,7 +109,7 @@ def _float(value):
     return float(value) if value is not None else None
 
 
-def build_problem(*, farm, reference, mode, entries, number_of_animals=None, duration_days=None):
+def build_problem(*, farm, reference, mode, entries, number_of_animals=None, duration_days=None, season=None):
     """`entries` : liste de dicts {ingredient, price_per_kg_as_fed?, available_kg_as_fed?}."""
     demo = farm.is_demo
     warnings = []
@@ -140,12 +147,27 @@ def build_problem(*, farm, reference, mode, entries, number_of_animals=None, dur
         bucket = by_ingredient.setdefault(comp.ingredient_id, {})
         bucket.setdefault(comp.nutrient_id, comp)  # une seule valeur par nutriment (validée en priorité)
 
+    # Prix : le prix habituel déclaré pour la saison s'il existe, sinon le dernier prix relevé (sans saison).
     prices = {}
     price_qs = IngredientPrice.objects.filter(
         farm=farm, ingredient_id__in=ingredient_ids, valid_from__lte=timezone.localdate(), is_demo=demo
-    )
-    for price in price_qs.order_by("ingredient_id", "-valid_from", "-created_at"):
-        prices.setdefault(price.ingredient_id, price)
+    ).filter(Q(season__isnull=True) | Q(season=season) if season is not None else Q(season__isnull=True))
+    for price in price_qs.order_by("ingredient_id", "season_id", "-valid_from", "-created_at"):
+        current = prices.get(price.ingredient_id)
+        if current is None or (price.season_id is not None and current.season_id is None):
+            prices[price.ingredient_id] = price
+
+    # Disponibilité déclarée pour la saison : signalée, jamais imposée (l'éleveur a choisi ses aliments).
+    if season is not None:
+        from seasons.models import AvailabilityLevel, IngredientAvailability
+
+        for availability in IngredientAvailability.objects.filter(
+            farm=farm, season=season, ingredient_id__in=ingredient_ids, level__in=["SCARCE", "UNAVAILABLE"]
+        ).select_related("ingredient"):
+            label = "rare" if availability.level == AvailabilityLevel.SCARCE else "indisponible"
+            warnings.append(
+                f"« {availability.ingredient.name} » est déclaré {label} en {season.name.lower()}."
+            )
 
     ingredients = []
     for entry in entries:
@@ -179,6 +201,11 @@ def build_problem(*, farm, reference, mode, entries, number_of_animals=None, dur
         price_value, currency, price_is_demo = entry.get("price_per_kg_as_fed"), "XOF", demo
         if price_value is None and ing.pk in prices:
             price_value, currency = prices[ing.pk].price_per_kg_as_fed, prices[ing.pk].currency
+            if prices[ing.pk].season_id is not None:
+                warnings.append(
+                    f"Prix de « {ing.name} » : prix habituel déclaré pour la saison "
+                    f"({price_value} par kg brut)."
+                )
         elif price_value is not None:
             warnings.append(f"Prix de « {ing.name} » saisi pour ce calcul ({price_value} par kg brut).")
 
@@ -284,6 +311,7 @@ def run_formulation(
     notes="",
     save=True,
     extra_warnings=(),
+    season=None,
 ):
     profile = profile or {}
     pre_warnings = list(extra_warnings)
@@ -297,6 +325,7 @@ def run_formulation(
             objective=profile.get("objective"),
             weight_kg=profile.get("weight_kg"),
             age_months=profile.get("age_months"),
+            season=season,
         )
         if reference is not None:
             pre_warnings.append(f"Référence retenue automatiquement : « {reference.name} ».")
@@ -331,6 +360,7 @@ def run_formulation(
             entries=entries,
             number_of_animals=number_of_animals,
             duration_days=duration_days,
+            season=season,
         )
         result = formulate(problem).to_dict()
         result["warnings"] = pre_warnings + warnings + result["warnings"]
@@ -350,6 +380,7 @@ def run_formulation(
     result["profile"] = {
         k: (getattr(v, "pk", v) if not isinstance(v, Decimal) else str(v)) for k, v in profile.items()
     }
+    result["season"] = {"id": season.pk, "name": season.name, "is_hot": season.is_hot} if season else None
     if farm.is_demo:
         result["warnings"].insert(
             0,
@@ -371,6 +402,7 @@ def run_formulation(
             is_demo=farm.is_demo,
             animal=animal,
             group=group,
+            season=season,
             animal_weight_kg=profile.get("weight_kg"),
             animal_age_months=profile.get("age_months"),
             physiological_stage=profile.get("physiological_stage"),
@@ -520,8 +552,16 @@ def offline_pack(farm):
     )
     entries = [{"ingredient": i} for i in ingredients]
     references = []
+    from seasons.models import Season
+
+    # Paquet préparé pour la saison en cours (prix de saison, disponibilités, besoins propres à la saison).
+    season = Season.for_date(timezone.localdate())
     for ref in _reference_pool(farm.is_demo).select_related("species", "system", "source"):
-        problem, warnings, _prices = build_problem(farm=farm, reference=ref, mode="ECONOMIC", entries=entries)
+        if ref.season_id is not None and ref.season_id != getattr(season, "pk", None):
+            continue  # référence d'une autre saison : inutile hors ligne pendant cette saison
+        problem, warnings, _prices = build_problem(
+            farm=farm, reference=ref, mode="ECONOMIC", entries=entries, season=season
+        )
         references.append(
             {
                 "id": ref.pk,
@@ -532,6 +572,7 @@ def offline_pack(farm):
                     "category": ref.category_id,
                     "physiological_stage": ref.physiological_stage_id,
                     "objective": ref.objective_id,
+                    "season": ref.season_id,
                     "weight_min_kg": _float(ref.weight_min_kg),
                     "weight_max_kg": _float(ref.weight_max_kg),
                     "age_min_months": _float(ref.age_min_months),
@@ -565,6 +606,7 @@ def offline_pack(farm):
     return {
         "farm": farm.pk,
         "is_demo": farm.is_demo,
+        "season": {"id": season.pk, "name": season.name, "is_hot": season.is_hot} if season else None,
         "generated_at": timezone.now().isoformat(),
         "engine_version": ENGINE_VERSION,
         "ingredients": [

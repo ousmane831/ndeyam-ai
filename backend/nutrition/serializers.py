@@ -230,6 +230,8 @@ class IngredientPriceSerializer(ModelCleanMixin, serializers.ModelSerializer):
     farm = WritableFarmField()
     ingredient_name = serializers.CharField(source="ingredient.name", read_only=True)
 
+    season_name = serializers.CharField(source="season.name", read_only=True, default=None)
+
     class Meta:
         model = IngredientPrice
         fields = [
@@ -240,6 +242,8 @@ class IngredientPriceSerializer(ModelCleanMixin, serializers.ModelSerializer):
             "price_per_kg_as_fed",
             "currency",
             "valid_from",
+            "season",
+            "season_name",
             "supplier",
             "location",
             "quantity_available_kg",
@@ -334,6 +338,7 @@ class ReferenceSerializer(ModelCleanMixin, ReadOnlyStatusSerializerMixin, serial
         source="physiological_stage.name", read_only=True, default=None
     )
     objective_name = serializers.CharField(source="objective.name", read_only=True, default=None)
+    season_name = serializers.CharField(source="season.name", read_only=True, default=None)
     requirements = RequirementSerializer(many=True, read_only=True)
 
     class Meta:
@@ -351,6 +356,8 @@ class ReferenceSerializer(ModelCleanMixin, ReadOnlyStatusSerializerMixin, serial
             "physiological_stage_name",
             "objective",
             "objective_name",
+            "season",
+            "season_name",
             "system",
             "system_code",
             "age_min_months",

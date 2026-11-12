@@ -50,6 +50,9 @@ export function fakeFarm(overrides: Partial<FarmContextValue> = {}): FarmContext
     writableFarms: writable,
     defaultWritableFarmId: writable[0]?.id ?? null,
     canWrite: (id: number) => writable.some((f) => f.id === id),
+    canWeigh: (id: number) => writable.some((f) => f.id === id),
+    canObserve: (id: number) => writable.some((f) => f.id === id),
+    canReviewRations: () => false,
     ...overrides,
   }
 }

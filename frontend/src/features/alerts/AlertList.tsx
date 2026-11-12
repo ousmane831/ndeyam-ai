@@ -4,6 +4,7 @@ import { AlertTriangle, Bell, CheckCircle2, Eye, Info, Scale, XCircle } from 'lu
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { AlertTypeIcon } from '@/components/icons/DomainIcons'
 import { Button } from '@/components/ui/Button'
 import { Alert as Notice, Badge, EmptyState } from '@/components/ui/Feedback'
 import { alertService } from '@/services/alerts'
@@ -60,7 +61,11 @@ export function AlertList({ alerts, canAct, emptyTitle }: { alerts: Alert[]; can
           const open = a.status === 'OPEN' || a.status === 'ACKNOWLEDGED'
           return (
             <li key={a.id} className="flex gap-3 py-4 first:pt-0 last:pb-0">
-              <span className={clsx('mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full', severity.tone)}>{severity.icon}</span>
+              {/* Pictogramme du type d'alerte (balance = pesée…), coloré selon la gravité */}
+              <span className={clsx('relative mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-full', severity.tone)} title={t(a.severity_label)}>
+                <AlertTypeIcon type={a.alert_type} className="size-5" />
+                <span className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full bg-white ring-1 ring-slate-200 [&>svg]:size-3.5">{severity.icon}</span>
+              </span>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="font-medium text-slate-800">{a.title}</p>

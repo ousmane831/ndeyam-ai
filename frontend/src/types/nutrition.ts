@@ -100,6 +100,9 @@ export interface IngredientPrice {
   quantity_available_kg: string | null
   notes: string
   is_demo: boolean
+  /** Prix habituel pour une saison (vide : prix relevé à la date indiquée). */
+  season?: number | null
+  season_name?: string | null
 }
 
 export interface Requirement {

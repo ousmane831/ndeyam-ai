@@ -76,7 +76,7 @@ export function AnimalDetailPage() {
   const animalId = Number(id)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { canWrite } = useFarm()
+  const { canWrite, canWeigh, canObserve } = useFarm()
   const [params] = useSearchParams()
   // Lien direct vers un onglet (ex. un rappel de pesée ouvre « Pesées et croissance »).
   const [tab, setTab] = useState<TabId>(params.get('onglet') === 'pesees' ? 'weighings' : 'general')
@@ -207,10 +207,10 @@ export function AnimalDetailPage() {
           </details>
         </Card>
       )}
-      {tab === 'weighings' && <WeighingsTab animal={a} canWrite={writable} />}
+      {tab === 'weighings' && <WeighingsTab animal={a} canWrite={canWeigh(a.farm)} />}
       {tab === 'feeding' && <FeedingHistoryTab animalId={a.id} />}
       {tab === 'rations' && <RationsTab animalId={a.id} />}
-      {tab === 'observations' && <ObservationsTab animalId={a.id} canWrite={writable} />}
+      {tab === 'observations' && <ObservationsTab animalId={a.id} canWrite={canObserve(a.farm)} />}
       {tab === 'alerts' && (
         <Card title={t('Alertes et rappels ouverts')}>
           <p className="mb-4 text-xs text-slate-500">

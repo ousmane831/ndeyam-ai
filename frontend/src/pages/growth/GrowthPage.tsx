@@ -217,11 +217,13 @@ function GroupGrowthTable({ groupId }: { groupId: number }) {
 export function GrowthPage() {
   const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
-  const { selectedFarmId, writableFarms, canWrite } = useFarm()
+  const { selectedFarmId, farms, canWeigh } = useFarm()
   const groups = useQuery({ queryKey: ['groups', selectedFarmId], queryFn: () => groupService.list(selectedFarmId) })
   const groupId = params.get('lot') ? Number(params.get('lot')) : null
   const group = useMemo(() => groups.data?.results.find((g) => g.id === groupId), [groups.data, groupId])
-  const sessionAllowed = group ? canWrite(group.farm) : writableFarms.length > 0 && selectedFarmId !== null && canWrite(selectedFarmId)
+  // Séance de pesée : propriétaire, gestionnaire ou technicien d'élevage de l'exploitation.
+  const sessionAllowed = group ? canWeigh(group.farm) : farms.length > 0 && selectedFarmId !== null && canWeigh(selectedFarmId)
+  const canWeighSomewhere = farms.some((f) => canWeigh(f.id))
 
   return (
     <div className="space-y-6">
@@ -252,13 +254,13 @@ export function GrowthPage() {
           <WeighingSession groupId={groupId} farmId={group ? group.farm : selectedFarmId} />
         ) : (
           <EmptyState icon={<TrendingUp className="size-10" />} title={t('Choisissez un lot pour démarrer une séance de pesée')}>
-            {writableFarms.length === 0
+            {!canWeighSomewhere
               ? t('Votre accès est en lecture seule.')
               : t('Sélectionnez un lot ci-dessus (ou une exploitation dans le menu du haut) pour saisir les poids de plusieurs animaux à la même date.')}
           </EmptyState>
         )}
       </Card>
-      {!groupId && writableFarms.length > 0 && (
+      {!groupId && canWeighSomewhere && (
         <p className="text-sm text-slate-500">
           {t('Astuce : créez des lots dans')}{' '}
           <Link to="/troupeaux" className="text-brand-700 hover:underline">

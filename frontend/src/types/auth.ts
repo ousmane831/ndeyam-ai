@@ -1,5 +1,5 @@
 export type UserRole = 'ADMIN' | 'ELEVEUR' | 'EXPERT'
-export type MembershipRole = 'OWNER' | 'MANAGER' | 'EXPERT'
+export type MembershipRole = 'OWNER' | 'MANAGER' | 'EXPERT' | 'VETERINARIAN' | 'TECHNICIAN'
 
 export interface MembershipSummary {
   farm_id: number

@@ -48,7 +48,16 @@ class Farm(TimeStampedModel):
 class MembershipRole(models.TextChoices):
     OWNER = "OWNER", "Propriétaire"
     MANAGER = "MANAGER", "Gestionnaire"
-    EXPERT = "EXPERT", "Expert invité (lecture seule)"
+    # Spécialistes invités : chacun n'agit que dans son domaine, le reste en lecture seule.
+    EXPERT = "EXPERT", "Nutritionniste / zootechnicien (vérifie les rations)"
+    VETERINARIAN = "VETERINARIAN", "Vétérinaire (santé)"
+    TECHNICIAN = "TECHNICIAN", "Technicien d'élevage (pesées, suivi)"
+
+
+# Qui peut faire quoi dans une exploitation (en plus du propriétaire, du gestionnaire et de l'administrateur).
+WEIGHING_ROLES = ("OWNER", "MANAGER", "TECHNICIAN")
+OBSERVATION_ROLES = ("OWNER", "MANAGER", "TECHNICIAN", "VETERINARIAN")
+RATION_REVIEW_ROLES = ("EXPERT",)
 
 
 class FarmMembership(TimeStampedModel):

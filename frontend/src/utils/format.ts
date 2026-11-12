@@ -68,3 +68,8 @@ export function todayIso(): string {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
+
+/** Mois en cours (1 à 12). */
+export function currentMonth(): number {
+  return new Date().getMonth() + 1
+}

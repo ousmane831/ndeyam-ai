@@ -27,6 +27,7 @@ api_v1 = [
     path("", include("alerts.urls")),
     path("", include("knowledge_base.urls")),
     path("", include("assistant.urls")),
+    path("", include("seasons.urls")),
 ]
 
 urlpatterns = [

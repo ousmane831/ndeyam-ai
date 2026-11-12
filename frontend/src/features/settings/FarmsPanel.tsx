@@ -26,7 +26,7 @@ type FarmValues = z.infer<typeof farmSchema>
 
 const memberSchema = z.object({
   email: z.email(tk('Saisissez une adresse e-mail valide.')),
-  role: z.enum(['MANAGER', 'EXPERT']),
+  role: z.enum(['MANAGER', 'EXPERT', 'VETERINARIAN', 'TECHNICIAN']),
 })
 type MemberValues = z.infer<typeof memberSchema>
 
@@ -160,7 +160,7 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
           <form onSubmit={onAdd} noValidate className="space-y-3 border-t border-slate-100 pt-4">
             <p className="text-sm font-medium text-slate-800">{t('Inviter un membre')}</p>
             <p className="text-xs text-slate-500">
-              {t('La personne doit déjà avoir un compte. Un expert obtient un accès en lecture seule ; un gestionnaire peut modifier les données.')}
+              {t('La personne doit déjà avoir un compte. Le gestionnaire peut modifier les données ; chaque spécialiste agit dans son domaine et consulte le reste.')}
             </p>
             {serverError && <Alert tone="error">{serverError}</Alert>}
             <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
@@ -168,7 +168,9 @@ function MembersModal({ farm, open, onClose }: { farm: Farm; open: boolean; onCl
               <SelectField
                 label={t('Rôle')}
                 options={[
-                  { value: 'EXPERT', label: t('Expert (lecture seule)') },
+                  { value: 'EXPERT', label: t('Nutritionniste / zootechnicien (vérifie les rations)') },
+                  { value: 'VETERINARIAN', label: t('Vétérinaire (santé)') },
+                  { value: 'TECHNICIAN', label: t("Technicien d'élevage (pesées, suivi)") },
                   { value: 'MANAGER', label: t('Gestionnaire') },
                 ]}
                 error={errors.role?.message}

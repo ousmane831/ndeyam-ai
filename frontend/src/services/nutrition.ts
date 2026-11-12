@@ -66,9 +66,9 @@ export const compositionService = {
 }
 
 export const priceService = {
-  list: async (params: { farm?: number | null; ingredient?: number; latest?: boolean }) =>
+  list: async (params: { farm?: number | null; ingredient?: number; latest?: boolean; season?: number | null }) =>
     (await api.get<Paginated<IngredientPrice>>('/ingredient-prices/', {
-      params: cleanParams({ farm: params.farm, ingredient: params.ingredient, latest: params.latest ? 'true' : undefined, page_size: 100 }),
+      params: cleanParams({ farm: params.farm, ingredient: params.ingredient, latest: params.latest ? 'true' : undefined, season: params.season ?? undefined, page_size: 100 }),
     })).data.results,
   create: async (payload: Record<string, unknown>) => (await api.post<IngredientPrice>('/ingredient-prices/', payload)).data,
   remove: async (id: number) => {

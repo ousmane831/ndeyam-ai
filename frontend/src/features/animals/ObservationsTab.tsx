@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { MessageSquarePlus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ObservationIcon } from '@/components/icons/DomainIcons'
 import { Button } from '@/components/ui/Button'
 import { Alert, Badge, Card, EmptyState } from '@/components/ui/Feedback'
 import { SelectField, TextField } from '@/components/ui/Field'
@@ -109,7 +110,10 @@ export function ObservationsTab({ animalId, canWrite }: { animalId: number; canW
           <ul className="divide-y divide-slate-100">
             {observations.data.map((o) => (
               <li key={o.id} className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
-                <div className="min-w-0">
+                <span className={o.kind === 'HEALTH' ? 'flex size-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-700' : 'flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700'} title={t(o.kind_label)}>
+                  <ObservationIcon kind={o.kind} />
+                </span>
+                <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                     <span>{formatDate(o.observed_on)}</span>
                     <Badge>{t(o.kind_label)}</Badge>

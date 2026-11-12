@@ -78,6 +78,7 @@ ACTION_LABELS.update(
         "animal.observation_added": "Observation ajoutée",
         "weighing.bulk_created": "Séance de pesée",
         "formula.calculated": "Formule calculée",
+        "formula.from_template": "Ration type appliquée",
         "formula.pending_review": "Formule soumise à un expert",
         "formula.validated": "Formule validée par un expert",
         "formula.rejected": "Formule rejetée par un expert",

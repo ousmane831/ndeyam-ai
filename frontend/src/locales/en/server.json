@@ -24,7 +24,6 @@
   "Estimation mathématique": "Mathematical estimate",
   "Estimation visuelle": "Visual estimate",
   "Expert": "Expert",
-  "Expert invité (lecture seule)": "Invited expert (read only)",
   "Femelle": "Female",
   "Fibres": "Fibre",
   "Formulation à vérifier": "Formula to review",
@@ -123,5 +122,9 @@
   "Dernier GMD mesuré en dehors d'une plage de suivi validée par un expert.": "Latest measured ADG outside a monitoring range validated by an expert.",
   "Formule en attente de vérification par un expert.": "Formula awaiting expert review.",
   "Informations d'un animal nécessaires au suivi et à la formulation.": "Animal information needed for monitoring and formulation.",
-  "Ration en cours sans distribution enregistrée depuis le délai choisi.": "Ongoing ration with no feeding recorded within the chosen period."
+  "Ration en cours sans distribution enregistrée depuis le délai choisi.": "Ongoing ration with no feeding recorded within the chosen period.",
+  "Nutritionniste / zootechnicien (vérifie les rations)": "Nutritionist / animal scientist (reviews rations)",
+  "Vétérinaire (santé)": "Veterinarian (health)",
+  "Technicien d'élevage (pesées, suivi)": "Livestock technician (weighings, monitoring)",
+  "Ration type": "Ration template"
 }

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { farmService } from '@/services/farms'
+import type { MembershipRole } from '@/types/auth'
 import { FarmContext, type FarmContextValue } from './farm-context'
 
 const STORAGE_KEY = 'ndeyam.selectedFarm'
@@ -39,6 +40,12 @@ export function FarmProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo<FarmContextValue>(() => {
+    // Rôle de l'utilisateur dans une exploitation ; l'administrateur de la plateforme peut tout faire.
+    const hasRole = (farmId: number, roles: MembershipRole[]) => {
+      if (user?.is_platform_admin) return true
+      const role = farms.find((f) => f.id === farmId)?.my_role
+      return role != null && roles.includes(role)
+    }
     const writableIds = new Set(writableFarms.map((f) => f.id))
     const selectedWritable = selectedFarmId !== null && writableIds.has(selectedFarmId) ? selectedFarmId : null
     return {
@@ -50,8 +57,11 @@ export function FarmProvider({ children }: { children: ReactNode }) {
       // Sans exploitation sélectionnée : une exploitation active de préférence (jamais une désactivée par défaut).
       defaultWritableFarmId: selectedWritable ?? (writableFarms.find((f) => f.is_active) ?? writableFarms[0])?.id ?? null,
       canWrite: (farmId: number) => writableIds.has(farmId),
+      canWeigh: (farmId: number) => hasRole(farmId, ['OWNER', 'MANAGER', 'TECHNICIAN']),
+      canObserve: (farmId: number) => hasRole(farmId, ['OWNER', 'MANAGER', 'TECHNICIAN', 'VETERINARIAN']),
+      canReviewRations: (farmId: number) => Boolean(user?.is_platform_admin) || (user?.role === 'EXPERT' && hasRole(farmId, ['EXPERT'])),
     }
-  }, [farms, query.isPending, selectedFarmId, selectFarm, writableFarms])
+  }, [farms, query.isPending, selectedFarmId, selectFarm, writableFarms, user])
 
   return <FarmContext.Provider value={value}>{children}</FarmContext.Provider>
 }

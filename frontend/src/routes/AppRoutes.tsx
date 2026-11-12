@@ -30,6 +30,7 @@ const IngredientDetailPage = page(() => import('@/pages/ingredients/IngredientDe
 const ReferencesPage = page(() => import('@/pages/references/ReferencesPage'), 'ReferencesPage')
 const ReferenceDetailPage = page(() => import('@/pages/references/ReferenceDetailPage'), 'ReferenceDetailPage')
 const FormulationPage = page(() => import('@/pages/formulation/FormulationPage'), 'FormulationPage')
+const SeasonsPage = page(() => import('@/pages/seasons/SeasonsPage'), 'SeasonsPage')
 const FormulaPage = page(() => import('@/pages/formulation/FormulaPage'), 'FormulaPage')
 const OfflineFormulaPage = page(() => import('@/pages/formulation/OfflineFormulaPage'), 'OfflineFormulaPage')
 const ComparePage = page(() => import('@/pages/formulation/ComparePage'), 'ComparePage')
@@ -79,6 +80,7 @@ export function AppRoutes() {
           <Route path="formulation/hors-ligne/:id" element={<OfflineFormulaPage />} />
           <Route path="formulation/:id" element={<FormulaPage />} />
           <Route path="rations" element={<RationsPage />} />
+          <Route path="saisons" element={<SeasonsPage />} />
           <Route path="alertes" element={<AlertsPage />} />
           <Route path="documents" element={<DocumentsPage />} />
           <Route path="assistant" element={<AssistantPage />} />

@@ -471,3 +471,23 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
 - Vérifications : pytest 486, Vitest 119, lint, build, OpenAPI ; balayage réel de tous les écrans en anglais
   (éleveur sur téléphone et ordinateur, expert, administrateur, fenêtres et erreurs de formulaires) : seuls restent en
   français les noms et descriptions saisis dans la base ; parcours lot 1 33/33 et hors ligne 18/18 relancés.
+
+## Retours clients, 2ᵉ série (11/11/2026) ✅
+
+- Spécialistes invités : nutritionniste / zootechnicien (valide les rations), vétérinaire (santé), technicien
+  d'élevage (pesées, suivi).
+- Module « Saison » : calendrier, disponibilité et prix par saison, besoins de saison, conseils validés ; saison dans
+  la formule rapide, la formule et l'accueil.
+- Pictogrammes par type d'alerte et d'observation, tâches du jour agrandies.
+- Protocole d'essai pilote (`docs/protocole-essai-pilote.md`).
+- Vérifications : pytest 501, Vitest 119, lint, build, OpenAPI ; navigateur 24/24 (téléphone en français,
+  ordinateur en anglais) ; balayage anglais de tous les écrans.
+
+## Rations types et délai de vérification (12/11/2026) ✅
+
+- Rations types validées : création depuis une formule validée, validation par un expert, proposition dans la formule
+  rapide, application immédiate (formule validée, ration possible tout de suite), onglet « Rations types ».
+- Délai de vérification convenu (48 h), échéance affichée, alerte de retard, relance des administrateurs.
+- Vérifications : pytest 506, Vitest 120, lint, build, OpenAPI ; navigateur 18/18 (téléphone en français, ordinateur
+  en anglais). Le contrôle navigateur a révélé une erreur à l'application avec un objectif choisi : corrigée et
+  couverte par un test.

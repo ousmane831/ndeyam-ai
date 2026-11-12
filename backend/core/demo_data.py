@@ -19,6 +19,7 @@ from decimal import Decimal
 
 from django.db import transaction
 from django.utils import timezone
+from django.utils.timezone import now as django_now
 
 DEMO_DOMAIN = "demo.ndeyam.example"  # domaine réservé (RFC 2606) : aucune adresse réelle
 PREFIX = "[DEMO]"
@@ -178,6 +179,46 @@ class Summary:
     documents: int = 0
 
 
+# Saison sèche chaude (DEMO, valeurs fictives) : (ingrédient, disponibilité, coefficient du prix de saison).
+SEASONAL_DEMO = [
+    ("Fane d'arachide", "SCARCE", 1.6),
+    ("Paille de mil", "SCARCE", 1.5),
+    ("Mélasse de canne", "UNAVAILABLE", None),
+]
+
+# Conseils d'EXEMPLE : montrés seulement dans les exploitations DEMO, jamais validés.
+ADVICE_DEMO = [
+    (
+        "SECHE_CHAUDE",
+        "WATER",
+        "[DEMO] Eau propre à volonté",
+        "Exemple à faire valider par un spécialiste : laisser de l'eau propre et fraîche à disposition "
+        "toute la journée, abreuvoirs à l'ombre et nettoyés chaque jour.",
+    ),
+    (
+        "SECHE_CHAUDE",
+        "SCHEDULE",
+        "[DEMO] Distribuer aux heures fraîches",
+        "Exemple à faire valider par un spécialiste : distribuer l'essentiel de la ration tôt le matin "
+        "et en fin d'après-midi, quand les animaux mangent le mieux.",
+    ),
+    (
+        "SECHE_CHAUDE",
+        "HOUSING",
+        "[DEMO] Ombre et aération",
+        "Exemple à faire valider par un spécialiste : prévoir un abri ombragé et aéré pendant les "
+        "heures chaudes.",
+    ),
+    (
+        "HIVERNAGE",
+        "FEED",
+        "[DEMO] Transition vers l'herbe verte",
+        "Exemple à faire valider par un spécialiste : introduire l'herbe fraîche progressivement pour "
+        "éviter les troubles digestifs.",
+    ),
+]
+
+
 def demo_users():
     from accounts.models import User
 
@@ -219,6 +260,12 @@ def remove_demo_data():
         doc.file.delete(save=False)
         doc.delete()
     InclusionConstraint.objects.filter(is_demo=True, created_by__in=users).delete()
+    from seasons.models import SeasonalAdvice
+
+    SeasonalAdvice.objects.filter(is_demo=True, created_by__in=users).delete()
+    from formulations.models import RationTemplate
+
+    RationTemplate.objects.filter(is_demo=True, created_by__in=users).delete()
     NutritionalReference.objects.filter(is_demo=True, created_by__in=users).delete()
     IngredientComposition.objects.filter(is_demo=True, created_by__in=users).delete()
     Ingredient.objects.filter(is_demo=True, created_by__in=users).delete()
@@ -454,6 +501,49 @@ def load_demo_data(password, today=None):
                 created_by=users["eleveur"],
             )
 
+    # Saisons (DEMO) : prix habituels et disponibilités de saison, conseils d'exemple jamais validés.
+    from seasons.models import IngredientAvailability, Season, SeasonalAdvice
+
+    seasons = {s.code: s for s in Season.objects.all()}
+    hot = seasons.get("SECHE_CHAUDE")
+    if hot is not None:
+        prices_by_name = {name: price for name, _c, _v, price in INGREDIENTS}
+        for name, level, factor in SEASONAL_DEMO:
+            IngredientAvailability.objects.create(
+                farm=farms["thies"],
+                ingredient=ingredients[name],
+                season=hot,
+                level=level,
+                notes="Disponibilité fictive de démonstration.",
+                is_demo=True,
+                created_by=users["eleveur"],
+            )
+            if factor:
+                IngredientPrice.objects.create(
+                    farm=farms["thies"],
+                    ingredient=ingredients[name],
+                    price_per_kg_as_fed=_d(round(prices_by_name[name] * factor)),
+                    valid_from=today - timedelta(days=30),
+                    season=hot,
+                    supplier="Fournisseur fictif",
+                    notes="Prix de saison fictif de démonstration.",
+                    is_demo=True,
+                    created_by=users["eleveur"],
+                )
+        for code, topic, title, text in ADVICE_DEMO:
+            if code in seasons:
+                SeasonalAdvice.objects.create(
+                    season=seasons[code],
+                    species=ovin,
+                    topic=topic,
+                    title=title,
+                    text=text,
+                    source=source,
+                    status="PENDING",
+                    is_demo=True,
+                    created_by=expert,
+                )
+
     # Animaux et pesées
     def animal(farm, tag, sex, **kw):
         a = Animal.objects.create(
@@ -654,6 +744,19 @@ def load_demo_data(password, today=None):
         raise RuntimeError(
             f"Jeu DEMO incohérent : la formule économique n'est pas calculable ({result['status']})."
         )
+    # Ration type DEMO tirée de cette formule : applicable tout de suite au lot d'embouche (jamais validée).
+    from formulations.models import RationTemplate
+    from formulations.templates import template_from_formula
+
+    demo_template = template_from_formula(
+        economic,
+        user=expert,
+        name="[DEMO] Embouche Tabaski 35–50 kg",
+        weight_min_kg=Decimal("35"),
+        weight_max_kg=Decimal("50"),
+        conditions="Exemple fictif de démonstration, à ne pas utiliser pour nourrir des animaux.",
+    )
+    RationTemplate.objects.filter(pk=demo_template.pk).update(status="PENDING")
     run_formulation(
         farm=thies,
         user=owner,
@@ -692,7 +795,8 @@ def load_demo_data(password, today=None):
         profile=profile,
     )
     economic.status = FormulaStatus.PENDING_REVIEW  # en attente : une formule DEMO ne sera jamais validée
-    economic.save(update_fields=["status"])
+    economic.review_requested_at = django_now() - timedelta(hours=6)  # demandée ce matin (délai en cours)
+    economic.save(update_fields=["status", "review_requested_at"])
 
     # Ration en cours et distributions des 30 derniers jours
     ration = Ration.objects.create(

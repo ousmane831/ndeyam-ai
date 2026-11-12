@@ -227,6 +227,10 @@ class IngredientPrice(TimeStampedModel):
         "quantité disponible (kg brut)", max_digits=12, decimal_places=2, null=True, blank=True
     )
     notes = models.TextField("notes", blank=True)
+    # Prix habituel pendant une saison (planification) ; vide = prix relevé à la date indiquée.
+    season = models.ForeignKey(
+        "seasons.Season", on_delete=models.PROTECT, null=True, blank=True, related_name="prices"
+    )
     is_demo = models.BooleanField("donnée DEMO", default=False, db_index=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
@@ -271,6 +275,10 @@ class NutritionalReference(ValidatedReferenceModel):
     )
     objective = models.ForeignKey(
         "animals.ProductionObjective", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    # Besoins propres à une saison (ex. chaleur : ingestion réduite) ; vide = toute l'année.
+    season = models.ForeignKey(
+        "seasons.Season", on_delete=models.PROTECT, null=True, blank=True, related_name="references"
     )
     system = models.ForeignKey(NutritionSystem, on_delete=models.PROTECT, related_name="references")
     age_min_months = models.DecimalField(

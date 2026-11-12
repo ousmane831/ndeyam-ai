@@ -118,12 +118,16 @@ class FarmMemberSerializer(serializers.ModelSerializer):
         role = attrs.get("role", getattr(self.instance, "role", None))
         if role is None:
             raise serializers.ValidationError({"role": "Le rôle est obligatoire."})
-        if role == MembershipRole.EXPERT and user.role != Role.EXPERT:
+        if role in (MembershipRole.EXPERT, MembershipRole.VETERINARIAN) and user.role != Role.EXPERT:
             raise serializers.ValidationError(
-                {"role": "Seul un compte de type Expert peut être invité comme expert."}
+                {
+                    "role": (
+                        "Seul un compte de type Expert peut être invité comme nutritionniste ou vétérinaire."
+                    )
+                }
             )
         if role == MembershipRole.MANAGER and user.role == Role.EXPERT:
             raise serializers.ValidationError(
-                {"role": "Un compte Expert ne peut être invité qu'en lecture seule (rôle Expert)."}
+                {"role": "Un compte Expert ne peut pas être gestionnaire : invitez-le comme spécialiste."}
             )
         return attrs

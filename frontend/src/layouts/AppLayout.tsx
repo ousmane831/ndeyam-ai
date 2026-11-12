@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { InstallAppButton } from '@/features/pwa/InstallAppButton'
 import { OfflineSync } from '@/features/offline/OfflineSync'
-import { Bell, BookOpen, Calculator, ClipboardList, ExternalLink, FileSearch, FileText, Layers, LayoutDashboard, LogOut, Menu, PawPrint, Settings, TrendingUp, Users, Wheat, X } from 'lucide-react'
+import { Bell, BookOpen, Calculator, ClipboardList, ExternalLink, FileSearch, FileText, Layers, LayoutDashboard, LogOut, Menu, PawPrint, Settings, Sun, TrendingUp, Users, Wheat, X } from 'lucide-react'
 import { Suspense, useState, type ReactNode } from 'react'
 import { NavLink, Outlet } from 'react-router'
 import { FarmSelector } from '@/components/FarmSelector'
@@ -33,6 +33,7 @@ const MAIN_NAV: NavItem[] = [
   { to: '/formulation', label: tk('Formulation des aliments'), icon: <Calculator className="size-5" /> },
   { to: '/suivi-croissance', label: tk('Suivi de croissance'), icon: <TrendingUp className="size-5" /> },
   { to: '/rations', label: tk('Historique des rations'), icon: <ClipboardList className="size-5" /> },
+  { to: '/saisons', label: tk('Saisons'), icon: <Sun className="size-5" /> },
   { to: '/alertes', label: tk('Alertes et rappels'), icon: <Bell className="size-5" /> },
   { to: '/references', label: tk('Références nutritionnelles'), icon: <BookOpen className="size-5" /> },
   { to: '/documents', label: tk('Base documentaire'), icon: <FileText className="size-5" /> },

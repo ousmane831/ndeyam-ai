@@ -1,4 +1,5 @@
-import type { CalculationPayload, Formula } from '@/types/formula'
+import type { CalculationPayload, Formula, RationTemplate } from '@/types/formula'
+import type { WorkflowAction } from '@/types/nutrition'
 import { api, type Paginated } from './api'
 import { cleanParams } from './download'
 
@@ -25,4 +26,17 @@ export const formulaService = {
   review: async (id: number, action: 'submit-review' | 'validate' | 'reject', comment = '') =>
     (await api.post<Formula>(`/formulas/${id}/${action}/`, { comment })).data,
   compare: async (ids: number[]) => (await api.get<{ formulas: Formula[]; note: string }>('/formulas/compare/', { params: { ids: ids.join(',') } })).data,
+}
+
+/** Rations types validées : application immédiate, création à partir d'une formule validée. */
+export const templateService = {
+  list: async () => (await api.get<Paginated<RationTemplate>>('/ration-templates/', { params: { page_size: 100 } })).data.results,
+  matching: async (params: { farm: number; group?: number | null; animal?: number | null; objective?: number | null; season?: number | null }) =>
+    (await api.get<RationTemplate[]>('/ration-templates/matching/', { params: cleanParams(params) })).data,
+  apply: async (id: number, payload: { farm: number; group?: number | null; animal?: number | null; objective?: number | null; season?: number | null; name?: string }) =>
+    (await api.post<Formula>(`/ration-templates/${id}/apply/`, payload)).data,
+  fromFormula: async (payload: { formula: number; name: string; weight_min_kg: string; weight_max_kg: string; conditions?: string }) =>
+    (await api.post<RationTemplate>('/ration-templates/from-formula/', payload)).data,
+  transition: async (id: number, action: WorkflowAction, comment = '') =>
+    (await api.post<RationTemplate>(`/ration-templates/${id}/${action}/`, { comment })).data,
 }

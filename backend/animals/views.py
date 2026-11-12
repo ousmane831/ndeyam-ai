@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from core.csv_io import CsvImportError, csv_response
 from core.serializers import WritableFarmField
 from core.viewsets import FarmScopedViewSet
-from farms.access import can_write_farm, readable_farms
+from farms.access import can_record_observations, readable_farms
 from governance.activity import log_activity
 from governance.serializers import ImportBatchSerializer
 
@@ -238,7 +238,7 @@ class AnimalObservationViewSet(
         return self.get_animal().observation_entries.select_related("author")
 
     def _check_write(self):
-        if not can_write_farm(self.request.user, self.get_animal().farm):
+        if not can_record_observations(self.request.user, self.get_animal().farm):
             raise PermissionDenied("Vous ne pouvez pas modifier les données de cette exploitation.")
 
     def perform_create(self, serializer):

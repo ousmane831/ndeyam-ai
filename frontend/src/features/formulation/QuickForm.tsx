@@ -11,6 +11,9 @@ import { Spinner } from '@/components/ui/Spinner'
 import { useFarm } from '@/hooks/useFarm'
 import { ApiError } from '@/services/api'
 import { groupService } from '@/services/animals'
+import { availabilityService, seasonService } from '@/services/seasons'
+import { SeasonIcon } from '@/features/seasons/SeasonCalendar'
+import { seasonTone } from '@/features/seasons/seasonStyle'
 import { formulaService } from '@/services/formulas'
 import { ingredientService, nutritionService, priceService } from '@/services/nutrition'
 import type { CalculationPayload } from '@/types/formula'
@@ -22,6 +25,7 @@ import { estimateForGroup } from '@/features/offline/estimate'
 import { loadPack, type OfflinePack } from '@/features/offline/pack'
 import type { Ingredient } from '@/types/nutrition'
 import { IngredientIcon } from './IngredientIcon'
+import { MatchingTemplates } from './RationTemplates'
 import { plainName, quickFormulaName } from './rationText'
 
 /** Derniers aliments cochés et objectif de chaque lot, mémorisés sur cet appareil (commodité, jamais indispensable). */
@@ -50,7 +54,7 @@ function remember(farm: number, memory: Memory) {
 
 /** Lots, aliments et derniers prix tirés du paquet hors ligne (utilisés seulement sans données en mémoire). */
 function packChoices(pack: OfflinePack | null, farm: number | null) {
-  const empty = { lots: [] as { id: number; name: string; animals_count: number }[], ingredients: [] as Ingredient[], prices: new Map<number, { price_per_kg_as_fed: string; currency: string }>() }
+  const empty = { lots: [] as { id: number; name: string; animals_count: number }[], ingredients: [] as Ingredient[], prices: new Map<number, { price_per_kg_as_fed: string; currency: string; seasonal?: boolean }>() }
   if (!pack) return empty
   const ready = new Set<number>()
   for (const ref of pack.references) {
@@ -78,6 +82,7 @@ export function QuickForm() {
   const [memory, setMemory] = useState(() => recall(defaultWritableFarmId))
   const [groupId, setGroupId] = useState<number | null>(null)
   const [objective, setObjective] = useState('')
+  const [seasonChoice, setSeasonChoice] = useState<number | null>(null)
   const [picked, setPicked] = useState<Set<number>>(() => new Set(memory.ingredients))
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -88,13 +93,24 @@ export function QuickForm() {
   const objectives = useQuery({ queryKey: ['objectives'], queryFn: nutritionService.objectives, staleTime: Infinity })
   const ingredients = useQuery({ queryKey: ['ingredients-all'], queryFn: ingredientService.all })
   const prices = useQuery({ queryKey: ['prices', 'latest', farmId], queryFn: () => priceService.list({ farm: farmId, latest: true }), enabled: farmId !== null })
+  // Saison du calcul : la saison en cours par défaut (prix habituels et disponibilité de la saison).
+  const seasons = useQuery({ queryKey: ['seasons'], queryFn: seasonService.list, staleTime: Infinity })
+  const currentSeason = useQuery({ queryKey: ['season-current', farmId], queryFn: () => seasonService.current(farmId) })
+  const seasonId = seasonChoice ?? currentSeason.data?.season?.id ?? null
+  const seasonalPrices = useQuery({ queryKey: ['prices', 'season', farmId, seasonId], queryFn: () => priceService.list({ farm: farmId, season: seasonId }), enabled: farmId !== null && seasonId !== null })
+  const availability = useQuery({ queryKey: ['availability', farmId, seasonId], queryFn: () => availabilityService.list({ farm: farmId, season: seasonId }), enabled: farmId !== null && seasonId !== null })
+  const levelOf = useMemo(() => new Map((availability.data ?? []).map((a) => [a.ingredient, a.level])), [availability.data])
   // Sans réseau ni données en mémoire, le paquet de calcul hors ligne fournit lots, aliments et prix.
   const pack = useMemo(() => (farmId !== null ? loadPack(farmId) : null), [farmId])
   const fromPack = useMemo(() => packChoices(pack, farmId), [pack, farmId])
-  const priceOf = useMemo(
-    () => new Map(prices.data ? prices.data.map((x) => [x.ingredient, { price_per_kg_as_fed: x.price_per_kg_as_fed, currency: x.currency }]) : fromPack.prices),
-    [prices.data, fromPack],
-  )
+  const priceOf = useMemo(() => {
+    const map = new Map(prices.data ? prices.data.map((x) => [x.ingredient, { price_per_kg_as_fed: x.price_per_kg_as_fed, currency: x.currency, seasonal: false }]) : fromPack.prices)
+    // Même règle que le serveur : le prix habituel déclaré pour la saison passe avant le dernier prix relevé.
+    for (const p of [...(seasonalPrices.data ?? [])].filter((x) => x.season === seasonId).sort((a, b) => a.valid_from.localeCompare(b.valid_from))) {
+      map.set(p.ingredient, { price_per_kg_as_fed: p.price_per_kg_as_fed, currency: p.currency, seasonal: true })
+    }
+    return map
+  }, [prices.data, fromPack, seasonalPrices.data, seasonId])
 
   const lots = groups.data ? groups.data.results.filter((g) => g.animals_count > 0) : fromPack.lots
   const lotsLoading = groups.isPending && fromPack.lots.length === 0
@@ -118,6 +134,7 @@ export function QuickForm() {
       mode: 'ECONOMIC',
       group: group.id,
       objective: objective ? Number(objective) : null,
+      ...(seasonId !== null ? { season: seasonId } : {}),
       ingredients: chosen.map((i) => ({ ingredient: i.id })),
     }
     remember(farmId, { ingredients: chosen.map((i) => i.id), objectives: { ...memory.objectives, [group.id]: objective } })
@@ -203,6 +220,24 @@ export function QuickForm() {
         <p className="mt-3 text-sm text-slate-500">{t("Les besoins dépendent de l'objectif : sans objectif, seules les références générales s'appliquent. Il est retenu pour ce lot sur cet appareil.")}</p>
       </Card>
 
+      {groupId !== null && farmId !== null && (
+        <MatchingTemplates farm={farmId} group={groupId} objective={objective ? Number(objective) : null} season={seasonId} isDemo={demoFarm} />
+      )}
+
+      {(seasons.data ?? []).length > 0 && (
+        <div className="flex flex-wrap items-center gap-2" role="radiogroup" aria-label={t('Saison du calcul')}>
+          <span className="text-sm font-medium text-slate-700">{t('Saison :')}</span>
+          {(seasons.data ?? []).map((s) => (
+            <button key={s.id} type="button" role="radio" aria-checked={s.id === seasonId} onClick={() => setSeasonChoice(s.id)}
+              className={clsx('inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 text-sm font-medium',
+                s.id === seasonId ? `${seasonTone(s)} border-transparent` : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50')}>
+              <SeasonIcon season={s} className="size-4" /> {t(s.name)}
+              {s.id === currentSeason.data?.season?.id && <span className="text-xs opacity-80">({t('en cours')})</span>}
+            </button>
+          ))}
+        </div>
+      )}
+
       <Card title={t('3. Vos aliments')}>
         {ingredients.isPending && fromPack.ingredients.length === 0 ? <Spinner /> : ready.length === 0 ? (
           <p className="text-sm text-slate-600">{t("Aucun aliment n'a encore de données validées par un expert : le calcul serait refusé.")}</p>
@@ -218,7 +253,11 @@ export function QuickForm() {
                   <span className="min-w-0 flex-1">
                     <span className="block font-semibold text-slate-900">{plainName(i.name)}</span>
                     {i.local_names && <span className="block text-sm text-slate-600">{i.local_names}</span>}
-                    <span className={clsx('text-sm', price ? 'text-slate-500' : 'text-mil-700')}>{price ? `${formatMoney(price.price_per_kg_as_fed, price.currency)} / kg` : t('Prix inconnu')}</span>
+                    <span className={clsx('text-sm', price ? 'text-slate-500' : 'text-mil-700')}>
+                      {price ? `${formatMoney(price.price_per_kg_as_fed, price.currency)} / kg${price.seasonal ? ` · ${t('prix de saison')}` : ''}` : t('Prix inconnu')}
+                    </span>
+                    {levelOf.get(i.id) === 'SCARCE' && <span className="mt-1 inline-flex rounded-full bg-mil-100 px-2 py-0.5 text-xs font-semibold text-mil-700">{t('Rare en cette saison')}</span>}
+                    {levelOf.get(i.id) === 'UNAVAILABLE' && <span className="mt-1 inline-flex rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-700">{t('Indisponible en cette saison')}</span>}
                   </span>
                   <span className={clsx('inline-flex size-6 shrink-0 items-center justify-center rounded border-2', on ? 'border-brand-700 bg-brand-700 text-white' : 'border-slate-300')}>
                     {on && <Check className="size-4" aria-hidden />}

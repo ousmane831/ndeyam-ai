@@ -1,7 +1,10 @@
+from datetime import timedelta
 from decimal import Decimal
 
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
+from django.utils import timezone
 from rest_framework import serializers
 
 from animals.models import (
@@ -15,10 +18,24 @@ from animals.models import (
 )
 from animals.services import group_profile
 from core.serializers import FarmScopedRelatedField, ModelCleanMixin, WritableFarmField
+from core.viewsets import ReadOnlyStatusSerializerMixin
 from nutrition.models import Ingredient, NutritionalReference
+from nutrition.serializers import SourceSummaryField
+from seasons.models import Season
 
 from .analysis import analyse_ration
-from .models import FeedFormula, FeedFormulaIngredient, FormulaMode, FormulaStatus
+from .models import (
+    FeedFormula,
+    FeedFormulaIngredient,
+    FormulaMode,
+    FormulaStatus,
+    RationTemplate,
+    RationTemplateItem,
+)
+
+
+def review_deadline():
+    return timedelta(hours=settings.FORMULA_REVIEW_DEADLINE_HOURS)
 
 
 class FormulaItemSerializer(serializers.ModelSerializer):
@@ -56,6 +73,10 @@ class FeedFormulaSerializer(ModelCleanMixin, serializers.ModelSerializer):
     items = FormulaItemSerializer(many=True, read_only=True)
     manual_items = ManualItemInputSerializer(many=True, write_only=True, required=False)
     mode_label = serializers.CharField(source="get_mode_display", read_only=True)
+    season_name = serializers.CharField(source="season.name", read_only=True, default=None)
+    template_name = serializers.CharField(source="template.name", read_only=True, default=None)
+    review_due_at = serializers.SerializerMethodField()
+    review_overdue = serializers.SerializerMethodField()
     status_label = serializers.CharField(source="get_status_display", read_only=True)
     validated_by_email = serializers.EmailField(source="validated_by.email", read_only=True, default=None)
 
@@ -74,6 +95,13 @@ class FeedFormulaSerializer(ModelCleanMixin, serializers.ModelSerializer):
             "is_demo",
             "animal",
             "group",
+            "season",
+            "season_name",
+            "template",
+            "template_name",
+            "review_requested_at",
+            "review_due_at",
+            "review_overdue",
             "animal_weight_kg",
             "animal_age_months",
             "physiological_stage",
@@ -97,6 +125,8 @@ class FeedFormulaSerializer(ModelCleanMixin, serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = [
+            "template",
+            "review_requested_at",
             "id",
             "mode",
             "status",
@@ -202,6 +232,19 @@ class FeedFormulaSerializer(ModelCleanMixin, serializers.ModelSerializer):
             self._apply_items(instance, items)
         return instance
 
+    def get_review_due_at(self, formula) -> str | None:
+        """Réponse attendue de l'expert avant cette date (délai convenu, FORMULA_REVIEW_DEADLINE_HOURS)."""
+        if formula.status != "PENDING_REVIEW":
+            return None
+        # Demande antérieure au suivi du délai : la dernière modification fait foi (comme les alertes).
+        return ((formula.review_requested_at or formula.updated_at) + review_deadline()).isoformat()
+
+    def get_review_overdue(self, formula) -> bool:
+        return bool(
+            formula.status == "PENDING_REVIEW"
+            and timezone.now() > (formula.review_requested_at or formula.updated_at) + review_deadline()
+        )
+
 
 class FormulaReviewSerializer(serializers.Serializer):
     comment = serializers.CharField(required=False, allow_blank=True, default="")
@@ -252,6 +295,10 @@ class CalculationRequestSerializer(serializers.Serializer):
     ingredients = CalculationEntrySerializer(many=True)
     number_of_animals = serializers.IntegerField(required=False, min_value=1)
     duration_days = serializers.IntegerField(required=False, min_value=1)
+    # Saison du calcul (prix et besoins de saison) ; par défaut, la saison en cours.
+    season = serializers.PrimaryKeyRelatedField(
+        queryset=Season.objects.all(), required=False, allow_null=True
+    )
     notes = serializers.CharField(required=False, allow_blank=True, default="")
     save = serializers.BooleanField(default=True)
 
@@ -337,4 +384,128 @@ class CalculationRequestSerializer(serializers.Serializer):
                     )
                 }
             )
+        return attrs
+
+
+class RationTemplateItemSerializer(serializers.ModelSerializer):
+    ingredient = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.filter(is_active=True))
+    ingredient_name = serializers.CharField(source="ingredient.name", read_only=True)
+    ingredient_category = serializers.CharField(
+        source="ingredient.category.code", read_only=True, default=None
+    )
+
+    class Meta:
+        model = RationTemplateItem
+        fields = ["ingredient", "ingredient_name", "ingredient_category", "inclusion_pct_dm"]
+
+
+class RationTemplateSerializer(ModelCleanMixin, ReadOnlyStatusSerializerMixin, serializers.ModelSerializer):
+    items = RationTemplateItemSerializer(many=True)
+    source = SourceSummaryField(required=False, allow_null=True)
+    species_name = serializers.CharField(source="species.name", read_only=True)
+    category_name = serializers.CharField(source="category.name", read_only=True, default=None)
+    physiological_stage_name = serializers.CharField(
+        source="physiological_stage.name", read_only=True, default=None
+    )
+    objective_name = serializers.CharField(source="objective.name", read_only=True, default=None)
+    season_name = serializers.CharField(source="season.name", read_only=True, default=None)
+
+    class Meta:
+        model = RationTemplate
+        fields = [
+            "id",
+            "name",
+            "species",
+            "species_name",
+            "category",
+            "category_name",
+            "physiological_stage",
+            "physiological_stage_name",
+            "objective",
+            "objective_name",
+            "season",
+            "season_name",
+            "weight_min_kg",
+            "weight_max_kg",
+            "dm_intake_kg_day",
+            "conditions",
+            "items",
+            "origin_formula",
+            "source",
+            "reference_date",
+            "is_demo",
+            "status",
+            "status_label",
+            "validated_by_email",
+            "validated_at",
+            "validation_comment",
+            "created_at",
+        ]
+        read_only_fields = ["id", "origin_formula", "created_at"]
+
+    def validate_items(self, items):
+        if not items:
+            raise serializers.ValidationError("Indiquez au moins un aliment.")
+        ids = [i["ingredient"].pk for i in items]
+        if len(ids) != len(set(ids)):
+            raise serializers.ValidationError("Chaque aliment ne doit apparaître qu'une fois.")
+        total = sum(Decimal(i["inclusion_pct_dm"]) for i in items)
+        if abs(total - 100) > Decimal("0.5"):
+            raise serializers.ValidationError(
+                f"Les parts dans la matière sèche doivent totaliser 100 % (actuellement {total} %)."
+            )
+        return items
+
+    @transaction.atomic
+    def create(self, validated_data):
+        items = validated_data.pop("items")
+        template = super().create(validated_data)
+        for item in items:
+            RationTemplateItem.objects.create(template=template, **item)
+        return template
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        items = validated_data.pop("items", None)
+        template = super().update(instance, validated_data)
+        if items is not None:
+            template.items.all().delete()
+            for item in items:
+                RationTemplateItem.objects.create(template=template, **item)
+        return template
+
+
+class TemplateFromFormulaSerializer(serializers.Serializer):
+    formula = serializers.PrimaryKeyRelatedField(queryset=FeedFormula.objects.all())
+    name = serializers.CharField(max_length=200)
+    weight_min_kg = serializers.DecimalField(max_digits=7, decimal_places=2, min_value=Decimal("0.01"))
+    weight_max_kg = serializers.DecimalField(max_digits=7, decimal_places=2, min_value=Decimal("0.01"))
+    conditions = serializers.CharField(required=False, allow_blank=True, default="")
+
+    def validate(self, attrs):
+        if attrs["weight_min_kg"] > attrs["weight_max_kg"]:
+            raise serializers.ValidationError(
+                {"weight_max_kg": "Le poids maximal doit être supérieur au poids minimal."}
+            )
+        return attrs
+
+
+class TemplateApplySerializer(serializers.Serializer):
+    farm = WritableFarmField()
+    group = FarmScopedRelatedField(AnimalGroup, required=False, allow_null=True)
+    animal = FarmScopedRelatedField(Animal, required=False, allow_null=True)
+    objective = serializers.PrimaryKeyRelatedField(
+        queryset=ProductionObjective.objects.all(), required=False, allow_null=True
+    )
+    season = serializers.PrimaryKeyRelatedField(
+        queryset=Season.objects.all(), required=False, allow_null=True
+    )
+    name = serializers.CharField(max_length=200, required=False, allow_blank=True, default="")
+
+    def validate(self, attrs):
+        farm, group, animal = attrs["farm"], attrs.get("group"), attrs.get("animal")
+        if bool(group) == bool(animal):
+            raise serializers.ValidationError("Choisissez un lot ou un animal.")
+        if (group or animal).farm_id != farm.pk:
+            raise serializers.ValidationError("L'animal ou le lot doit appartenir à l'exploitation choisie.")
         return attrs

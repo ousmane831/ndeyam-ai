@@ -1,4 +1,4 @@
-export type FormulaMode = 'ECONOMIC' | 'BALANCED' | 'MANUAL'
+export type FormulaMode = 'ECONOMIC' | 'BALANCED' | 'MANUAL' | 'TEMPLATE'
 export type FormulaStatus = 'DRAFT' | 'REFUSED' | 'INFEASIBLE' | 'ESTIMATED' | 'PENDING_REVIEW' | 'VALIDATED' | 'REJECTED'
 
 export interface FormulaItem {
@@ -86,6 +86,15 @@ export interface Formula {
   is_demo: boolean
   animal: number | null
   group: number | null
+  season?: number | null
+  season_name?: string | null
+  /** Ration type validée dont la formule est issue. */
+  template?: number | null
+  template_name?: string | null
+  /** Délai de vérification convenu. */
+  review_requested_at?: string | null
+  review_due_at?: string | null
+  review_overdue?: boolean
   animal_weight_kg: string | null
   animal_age_months: string | null
   physiological_stage: number | null
@@ -124,6 +133,42 @@ export interface CalculationPayload {
   ingredients: { ingredient: number; price_per_kg_as_fed?: string; available_kg_as_fed?: string }[]
   number_of_animals?: number
   duration_days?: number
+  season?: number | null
   notes?: string
   save?: boolean
+}
+
+export interface RationTemplateItem {
+  ingredient: number
+  ingredient_name: string
+  ingredient_category: string | null
+  inclusion_pct_dm: string
+}
+
+export interface RationTemplate {
+  id: number
+  name: string
+  species: number
+  species_name: string
+  category: number | null
+  category_name: string | null
+  physiological_stage: number | null
+  physiological_stage_name: string | null
+  objective: number | null
+  objective_name: string | null
+  season: number | null
+  season_name: string | null
+  weight_min_kg: string
+  weight_max_kg: string
+  dm_intake_kg_day: string
+  conditions: string
+  items: RationTemplateItem[]
+  origin_formula: number | null
+  is_demo: boolean
+  status: 'DRAFT' | 'PENDING' | 'VALIDATED' | 'REJECTED'
+  status_label: string
+  validated_by_email: string | null
+  validated_at: string | null
+  validation_comment: string
+  created_at: string
 }
