@@ -79,6 +79,7 @@ ACTION_LABELS.update(
         "weighing.bulk_created": "Séance de pesée",
         "formula.calculated": "Formule calculée",
         "formula.from_template": "Ration type appliquée",
+        "voice.answered": "Réponse vocale",
         "formula.pending_review": "Formule soumise à un expert",
         "formula.validated": "Formule validée par un expert",
         "formula.rejected": "Formule rejetée par un expert",

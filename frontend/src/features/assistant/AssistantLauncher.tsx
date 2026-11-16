@@ -1,9 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Maximize2, MessageSquarePlus, X } from 'lucide-react'
+import { Maximize2, MessageSquarePlus, Mic, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router'
 import { Logo } from '@/components/ui/Logo'
+import { VoiceAssistant } from '@/features/voice/VoiceAssistant'
 import { useAuth } from '@/hooks/useAuth'
+import { tk } from '@/i18n'
+import { voiceService } from '@/services/voice'
 import { ChatThread } from './AssistantChat'
 import { GuidePanel } from './GuidePanel'
 import { useAssistantChat } from './useAssistantChat'
@@ -26,14 +30,20 @@ export function AssistantLauncher() {
   const statusKnown = !chat.status.isLoading
   // Assistant non activé : le bouton bélier ouvre le guide et le glossaire, jamais un message technique.
   const guideMode = statusKnown && !chat.configured
+  // Assistant vocal (wolof, pulaar, sérère) : premier onglet du panneau quand le service vocal est configuré.
+  const voice = useQuery({ queryKey: ['voice', 'status'], queryFn: voiceService.status, staleTime: 5 * 60_000 })
+  const voiceOn = Boolean(voice.data?.configured)
+  const [tab, setTab] = useState<'voice' | 'other'>('voice')
+  const showVoice = voiceOn && tab === 'voice'
+  const title = guideMode && !voiceOn ? t('Guide Ndeyam AI') : t('Assistant Ndeyam AI')
 
   // À l'ouverture : focus dans la zone de saisie si l'assistant répond, sinon sur « Fermer »
   // (un champ désactivé ne peut pas recevoir le focus ; il ne doit jamais rester hors du panneau).
   useEffect(() => {
     if (!open || !statusKnown) return
-    if (chat.configured && inputRef.current) inputRef.current.focus()
+    if (chat.configured && !showVoice && inputRef.current) inputRef.current.focus()
     else closeRef.current?.focus()
-  }, [open, statusKnown, chat.configured])
+  }, [open, statusKnown, chat.configured, showVoice])
 
   useEffect(() => {
     if (!open) return
@@ -56,7 +66,7 @@ export function AssistantLauncher() {
         <section
           id="assistant-panel"
           role="dialog"
-          aria-label={guideMode ? t('Guide Ndeyam AI') : t('Assistant Ndeyam AI')}
+          aria-label={title}
           className={clsx(
             'fixed z-50 flex flex-col overflow-hidden bg-white',
             // Téléphone : plein écran ; ordinateur et tablette : panneau ancré au-dessus du bouton.
@@ -68,12 +78,12 @@ export function AssistantLauncher() {
             <div className="flex items-center gap-3 px-4 py-3">
               <Logo className="size-9 shrink-0" />
               <div className="min-w-0 flex-1">
-                <p className="font-display text-[15px] leading-tight font-bold">{guideMode ? t('Guide Ndeyam AI') : t('Assistant Ndeyam AI')}</p>
+                <p className="font-display text-[15px] leading-tight font-bold">{title}</p>
                 <p className="truncate text-xs text-brand-200">
-                  {chat.status.isLoading ? t('Vérification…') : guideMode ? t('Les gestes essentiels et le vocabulaire') : t('Répond à partir de vos données')}
+                  {chat.status.isLoading ? t('Vérification…') : showVoice ? t('Parlez en wolof, pulaar ou sérère') : guideMode ? t('Les gestes essentiels et le vocabulaire') : t('Répond à partir de vos données')}
                 </p>
               </div>
-              {!guideMode && (
+              {!guideMode && !showVoice && (
                 <>
                   <button type="button" onClick={() => chat.open(null)} className="rounded-md p-2.5 text-brand-200 hover:bg-white/10 hover:text-white"
                     aria-label={t('Nouvelle conversation')} title={t('Nouvelle conversation')}>
@@ -93,7 +103,21 @@ export function AssistantLauncher() {
           </header>
           <div className="h-[3px] bg-mil-400" aria-hidden />
 
-          {chat.status.isLoading ? null : guideMode ? (
+          {voiceOn && (
+            <div className="flex gap-1 border-b border-slate-200 px-3" role="tablist" aria-label={t('Assistant')}>
+              {([['voice', tk('Parler')], ['other', guideMode ? tk('Guide') : tk('Écrire')]] as const).map(([id, label]) => (
+                <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => setTab(id)}
+                  className={clsx('-mb-px flex min-h-11 items-center gap-1.5 border-b-2 px-3 text-sm font-semibold', tab === id ? 'border-mil-400 text-brand-800' : 'border-transparent text-slate-500 hover:text-slate-800')}>
+                  {id === 'voice' && <Mic className="size-4" aria-hidden />}
+                  {t(label)}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {showVoice ? (
+            <VoiceAssistant />
+          ) : chat.status.isLoading ? null : guideMode ? (
             <GuidePanel onNavigate={() => setOpen(false)} adminNote={Boolean(user?.is_platform_admin)} />
           ) : (
             <>
@@ -115,7 +139,7 @@ export function AssistantLauncher() {
         aria-expanded={open}
         aria-controls="assistant-panel"
         aria-label={open ? t("Fermer l'assistant Ndeyam AI") : t("Ouvrir l'assistant Ndeyam AI")}
-        title={guideMode ? t('Guide Ndeyam AI') : t('Assistant Ndeyam AI')}
+        title={title}
         className={clsx(
           'group fixed z-50 rounded-[14px] transition-transform focus-visible:outline-offset-4 motion-safe:hover:-translate-y-0.5',
           'right-[max(1.25rem,env(safe-area-inset-right))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:right-6 sm:bottom-6',
@@ -132,7 +156,7 @@ export function AssistantLauncher() {
         )}
         {!open && (
           <span className="pointer-events-none absolute right-full top-1/2 mr-3 hidden -translate-y-1/2 whitespace-nowrap rounded-md bg-brand-900 px-3 py-1.5 text-xs font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100 sm:block">
-            {guideMode ? t('Guide Ndeyam AI') : t('Assistant Ndeyam AI')}
+            {title}
           </span>
         )}
       </button>

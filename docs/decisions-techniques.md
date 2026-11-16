@@ -391,3 +391,16 @@ d'emblée et rattachée à la ration type (traçabilité : qui a validé, quand,
 `FORMULA_REVIEW_DEADLINE_HOURS` (48 h par défaut). La demande est datée (`review_requested_at`) ; l'alerte de
 l'exploitation indique la réponse attendue, puis devient « Vérification en retard » (critique) ; les administrateurs
 reçoivent une relance groupée. Les alertes se résolvent automatiquement à la décision de l'expert.
+
+## DT-77 — Assistant vocal : la voix par un service libre, la réponse par Ndeyam
+Défi IA, sans modèle payant. La voix passe par un service auto-hébergé (Sama Agri Voice : reconnaissance
+M-Kiriku-ASR en wolof, pulaar, sérère ; synthèse wolof et pulaar), appelé par le serveur Ndeyam
+(`VOICE_SERVICE_URL`, clé facultative, jamais dans le code). Le sens de la demande est reconnu par mots-clés
+(`voice/phrases.json`, sans accents, début de mot, priorité pesées > coût > croissance > tâches > ration) et la
+réponse est **calculée sur les données de l'exploitation** (ration en cours, pesées, coûts, croissance, alertes) :
+aucun modèle de langage ne produit de chiffre. Les routes `/respond` et `/ask` du service (conseil générique, sans
+contexte) ne sont pas utilisées. Constats des essais réels, d'où la forme des réponses : la synthèse lit mal les
+chiffres (« 1056 » devient un nom) → nombres écrits en lettres (wolof, pulaar) ; les phrases longues se perdent →
+une phrase courte par information, chacune synthétisée à part (en parallèle) et lue à la suite ; noms de lots avec
+chiffres épelés. Le sérère est compris mais la réponse est lue en wolof (pas de voix sérère). Les phrases sont une
+première version, à faire relire par des locuteurs natifs : elles se corrigent dans `phrases.json`, sans code.

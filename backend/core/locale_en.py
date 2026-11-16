@@ -6,6 +6,31 @@ Les modèles utilisent les noms de groupes entre accolades ; les accolades litt�
 """
 
 EXACT = {
+    # --- Assistant vocal ------------------------------------------------------------------------------
+    "Réponse vocale": "Voice answer",
+    "L'assistant vocal n'est pas activé.": "The voice assistant is not enabled.",
+    "Enregistrement trop long (2 minutes au plus).": "Recording too long (2 minutes at most).",
+    "Aucune exploitation accessible.": "No accessible farm.",
+    "Le service vocal ne répond pas. Réessayez dans un instant.": (
+        "The voice service is not responding. Try again in a moment."
+    ),
+    "Réponse illisible du service vocal.": "Unreadable answer from the voice service.",
+    "Adresse du service vocal invalide (http ou https attendu).": (
+        "Invalid voice service address (http or https expected)."
+    ),
+    "Aucune ration en cours dans l'exploitation.": "No ration in progress on the farm.",
+    "Aucun animal à peser pour le moment.": "No animal to weigh for now.",
+    "Pas assez de pesées pour calculer la croissance.": "Not enough weighings to calculate growth.",
+    "Rien d'urgent aujourd'hui.": "Nothing urgent today.",
+    "Demande non comprise : ration, pesées, coût, croissance ou tâches du jour.": (
+        "Request not understood: ration, weighings, cost, growth or today's tasks."
+    ),
+    "Ration du jour": "Today's ration",
+    "Pesées": "Weighings",
+    "Coût de l'alimentation": "Feeding cost",
+    "Croissance": "Growth",
+    "À faire aujourd'hui": "To do today",
+    "Demande non comprise": "Request not understood",
     # --- Rations types et délai de vérification -------------------------------------------------------
     "Le poids minimal doit être strictement positif.": "The minimum weight must be greater than zero.",
     "La matière sèche par animal et par jour doit être strictement positive.": (
@@ -913,6 +938,23 @@ _GROWTH_EN = (
 )
 
 PATTERNS = [
+    (r"Langue non prise en charge : (?P<lang>.+)\.", "Language not supported: {lang}."),
+    (
+        r"Le service vocal a refusé la demande \(code (?P<code>\d+)\)\.",
+        "The voice service refused the request (code {code}).",
+    ),
+    (r"(?P<n>\d+) animal\(aux\) à peser\.(?P<rest>.*)", "{n} animal(s) to weigh.{rest}"),
+    (r" Poids moyen du lot « (?P<g>.+?) » : (?P<w>.+?)\.", " Average weight of group “{g}”: {w}."),
+    (
+        r"Coût de l'alimentation sur les (?P<d>\d+) derniers jours : (?P<c>.+?)\.(?P<rest>.*)",
+        "Feeding cost over the last {d} days: {c}.{rest}",
+    ),
+    (
+        r"Lot « (?P<g>.+?) » : gain moyen quotidien de (?P<a>\d+) g/j\.(?P<rest>.*)",
+        "Group “{g}”: average daily gain of {a} g/day.{rest}",
+    ),
+    (r"(?P<n>\d+) chose\(s\) à faire aujourd'hui\.(?P<rest>.*)", "{n} thing(s) to do today.{rest}"),
+    (r"(?P<body>.+) \(Données de démonstration fictives\.\)", "{body} (Fictitious demonstration data.)"),
     (
         r"Cette formule a été soumise à un expert\. Elle ne doit pas être considérée comme validée "
         r"tant que l'expert ne s'est pas prononcé\. Réponse attendue avant le (?P<due>.+)\.",

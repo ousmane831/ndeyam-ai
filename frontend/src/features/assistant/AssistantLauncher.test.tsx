@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { assistantService } from '@/services/assistant'
+import { voiceService } from '@/services/voice'
 import { breeder, fakeAuth, renderWithProviders } from '@/test/utils'
 import { AssistantLauncher } from './AssistantLauncher'
 
@@ -12,6 +13,7 @@ const configured = () =>
 describe('AssistantLauncher', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
+    vi.spyOn(voiceService, 'status').mockResolvedValue({ configured: false, speech_languages: [], voice_languages: [], intents: [] })
     vi.spyOn(assistantService, 'status').mockResolvedValue({
       configured: false, provider: null, model: null, message: "L'assistant IA n'est pas configuré (LLM_PROVIDER=none).",
     })
@@ -74,5 +76,19 @@ describe('AssistantLauncher', () => {
     await userEvent.type(input, 'Combien pèse E2E-001 ?{Enter}')
     await vi.waitFor(() => expect(ask).toHaveBeenCalledWith(3, 'Combien pèse E2E-001 ?'))
     expect(create).toHaveBeenCalledWith(1)
+  })
+
+  it("service vocal configuré : le bélier s'ouvre sur « Parler », le guide reste à un onglet", async () => {
+    vi.spyOn(voiceService, 'status').mockResolvedValue({
+      configured: true, speech_languages: ['wolof', 'pulaar', 'serere'], voice_languages: ['wolof', 'pulaar'], intents: [],
+    })
+    renderWithProviders(<AssistantLauncher />, { auth: auth() })
+    await userEvent.click(screen.getByRole('button', { name: "Ouvrir l'assistant Ndeyam AI" }))
+    expect(await screen.findByRole('dialog', { name: 'Assistant Ndeyam AI' })).toBeInTheDocument()
+    expect(await screen.findByRole('tab', { name: 'Parler' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('button', { name: 'Parler' })).toBeInTheDocument() // le micro
+    expect(screen.getByRole('button', { name: /Ration du jour/ })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Guide' }))
+    expect(screen.getByText('Peser vos animaux')).toBeInTheDocument()
   })
 })

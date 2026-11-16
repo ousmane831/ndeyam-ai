@@ -21,6 +21,8 @@ from dataclasses import dataclass, field
 import httpx
 from django.conf import settings
 
+from core.http_retry import post_with_retry
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_ANTHROPIC_MODEL = "claude-opus-5-5"
@@ -172,7 +174,7 @@ class _HttpProvider(LLMProvider):
 
     def _post(self, url, payload, headers=None):
         try:
-            response = self.client.post(url, json=payload, headers=headers or {})
+            response = post_with_retry(self.client, url, json=payload, headers=headers or {})
         except httpx.HTTPError as exc:
             raise LLMError(
                 "provider_unreachable", "Le fournisseur d'IA est injoignable (réseau ou délai dépassé)."

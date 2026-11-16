@@ -1,0 +1,152 @@
+{
+  "_statut": "Première version, à faire relire et corriger par des locuteurs natifs (wolof, pulaar). Ce fichier se modifie sans toucher au code : mots-clés de détection (sans accents, minuscules) et phrases de réponse ; les {variables} doivent être conservées. Une phrase courte par information : chaque phrase est lue séparément (meilleure compréhension).",
+  "wolof": {
+    "keywords": {
+      "weighing": [
+        "natt",
+        "pese",
+        "peese",
+        "peser",
+        "pesee",
+        "diis",
+        "diisaay",
+        "balance"
+      ],
+      "cost": [
+        "xaalis",
+        "njeg",
+        "jar",
+        "franc",
+        "cfa",
+        "depense",
+        "cout",
+        "prix"
+      ],
+      "growth": [
+        "yokk",
+        "yokku",
+        "mag",
+        "mageel",
+        "gmd",
+        "croissance",
+        "sew"
+      ],
+      "tasks": [
+        "lan laa wara def",
+        "def tey",
+        "liggeey",
+        "jamp",
+        "alerte",
+        "tey"
+      ],
+      "ration": [
+        "jox",
+        "lekk",
+        "nam",
+        "dund",
+        "dundal",
+        "ration",
+        "son",
+        "fane",
+        "ngooñ",
+        "gooñ",
+        "kilo"
+      ]
+    },
+    "templates": {
+      "ration": "Ci sa {group}, bés bu nekk, jox leen:",
+      "ration_item": "{quantity}, {food}.",
+      "ration_none": "Amul ration bu dox fi mu nekk. Defal benn ci Ndeyam, te expert bi saytu ko.",
+      "weighing": "Am na {count} xar yu nga wara natt.",
+      "weighing_average": "Xar yi dañu diis {weight} ci diggante.",
+      "weighing_none": "Amul xar bu nga wara natt léegi.",
+      "cost": "Ci fanweer fan yii weesu, dundal sa jur gi jar na:",
+      "cost_none": "Amul xaalis bu ñu bind ci dundal ci fanweer fan yii weesu.",
+      "growth": "Xar yi dañuy yokk {adg} ci bés.",
+      "growth_none": "Natt yi doyuñu ngir xam ni xar yi di yokke.",
+      "tasks": "Am na {count} lu nga wara def tey.",
+      "tasks_none": "Amul lu jamp tey.",
+      "unknown": "Déggumala bu baax. Laajal ma ci lekk, natt, xaalis, yokku walla liggéey bi.",
+      "demo": "Lii ay misaal rekk la.",
+      "cost_amount": "{amount}.",
+      "group": "Sa {group}:"
+    },
+    "units": {
+      "kilo": "kilo",
+      "gram": "gramme",
+      "half": "ak genn-wàll",
+      "currency": "franc"
+    }
+  },
+  "pulaar": {
+    "keywords": {
+      "weighing": [
+        "betu",
+        "betugol",
+        "pese",
+        "peese",
+        "teddeende",
+        "teddi",
+        "balance"
+      ],
+      "cost": [
+        "ceede",
+        "coggu",
+        "njoggu",
+        "franc",
+        "cfa",
+        "depense",
+        "cout"
+      ],
+      "growth": [
+        "mawn",
+        "mawnugol",
+        "beydo",
+        "beydagol",
+        "gmd",
+        "croissance"
+      ],
+      "tasks": [
+        "hol ko",
+        "golle",
+        "hannde",
+        "alerte"
+      ],
+      "ration": [
+        "hokk",
+        "hokkata",
+        "nyaam",
+        "naam",
+        "ñaam",
+        "ration",
+        "son",
+        "fane",
+        "kilo"
+      ]
+    },
+    "templates": {
+      "ration": "E {group} maa, ñalnde kala, hokku ɓe:",
+      "ration_item": "{quantity}, {food}.",
+      "ration_none": "Alaa ration golloowo jooni. Waɗ goɗɗo e Ndeyam, ganndo oo ƴeewta ɗum.",
+      "weighing": "Ena woodi {count} baali ɗi mbaɗaa betde.",
+      "weighing_average": "Baali ɗii ena teddi {weight} e hakkunde.",
+      "weighing_none": "Alaa mbaalu ngu mbaɗaa betde jooni.",
+      "cost": "Ñalɗi capanɗe tati ɗii, ñaamngol jawdi maa coggi:",
+      "cost_none": "Alaa ceede winndaaɗe e ñaamngol ñalɗi capanɗe tati ɗii.",
+      "growth": "Baali ɗii ena mawna {adg} ñalnde kala.",
+      "growth_none": "Bette ɗee heewaani ngam anndude no baali ɗii mawnirta.",
+      "tasks": "Ena woodi {count} golle ɗe mbaɗaa waɗde hannde.",
+      "tasks_none": "Alaa ko yaawi hannde.",
+      "unknown": "Mi faamaani no feewi. Naamnu kam e ñaamdu, betgol, ceede, mawnugol walla golle.",
+      "demo": "Ɗum ko misal tan.",
+      "cost_amount": "{amount}.",
+      "group": "E {group} maa:"
+    },
+    "units": {
+      "kilo": "kilo",
+      "gram": "gram",
+      "half": "e feccere",
+      "currency": "franc"
+    }
+  }
+}

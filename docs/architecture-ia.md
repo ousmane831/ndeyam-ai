@@ -135,3 +135,22 @@ exposer la clé.
 - Testé avec des fournisseurs simulés (formats de requête vérifiés) ; aucun fournisseur réel n'est configuré
   sur cette installation.
 - La qualité des explications dépend du modèle choisi ; les chiffres, eux, viennent toujours des outils.
+
+## 3. Assistant vocal en langues locales
+
+**Chaîne.** Micro du navigateur → WAV mono 16 kHz (converti dans le navigateur, Web Audio) → `POST /voice/ask/` →
+service vocal `/api/v1/agriculture/transcribe` (M-Kiriku-ASR ; texte dans la langue parlée) → détection de la demande
+(`voice/intents.py`, mots-clés de `voice/phrases.json`) → réponse calculée (`voice/answers.py`) → synthèse de chaque
+phrase (`/api/v1/agriculture/synthesize`, wolof ou pulaar) → lecture enchaînée dans le navigateur.
+
+**Pourquoi pas de modèle de langage ici.** Les questions d'un éleveur sur son troupeau sont peu nombreuses et
+chiffrées ; des mots-clés relus par des locuteurs suffisent et garantissent qu'aucun chiffre n'est inventé. Un
+modèle libre (Kirikou, etc.) pourra plus tard comprendre des questions libres, en appelant les mêmes calculs.
+
+**Nombres et phrases.** `voice/numbers.py` écrit les nombres en wolof et en pulaar ; quantités au demi-kilo (ou par
+50 g), montants exacts en francs. Une phrase courte par information. Contrôle d'intelligibilité pendant les essais :
+chaque phrase synthétisée est retranscrite par le service ; les nombres reviennent correctement dans les deux
+langues ; les noms d'aliments français restent la partie la moins bien rendue.
+
+**Limites.** Réponse en 6 s (question touchée) à 15 s (question parlée), selon le serveur vocal. Pas de voix sérère.
+Pas de détection automatique de la langue. Phrases à valider par des locuteurs natifs.

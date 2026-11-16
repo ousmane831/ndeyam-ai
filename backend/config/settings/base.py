@@ -22,6 +22,9 @@ env = environ.Env(
     JWT_ACCESS_MINUTES=(int, 15),
     JWT_REFRESH_DAYS=(int, 7),
     FORMULA_REVIEW_DEADLINE_HOURS=(int, 48),
+    VOICE_SERVICE_URL=(str, ""),
+    VOICE_SERVICE_API_KEY=(str, ""),
+    VOICE_SERVICE_TIMEOUT_SECONDS=(int, 120),
     LLM_PROVIDER=(str, "none"),
     LLM_MODEL=(str, ""),
     LLM_API_KEY=(str, ""),
@@ -73,6 +76,7 @@ LOCAL_APPS = [
     "knowledge_base",
     "assistant",
     "seasons",
+    "voice",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -261,3 +265,12 @@ LOGGING = {
 # Délai de réponse convenu avec les experts : au-delà, l'alerte passe en « en retard » et les administrateurs
 # de la plateforme sont relancés (ils peuvent valider ou trouver un autre expert).
 FORMULA_REVIEW_DEADLINE_HOURS = env("FORMULA_REVIEW_DEADLINE_HOURS")
+
+# --- Assistant vocal ---------------------------------------------------------------------------
+# Service de reconnaissance et de synthèse vocales (wolof, pulaar, sérère), par ex. Sama Agri Voice.
+# Vide : assistant vocal désactivé. La clé n'est jamais écrite dans le code (fichier .env uniquement).
+VOICE_SERVICE = {
+    "URL": env("VOICE_SERVICE_URL").strip(),
+    "API_KEY": env("VOICE_SERVICE_API_KEY"),
+    "TIMEOUT": env("VOICE_SERVICE_TIMEOUT_SECONDS"),
+}

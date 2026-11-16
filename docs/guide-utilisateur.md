@@ -314,3 +314,17 @@ tranche de poids, conditions d'emploi), puis la valide dans l'onglet **Rations t
 l'alerte passe en « Vérification en retard », les administrateurs de la plateforme sont relancés, et l'éleveur peut
 inviter un autre nutritionniste ou utiliser une ration type validée. Une exploitation peut inviter plusieurs
 nutritionnistes : le premier disponible se prononce.
+
+## Assistant vocal
+
+Touchez le **bouton bélier** (en bas à droite) : il s'ouvre sur l'onglet **Parler** (l'onglet **Guide**, ou
+**Écrire** quand l'assistant écrit est activé, reste à côté). Choisissez la langue (**wolof**, **pulaar** ou **sérère**), touchez le **micro**, posez
+votre question, puis touchez à nouveau pour l'envoyer (une minute au plus). Ndeyam répond en une quinzaine de
+secondes : il affiche ce qu'il a entendu, lit la réponse à voix haute phrase par phrase (la phrase lue est
+surlignée) et donne la même réponse en français avec les chiffres exacts. Sans parler, vous pouvez aussi **toucher
+une image** : ration du jour, pesées, croissance, coût de l'alimentation, à faire aujourd'hui.
+
+Les réponses viennent de vos données (ration en cours, pesées, dépenses des 30 derniers jours, alertes) ; rien
+n'est inventé, et une exploitation sans ration en cours l'entend dire. En sérère, la réponse est lue en wolof. Les
+quantités parlées sont arrondies (au demi-kilo, ou par 50 g sous le kilo) ; le texte français garde les valeurs
+exactes. Les phrases en wolof et pulaar sont une première version, à faire relire par des locuteurs natifs.

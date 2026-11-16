@@ -249,3 +249,16 @@ Voir [architecture-ia.md](architecture-ia.md#2-assistant-conversationnel--étape
 
 Le délai se règle par `FORMULA_REVIEW_DEADLINE_HOURS` (48 par défaut). Planifier `evaluate_alerts` au moins toutes
 les heures pour que les retards soient signalés à temps.
+
+## Assistant vocal
+
+| Route | Corps | Notes |
+|---|---|---|
+| `GET /voice/status/` | — | `configured`, `speech_languages` (wolof, pulaar, serere), `voice_languages` (wolof, pulaar), `intents` |
+| `POST /voice/ask/` | multipart `audio` (WAV, 8 Mo au plus), `language`, `farm?` | Transcription, demande reconnue (`intent`, `keywords`), réponse |
+| `POST /voice/answer/` | `{intent, language, farm?}` | Question touchée : `ration`, `weighing`, `cost`, `growth`, `tasks` |
+
+Réponse : `transcript`, `intent`, `spoken_text`, `segments` (`[{text, audio_url, error}]`, une phrase par segment, à
+lire dans l'ordre), `text` (français, chiffres exacts), `farm` (`is_demo`), `data`. Codes : 503 `voice_disabled`
+(service non configuré) ou erreur du service vocal, 404 `no_farm`, 400 langue non prise en charge (`fr` n'est pas
+reconnu par le service). Débit : portée `assistant`. Codes courts acceptés (`wo`, `ff`, `srr`).

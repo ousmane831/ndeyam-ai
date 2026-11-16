@@ -491,3 +491,15 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
 - Vérifications : pytest 506, Vitest 120, lint, build, OpenAPI ; navigateur 18/18 (téléphone en français, ordinateur
   en anglais). Le contrôle navigateur a révélé une erreur à l'application avec un objectif choisi : corrigée et
   couverte par un test.
+
+## Assistant vocal en langues locales (13/11/2026) ✅
+
+- Défi IA sans modèle payant : reconnaissance et synthèse vocales par le service auto-hébergé Sama Agri Voice
+  (M-Kiriku-ASR, voix wolof et pulaar) ; réponses calculées par Ndeyam sur les données de l'exploitation.
+- Application `voice` (statut, question parlée, question touchée), nombres en lettres wolof / pulaar, une phrase par
+  information ; onglet « Parler » du bouton bélier (micro, langues, cinq questions illustrées, lecture phrase par
+  phrase), sans nouvelle entrée de menu.
+- Vérifications : pytest 524, Vitest 125, lint, typecheck, build ; essais réels avec le service (retranscription de
+  chaque phrase synthétisée) ; navigateur 17/17 avec un faux micro lisant une question wolof enregistrée (téléphone
+  et ordinateur). Le contrôle navigateur a révélé l'envoi de l'audio en JSON (corrigé : multipart) et un débordement en largeur du
+  tableau de bord sur téléphone, qui cachait le bouton bélier (corrigé).

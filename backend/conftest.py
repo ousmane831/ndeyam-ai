@@ -17,6 +17,12 @@ def rejected_by_database():
         yield
 
 
+@pytest.fixture(autouse=True)
+def _no_retry_pause(monkeypatch):
+    """Les nouvelles tentatives vers les fournisseurs d'IA se font sans pause dans les tests."""
+    monkeypatch.setattr("core.http_retry.RETRY_DELAYS", (0, 0))
+
+
 @pytest.fixture
 def make_user(db, django_user_model):
     counter = {"n": 0}
