@@ -56,12 +56,13 @@ describe('VoiceAssistant', () => {
     expect(within(spoken).getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'true')
   })
 
-  it("répond en wolof quand l'éleveur choisit le sérère (pas encore de voix sérère)", async () => {
+  it("sérère : pas de question parlée (pas de mots-clés), questions par images lues en wolof", async () => {
     vi.spyOn(voiceService, 'status').mockResolvedValue(status(true))
     const ask = vi.spyOn(voiceService, 'answer').mockResolvedValue(answer)
     renderWithProviders(<VoiceAssistant />, { auth: auth() })
     await userEvent.click(screen.getByRole('button', { name: 'Sérère' }))
-    expect(await screen.findByText(/la voix sérère n'est pas encore disponible/)).toBeInTheDocument()
+    expect(await screen.findByText(/Le sérère n'est pas encore compris à l'oral/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Parler' })).toBeDisabled()
     const tasks = screen.getByRole('button', { name: /À faire aujourd'hui/ })
     await waitFor(() => expect(tasks).toBeEnabled())
     await userEvent.click(tasks)

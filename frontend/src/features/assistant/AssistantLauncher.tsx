@@ -30,7 +30,7 @@ export function AssistantLauncher() {
   const statusKnown = !chat.status.isLoading
   // Assistant non activé : le bouton bélier ouvre le guide et le glossaire, jamais un message technique.
   const guideMode = statusKnown && !chat.configured
-  // Assistant vocal (wolof, pulaar, sérère) : premier onglet du panneau quand le service vocal est configuré.
+  // Assistant vocal (oral en wolof et pulaar ; sérère par images) : premier onglet du panneau quand le service vocal est configuré.
   const voice = useQuery({ queryKey: ['voice', 'status'], queryFn: voiceService.status, staleTime: 5 * 60_000 })
   const voiceOn = Boolean(voice.data?.configured)
   const [tab, setTab] = useState<'voice' | 'other'>('voice')
@@ -80,7 +80,7 @@ export function AssistantLauncher() {
               <div className="min-w-0 flex-1">
                 <p className="font-display text-[15px] leading-tight font-bold">{title}</p>
                 <p className="truncate text-xs text-brand-200">
-                  {chat.status.isLoading ? t('Vérification…') : showVoice ? t('Parlez en wolof, pulaar ou sérère') : guideMode ? t('Les gestes essentiels et le vocabulaire') : t('Répond à partir de vos données')}
+                  {chat.status.isLoading ? t('Vérification…') : showVoice ? t('Parlez en wolof ou en pulaar') : guideMode ? t('Les gestes essentiels et le vocabulaire') : t('Répond à partir de vos données')}
                 </p>
               </div>
               {!guideMode && !showVoice && (

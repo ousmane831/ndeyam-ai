@@ -503,3 +503,16 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
   chaque phrase synthétisée) ; navigateur 17/17 avec un faux micro lisant une question wolof enregistrée (téléphone
   et ordinateur). Le contrôle navigateur a révélé l'envoi de l'audio en JSON (corrigé : multipart) et un débordement en largeur du
   tableau de bord sur téléphone, qui cachait le bouton bélier (corrigé).
+
+## Dossier de soumission et cohérence (16/11/2026) ✅
+
+- Fiche de projet (5 pages) et document technique (9 pages), en PDF et Word à la racine ; distinction explicite entre
+  vérification du logiciel et effet sur les animaux (essai pilote = prochaine étape) ; absence de données réelles
+  validées indiquée dès le résumé.
+- Sérère : aucun mot-clé, donc aucune question parlée comprise. Interface alignée : micro désactivé et message
+  « touchez une question » en sérère, sous-titre « Parlez en wolof ou en pulaar ».
+- « Lan laa wara jox sama xar yi tey ? » donnait « tâches » : « tey » et « hannde » (aujourd'hui) retirés des
+  mots-clés des tâches, cas ajoutés aux tests.
+- Preuves des chiffres cités : `docs/preuves/` (rapports JUnit du jour, résultats détaillés des vérifications du 07 et
+  du 09/11, captures de l'assistant vocal).
+

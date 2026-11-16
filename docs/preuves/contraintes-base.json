@@ -1,0 +1,157 @@
+[
+ {
+  "name": "source : année 3000 → 400 (reçu 400) [\"L'année de la source n'est pas plausible.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "source : année 900 → 400 (reçu 400) [\"L'année de la source n'est pas plausible.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "animal : poids initial négatif → 400 (reçu 400) ['Le poids initial doit être strictement positif.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "animal : poids initial nul → 400 (reçu 400) ['Le poids initial doit être strictement positif.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "composition : valeur négative → 400 (reçu 400) ['Une teneur ne peut pas être négative.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "prix : nul → 400 (reçu 400) ['Le prix doit être supérieur à zéro.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "prix : stock négatif → 400 (reçu 400) ['La quantité disponible ne peut pas être négative.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence : âge min > max → 400 (reçu 400) [\"L'âge minimal doit être inférieur ou égal à l'âge maximal.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence : poids min > max → 400 (reçu 400) ['Le poids minimal doit être inférieur ou égal au poids maximal.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence : poids négatif → 400 (reçu 400) [\"Les âges, poids et quantités d'ingestion doivent être positifs.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence : ingestion négative → 400 (reçu 400) [\"Les âges, poids et quantités d'ingestion doivent être positifs.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin : aucune valeur → 400 (reçu 400) ['Indiquez au moins une valeur (minimum, cible ou maximum).']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin : valeur négative → 400 (reçu 400) [\"Les valeurs d'un besoin ne peuvent pas être négatives.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin : min > cible → 400 (reçu 400) ['Le minimum doit être inférieur ou égal à la cible.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin : cible > max → 400 (reçu 400) ['La cible doit être inférieure ou égale au maximum.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : ingrédient ET catégorie → 400 (reçu 400) [\"Choisissez soit un ingrédient, soit une catégorie d'ingrédients.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : aucune borne → 400 (reçu 400) ['Renseignez au moins une borne.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : % négatif → 400 (reçu 400) ['Les bornes sont des pourcentages entre 0 et 100.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : % > 100 → 400 (reçu 400) ['Les bornes sont des pourcentages entre 0 et 100.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule manuelle : quantité négative → 400 (reçu 400) [{'quantity_as_fed_kg': ['Assurez-vous que cette valeur est supérieure ou égale à\\xa00.0001.']}]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule : poids d'animal négatif → 400 (reçu 400) [\"Le poids de l'animal doit être strictement positif.\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ration : animal ET lot → 400 (reçu 400) [\"Associez soit un animal, soit un lot (l'un des deux, pas les deux).\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ration : fin avant début → 400 (reçu 400) ['La date de fin doit suivre la date de début.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ration : quantité prévue négative → 400 (reçu 400) ['La quantité doit être positive.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "distribution : quantité négative → 400 (reçu 400) ['La quantité ne peut pas être négative.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "distribution : refus > distribué → 400 (reçu 400) ['Ne peut pas dépasser la quantité distribuée.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "distribution : animal ET lot → 400 (reçu 400) [\"Associez soit un animal, soit un lot (l'un des deux, pas les deux).\"]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pesée : poids nul → 400 (reçu 400) ['Le poids doit être supérieur à zéro.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "plage de suivi : min > max → 400 (reçu 400) ['La borne maximale doit être ≥ à la borne minimale.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "plage de suivi : aucune borne → 400 (reçu 400) ['Renseignez au moins une borne de GMD.']",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "plage de suivi : âge min > max → 400 (reçu 400) ['La borne maximale doit être ≥ à la borne minimale.']",
+  "ok": true,
+  "detail": ""
+ }
+]

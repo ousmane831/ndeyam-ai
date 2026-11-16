@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="125" failures="0" errors="0" time="26.9069952">
+    <testsuite name="src/components/ui/Modal.test.tsx" timestamp="2026-11-16T13:17:22.005Z" hostname="poste-de-developpement" tests="1" failures="0" errors="0" skipped="0" time="0.8642169">
+        <testcase classname="src/components/ui/Modal.test.tsx" name="Modal &gt; ne vole pas le focus d’un champ contrôlé pendant la saisie" time="0.8516505">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/contexts/FarmContext.test.tsx" timestamp="2026-11-16T13:17:22.010Z" hostname="poste-de-developpement" tests="1" failures="0" errors="0" skipped="0" time="0.1476961">
+        <testcase classname="src/contexts/FarmContext.test.tsx" name="FarmProvider &gt; ne propose jamais par défaut une exploitation désactivée (défaut trouvé à l&apos;étape 11)" time="0.13886">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/alerts/AlertList.test.tsx" timestamp="2026-11-16T13:17:22.011Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="1.1648719">
+        <testcase classname="src/features/alerts/AlertList.test.tsx" name="AlertList &gt; explique l&apos;alerte et renvoie vers l&apos;animal" time="0.8911421">
+        </testcase>
+        <testcase classname="src/features/alerts/AlertList.test.tsx" name="AlertList &gt; appelle l’API pour résoudre une alerte" time="0.2051065">
+        </testcase>
+        <testcase classname="src/features/alerts/AlertList.test.tsx" name="AlertList &gt; n’affiche aucune action en lecture seule" time="0.0408354">
+        </testcase>
+        <testcase classname="src/features/alerts/AlertList.test.tsx" name="AlertList &gt; affiche un état vide explicite" time="0.0195725">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/animals/animalForm.test.ts" timestamp="2026-11-16T13:17:22.013Z" hostname="poste-de-developpement" tests="8" failures="0" errors="0" skipped="0" time="0.0390716">
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : validation &gt; accepte un animal minimal" time="0.0148993">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : validation &gt; exige numéro, espèce et sexe" time="0.0032299">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : validation &gt; exige la date de naissance en mode « date » et refuse une date future" time="0.0024281">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : validation &gt; contrôle l&apos;âge estimé" time="0.0016482">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : validation &gt; refuse un poids nul ou négatif mais accepte la virgule" time="0.0014794">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : conversion pour l’API &gt; convertit les identifiants et la virgule décimale" time="0.004167">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : conversion pour l’API &gt; envoie l&apos;âge estimé ou la date selon le mode choisi" time="0.0010481">
+        </testcase>
+        <testcase classname="src/features/animals/animalForm.test.ts" name="formulaire animal : conversion pour l’API &gt; efface la date de naissance lorsque l’âge devient inconnu en modification" time="0.0010592">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/assistant/AssistantLauncher.test.tsx" timestamp="2026-11-16T13:17:22.015Z" hostname="poste-de-developpement" tests="5" failures="0" errors="0" skipped="0" time="2.4565449">
+        <testcase classname="src/features/assistant/AssistantLauncher.test.tsx" name="AssistantLauncher &gt; sans assistant activé, le bouton bélier ouvre un guide et un glossaire, sans jargon technique" time="0.7930154">
+        </testcase>
+        <testcase classname="src/features/assistant/AssistantLauncher.test.tsx" name="AssistantLauncher &gt; l&apos;indication technique d&apos;activation n&apos;est montrée qu&apos;aux administrateurs" time="0.1074464">
+        </testcase>
+        <testcase classname="src/features/assistant/AssistantLauncher.test.tsx" name="AssistantLauncher &gt; assistant activé : discussion, vue plein écran, et masqué sur la page de l&apos;assistant" time="0.1647359">
+        </testcase>
+        <testcase classname="src/features/assistant/AssistantLauncher.test.tsx" name="AssistantLauncher &gt; envoie une question depuis le panneau" time="1.0823922">
+        </testcase>
+        <testcase classname="src/features/assistant/AssistantLauncher.test.tsx" name="AssistantLauncher &gt; service vocal configuré : le bélier s&apos;ouvre sur « Parler », le guide reste à un onglet" time="0.3004113">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/charts/theme.test.ts" timestamp="2026-11-16T13:17:22.017Z" hostname="poste-de-developpement" tests="2" failures="0" errors="0" skipped="0" time="0.0088202">
+        <testcase classname="src/features/charts/theme.test.ts" name="niceTicks &gt; produit des graduations régulières qui encadrent les valeurs" time="0.0033738">
+        </testcase>
+        <testcase classname="src/features/charts/theme.test.ts" name="niceTicks &gt; gère une seule valeur et une liste vide" time="0.0012922">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/feeding/feedingForm.test.ts" timestamp="2026-11-16T13:17:22.018Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="0.0109954">
+        <testcase classname="src/features/feeding/feedingForm.test.ts" name="validateFeeding &gt; accepte une distribution sans consommation mesurée (jamais supposée)" time="0.004296">
+        </testcase>
+        <testcase classname="src/features/feeding/feedingForm.test.ts" name="validateFeeding &gt; refuse une consommation ou des refus supérieurs à la quantité distribuée" time="0.0007957">
+        </testcase>
+        <testcase classname="src/features/feeding/feedingForm.test.ts" name="validateFeeding &gt; exige la quantité distribuée, une date passée et l’effectif pour un lot" time="0.0008062">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/formulation/FormulaResult.test.tsx" timestamp="2026-11-16T13:17:22.019Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="0.7504631">
+        <testcase classname="src/features/formulation/FormulaResult.test.tsx" name="FormulaResult &gt; présente une estimation avec ses limites, sans la faire passer pour une recommandation" time="0.51728">
+        </testcase>
+        <testcase classname="src/features/formulation/FormulaResult.test.tsx" name="FormulaResult &gt; explique un refus et n’affiche aucune ration" time="0.0403992">
+        </testcase>
+        <testcase classname="src/features/formulation/FormulaResult.test.tsx" name="FormulaResult &gt; détaille les contraintes bloquantes d’une formule impossible" time="0.0290464">
+        </testcase>
+        <testcase classname="src/features/formulation/FormulaResult.test.tsx" name="FormulaResult &gt; signale une formule de démonstration" time="0.1541425">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/formulation/QuickForm.test.tsx" timestamp="2026-11-16T13:17:22.021Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="1.6896646">
+        <testcase classname="src/features/formulation/QuickForm.test.tsx" name="QuickForm &gt; calcule une ration pour un lot en deux gestes, sans profil à saisir" time="0.9489458">
+        </testcase>
+        <testcase classname="src/features/formulation/QuickForm.test.tsx" name="QuickForm &gt; demande le lot avant de calculer" time="0.1434171">
+        </testcase>
+        <testcase classname="src/features/formulation/QuickForm.test.tsx" name="QuickForm &gt; sans réseau : calcule sur l’appareil et met le calcul officiel en attente d’envoi" time="0.3362032">
+        </testcase>
+        <testcase classname="src/features/formulation/QuickForm.test.tsx" name="QuickForm &gt; propose les rations types validées du lot, utilisables tout de suite" time="0.2469516">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/formulation/RationCard.test.tsx" timestamp="2026-11-16T13:17:22.022Z" hostname="poste-de-developpement" tests="5" failures="0" errors="0" skipped="0" time="0.9067358">
+        <testcase classname="src/features/formulation/RationCard.test.tsx" name="practicalQuantity &gt; donne des grammes sous 1 kg et des kilos au dixième au-delà" time="0.0606873">
+        </testcase>
+        <testcase classname="src/features/formulation/RationCard.test.tsx" name="RationCard &gt; affiche en gros les quantités et le coût du jour pour tout le lot" time="0.2877368">
+        </testcase>
+        <testcase classname="src/features/formulation/RationCard.test.tsx" name="RationCard &gt; recalcule pour un autre nombre d&apos;animaux et le reprend dans le message WhatsApp" time="0.4840787">
+        </testcase>
+        <testcase classname="src/features/formulation/RationCard.test.tsx" name="RationCard &gt; dit clairement quand une ration peut être distribuée, et quand jamais" time="0.0041749">
+        </testcase>
+        <testcase classname="src/features/formulation/RationCard.test.tsx" name="RationCard &gt; compte un seul animal quand la formule ne vise pas un lot" time="0.0596181">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/formulation/payload.test.ts" timestamp="2026-11-16T13:17:22.024Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="0.0157959">
+        <testcase classname="src/features/formulation/payload.test.ts" name="buildCalculationPayload &gt; ne transmet que les ingrédients cochés et convertit la virgule décimale" time="0.00644">
+        </testcase>
+        <testcase classname="src/features/formulation/payload.test.ts" name="buildCalculationPayload &gt; pour un animal, laisse le serveur reprendre le profil de sa fiche" time="0.0011564">
+        </testcase>
+        <testcase classname="src/features/formulation/payload.test.ts" name="buildCalculationPayload &gt; ajoute effectif et durée seulement si une disponibilité est saisie" time="0.0011633">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/offline/engine.test.ts" timestamp="2026-11-16T13:17:22.026Z" hostname="poste-de-developpement" tests="17" failures="0" errors="0" skipped="0" time="0.1072884">
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; economique_simple" time="0.0253479">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; economique_teneur_et_plafond" time="0.0063243">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; equilibre_cibles" time="0.00478">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; disponibilite_limitee" time="0.0022314">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; impossible" time="0.0012192">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; refus_sans_besoin" time="0.0008368">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; exclusions" time="0.0031382">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_118_economic_tous" time="0.003733">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_118_economic_sans_premier" time="0.0033269">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_118_balanced_tous" time="0.0037323">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_118_balanced_sans_premier" time="0.015775">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_117_economic_tous" time="0.004078">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_117_economic_sans_premier" time="0.0038599">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_117_balanced_tous" time="0.0048302">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; pack_117_balanced_sans_premier" time="0.0063877">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; restreint un problème aux ingrédients choisis, plafonds compris" time="0.0077299">
+        </testcase>
+        <testcase classname="src/features/offline/engine.test.ts" name="moteur hors ligne : parité avec le moteur Python (PuLP / CBC) &gt; refuse avec les mêmes motifs que le serveur, sans rien supposer" time="0.0009106">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/offline/offline.test.ts" timestamp="2026-11-16T13:17:22.031Z" hostname="poste-de-developpement" tests="7" failures="0" errors="0" skipped="0" time="0.062188">
+        <testcase classname="src/features/offline/offline.test.ts" name="choix de la référence hors ligne (même règle que le serveur) &gt; retient la référence d&apos;embouche pour le lot Tabaski avec l&apos;objectif Tabaski" time="0.0048594">
+        </testcase>
+        <testcase classname="src/features/offline/offline.test.ts" name="choix de la référence hors ligne (même règle que le serveur) &gt; n&apos;applique jamais une référence propre à un objectif sans cet objectif" time="0.0010818">
+        </testcase>
+        <testcase classname="src/features/offline/offline.test.ts" name="choix de la référence hors ligne (même règle que le serveur) &gt; refuse proprement un lot sans référence (agneaux)" time="0.0070979">
+        </testcase>
+        <testcase classname="src/features/offline/offline.test.ts" name="choix de la référence hors ligne (même règle que le serveur) &gt; estime une ration DEMO avec les notes du lot et de la référence" time="0.0197581">
+        </testcase>
+        <testcase classname="src/features/offline/offline.test.ts" name="file d&apos;envoi des saisies hors ligne &gt; garde les saisies sur l’appareil, rattachées à l’utilisateur" time="0.0055558">
+        </testcase>
+        <testcase classname="src/features/offline/offline.test.ts" name="file d&apos;envoi des saisies hors ligne &gt; envoie dans l&apos;ordre, s&apos;arrête sur une coupure et garde les refus avec leur message" time="0.0082286">
+        </testcase>
+        <testcase classname="src/features/offline/offline.test.ts" name="file d&apos;envoi des saisies hors ligne &gt; relie le calcul hors ligne à la formule officielle enregistrée par le serveur" time="0.0029515">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/reference/Workflow.test.tsx" timestamp="2026-11-16T13:17:22.033Z" hostname="poste-de-developpement" tests="5" failures="0" errors="0" skipped="0" time="1.754868">
+        <testcase classname="src/features/reference/Workflow.test.tsx" name="WorkflowActions &gt; un éleveur ne peut que soumettre" time="0.5415196">
+        </testcase>
+        <testcase classname="src/features/reference/Workflow.test.tsx" name="WorkflowActions &gt; un expert peut valider une donnée en attente" time="0.1994197">
+        </testcase>
+        <testcase classname="src/features/reference/Workflow.test.tsx" name="WorkflowActions &gt; le rejet exige un motif" time="0.7892933">
+        </testcase>
+        <testcase classname="src/features/reference/Workflow.test.tsx" name="WorkflowActions &gt; affiche l’erreur du serveur (ex. validation sans source)" time="0.1938861">
+        </testcase>
+        <testcase classname="src/features/reference/Workflow.test.tsx" name="WorkflowActions &gt; rien à faire sur une donnée validée pour un non-expert" time="0.0130721">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/voice/VoiceAssistant.test.tsx" timestamp="2026-11-16T13:17:22.035Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="1.0812854">
+        <testcase classname="src/features/voice/VoiceAssistant.test.tsx" name="VoiceAssistant &gt; explique que l&apos;assistant vocal n&apos;est pas activé et désactive les questions" time="0.5583798">
+        </testcase>
+        <testcase classname="src/features/voice/VoiceAssistant.test.tsx" name="VoiceAssistant &gt; répond à une question touchée, phrase par phrase, avec le texte français et la mention DEMO" time="0.3285244">
+        </testcase>
+        <testcase classname="src/features/voice/VoiceAssistant.test.tsx" name="VoiceAssistant &gt; sérère : pas de question parlée (pas de mots-clés), questions par images lues en wolof" time="0.1811697">
+        </testcase>
+        <testcase classname="src/features/voice/VoiceAssistant.test.tsx" name="encodeWav &gt; produit un WAV PCM 16 bits mono 16 kHz" time="0.0044297">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/i18n/context.test.ts" timestamp="2026-11-16T13:17:22.036Z" hostname="poste-de-developpement" tests="1" failures="0" errors="0" skipped="0" time="0.01305">
+        <testcase classname="src/i18n/context.test.ts" name="langue de l’interface &gt; « Nom » d’une personne : « Last name » en anglais, inchangé en français" time="0.0081946">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/i18n/i18n.test.ts" timestamp="2026-11-16T13:17:22.037Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="0.021192">
+        <testcase classname="src/i18n/i18n.test.ts" name="traductions anglaises &gt; chaque texte de l’interface a sa traduction anglaise" time="0.0064767">
+        </testcase>
+        <testcase classname="src/i18n/i18n.test.ts" name="traductions anglaises &gt; les variables ({{…}}) sont les mêmes en français et en anglais" time="0.0054633">
+        </testcase>
+        <testcase classname="src/i18n/i18n.test.ts" name="traductions anglaises &gt; aucune traduction vide" time="0.0028091">
+        </testcase>
+        <testcase classname="src/i18n/i18n.test.ts" name="traductions anglaises &gt; l’interface est réellement traduite (contrôle de volume)" time="0.0008619">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/DashboardPage.test.tsx" timestamp="2026-11-16T13:17:22.038Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="0.9891035">
+        <testcase classname="src/pages/DashboardPage.test.tsx" name="DashboardPage &gt; affiche des états vides explicites sans inventer de statistiques" time="0.5419172">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.tsx" name="DashboardPage &gt; affiche les indicateurs réels et signale les coûts incomplets" time="0.2069684">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.tsx" name="DashboardPage &gt; transforme les alertes ouvertes en tâches du jour avec une action directe" time="0.2327508">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/SystemStatusPage.test.tsx" timestamp="2026-11-16T13:17:22.040Z" hostname="poste-de-developpement" tests="2" failures="0" errors="0" skipped="0" time="0.3409299">
+        <testcase classname="src/pages/SystemStatusPage.test.tsx" name="SystemStatusPage &gt; affiche l&apos;état renvoyé par l&apos;API" time="0.2518389">
+        </testcase>
+        <testcase classname="src/pages/SystemStatusPage.test.tsx" name="SystemStatusPage &gt; affiche un message explicite lorsque l&apos;API est injoignable" time="0.079845">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/animals/AnimalsPage.test.tsx" timestamp="2026-11-16T13:17:22.041Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="1.0653581">
+        <testcase classname="src/pages/animals/AnimalsPage.test.tsx" name="AnimalsPage &gt; affiche les animaux renvoyés par l’API" time="0.6312234">
+        </testcase>
+        <testcase classname="src/pages/animals/AnimalsPage.test.tsx" name="AnimalsPage &gt; propose d’ajouter un premier animal quand la liste est vide" time="0.1362048">
+        </testcase>
+        <testcase classname="src/pages/animals/AnimalsPage.test.tsx" name="AnimalsPage &gt; n’affiche aucun bouton d’ajout ou d’import en lecture seule" time="0.1240766">
+        </testcase>
+        <testcase classname="src/pages/animals/AnimalsPage.test.tsx" name="AnimalsPage &gt; transmet l’exploitation sélectionnée à l’API" time="0.1634219">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/assistant/AssistantPage.test.tsx" timestamp="2026-11-16T13:17:22.043Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="2.0626345">
+        <testcase classname="src/pages/assistant/AssistantPage.test.tsx" name="AssistantPage &gt; indique clairement que l&apos;assistant n&apos;est pas configuré et désactive la saisie" time="0.5233009">
+        </testcase>
+        <testcase classname="src/pages/assistant/AssistantPage.test.tsx" name="AssistantPage &gt; envoie une question et affiche la réponse avec l&apos;origine des informations" time="1.093162">
+        </testcase>
+        <testcase classname="src/pages/assistant/AssistantPage.test.tsx" name="AssistantPage &gt; restaure la question et affiche l&apos;erreur si l&apos;envoi échoue" time="0.435352">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/auth/LoginPage.test.tsx" timestamp="2026-11-16T13:17:22.044Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="2.3780966">
+        <testcase classname="src/pages/auth/LoginPage.test.tsx" name="LoginPage &gt; valide les champs avant d&apos;appeler l&apos;API" time="0.6989789">
+        </testcase>
+        <testcase classname="src/pages/auth/LoginPage.test.tsx" name="LoginPage &gt; affiche l&apos;erreur renvoyée par le serveur" time="0.7760831">
+        </testcase>
+        <testcase classname="src/pages/auth/LoginPage.test.tsx" name="LoginPage &gt; connecte avec « Rester connecté » puis redirige" time="0.7942965">
+        </testcase>
+        <testcase classname="src/pages/auth/LoginPage.test.tsx" name="LoginPage &gt; prévient l&apos;utilisateur lorsque sa session a expiré" time="0.0972275">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/auth/RegisterPage.test.tsx" timestamp="2026-11-16T13:17:22.046Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="5.5978559">
+        <testcase classname="src/pages/auth/RegisterPage.test.tsx" name="RegisterPage &gt; refuse deux mots de passe différents" time="2.165433">
+        </testcase>
+        <testcase classname="src/pages/auth/RegisterPage.test.tsx" name="RegisterPage &gt; rattache les erreurs du serveur au bon champ" time="1.8247077">
+        </testcase>
+        <testcase classname="src/pages/auth/RegisterPage.test.tsx" name="RegisterPage &gt; envoie les informations de l&apos;exploitation avec le compte" time="1.5991876">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/documents/DocumentsPage.test.tsx" timestamp="2026-11-16T13:17:22.047Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="1.3457392">
+        <testcase classname="src/pages/documents/DocumentsPage.test.tsx" name="DocumentsPage &gt; indique le mode de recherche et masque l&apos;import pour un éleveur" time="0.5650884">
+        </testcase>
+        <testcase classname="src/pages/documents/DocumentsPage.test.tsx" name="DocumentsPage &gt; affiche les résultats avec leur citation (document, page, source)" time="0.6754455">
+        </testcase>
+        <testcase classname="src/pages/documents/DocumentsPage.test.tsx" name="DocumentsPage &gt; propose l&apos;import et l&apos;aperçu des brouillons aux experts" time="0.096344">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/ingredients/IngredientDetailPage.test.tsx" timestamp="2026-11-16T13:17:22.048Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="1.3005598">
+        <testcase classname="src/pages/ingredients/IngredientDetailPage.test.tsx" name="IngredientDetailPage &gt; affiche la valeur validée et signale explicitement les valeurs inconnues" time="0.5744394">
+        </testcase>
+        <testcase classname="src/pages/ingredients/IngredientDetailPage.test.tsx" name="IngredientDetailPage &gt; un éleveur ne peut pas modifier le catalogue commun mais peut saisir ses prix" time="0.4378143">
+        </testcase>
+        <testcase classname="src/pages/ingredients/IngredientDetailPage.test.tsx" name="IngredientDetailPage &gt; un expert peut ajouter une valeur" time="0.2733439">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/routes/guards.test.tsx" timestamp="2026-11-16T13:17:22.049Z" hostname="poste-de-developpement" tests="6" failures="0" errors="0" skipped="0" time="0.3831214">
+        <testcase classname="src/routes/guards.test.tsx" name="protection des routes &gt; redirige un visiteur non connecté vers la connexion" time="0.1364324">
+        </testcase>
+        <testcase classname="src/routes/guards.test.tsx" name="protection des routes &gt; affiche un chargement pendant la restauration de session" time="0.1831378">
+        </testcase>
+        <testcase classname="src/routes/guards.test.tsx" name="protection des routes &gt; laisse passer un utilisateur connecté" time="0.0166578">
+        </testcase>
+        <testcase classname="src/routes/guards.test.tsx" name="protection des routes &gt; refuse l&apos;espace administrateur à un éleveur" time="0.017876">
+        </testcase>
+        <testcase classname="src/routes/guards.test.tsx" name="protection des routes &gt; ouvre l&apos;espace administrateur à un administrateur" time="0.0114895">
+        </testcase>
+        <testcase classname="src/routes/guards.test.tsx" name="protection des routes &gt; renvoie un utilisateur déjà connecté hors de la page de connexion" time="0.0096247">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/services/api.refresh.test.ts" timestamp="2026-11-16T13:17:22.052Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="0.0785923">
+        <testcase classname="src/services/api.refresh.test.ts" name="renouvellement automatique du jeton &gt; renouvelle le jeton puis rejoue la requête" time="0.0185477">
+        </testcase>
+        <testcase classname="src/services/api.refresh.test.ts" name="renouvellement automatique du jeton &gt; mutualise le renouvellement entre requêtes simultanées" time="0.0189352">
+        </testcase>
+        <testcase classname="src/services/api.refresh.test.ts" name="renouvellement automatique du jeton &gt; termine la session si le renouvellement échoue" time="0.0269541">
+        </testcase>
+        <testcase classname="src/services/api.refresh.test.ts" name="renouvellement automatique du jeton &gt; ne tente pas de renouvellement sur un échec de connexion" time="0.0061981">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/services/api.test.ts" timestamp="2026-11-16T13:17:22.053Z" hostname="poste-de-developpement" tests="4" failures="0" errors="0" skipped="0" time="0.0259969">
+        <testcase classname="src/services/api.test.ts" name="toApiError &gt; signale une erreur réseau lorsque le serveur est injoignable" time="0.0115322">
+        </testcase>
+        <testcase classname="src/services/api.test.ts" name="toApiError &gt; reprend le message et les erreurs de champ renvoyés par le backend" time="0.004153">
+        </testcase>
+        <testcase classname="src/services/api.test.ts" name="toApiError &gt; fournit un message par défaut pour une erreur 500 sans corps" time="0.0014867">
+        </testcase>
+        <testcase classname="src/services/api.test.ts" name="erreurs imbriquées &gt; aplatit les erreurs par ligne (ex. séance de pesée)" time="0.0012408">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/services/tokens.test.ts" timestamp="2026-11-16T13:17:22.054Z" hostname="poste-de-developpement" tests="5" failures="0" errors="0" skipped="0" time="0.019169">
+        <testcase classname="src/services/tokens.test.ts" name="tokenStore &gt; garde le jeton d&apos;accès uniquement en mémoire" time="0.0067443">
+        </testcase>
+        <testcase classname="src/services/tokens.test.ts" name="tokenStore &gt; « Rester connecté » conserve le jeton de rafraîchissement dans localStorage" time="0.0016619">
+        </testcase>
+        <testcase classname="src/services/tokens.test.ts" name="tokenStore &gt; sans « Rester connecté », le jeton est limité à la session du navigateur" time="0.0011122">
+        </testcase>
+        <testcase classname="src/services/tokens.test.ts" name="tokenStore &gt; un renouvellement conserve le mode de stockage choisi à la connexion" time="0.0010946">
+        </testcase>
+        <testcase classname="src/services/tokens.test.ts" name="tokenStore &gt; clear efface tout" time="0.0011085">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/format.test.ts" timestamp="2026-11-16T13:17:22.056Z" hostname="poste-de-developpement" tests="3" failures="0" errors="0" skipped="0" time="0.2250899">
+        <testcase classname="src/utils/format.test.ts" name="formatage &gt; affiche « — » pour une valeur absente, jamais zéro" time="0.0067173">
+        </testcase>
+        <testcase classname="src/utils/format.test.ts" name="formatage &gt; formate à la française" time="0.1738023">
+        </testcase>
+        <testcase classname="src/utils/format.test.ts" name="formatage &gt; exprime l&apos;âge en jours, mois ou années et signale l&apos;estimation" time="0.0346688">
+        </testcase>
+    </testsuite>
+</testsuites>

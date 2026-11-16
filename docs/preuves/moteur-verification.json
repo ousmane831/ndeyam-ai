@@ -1,0 +1,282 @@
+[
+ {
+  "name": "référence de test validée [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut ESTIMATED",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "second solveur (HiGHS) : problème réalisable",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "coût optimal identique au second solveur (±0,01 FCFA)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "coût recalculé depuis les quantités = coût annoncé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ingestion de MS dans [1,0 ; 1,4]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "UFL ≥ 0,9 (recalcul indépendant)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "MAT dans [120 ; 200] g/j (recalcul)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "CB ≤ 250 g/kg MS (teneur, recalcul)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tourteau ≤ 20 % de la MS (recalcul)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "conversion MS → brut = MS ÷ (teneur MS / 1000) pour chaque ingrédient",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "somme des incorporations = 100 % de la MS",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "apport UFL annoncé = recalcul",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "apport MAT annoncé = recalcul",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "vérification interne (verify.py) : toutes les contraintes « ok »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule présentée comme estimation, pas comme recommandation",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "sources citées",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "équilibré : ESTIMATED et contraintes respectées (recalcul)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "équilibré : vérification interne « ok »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "disponibilité : tourteau ≤ 0.0613 kg MS/j",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "disponibilité : coût identique au second solveur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ingrédient sans MAT validée exclu (jamais compté à zéro), même s'il est le moins cher",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "une valeur en brouillon n'est pas utilisée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ingrédient sans matière sèche exclu → refus",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mode économique : ingrédient sans prix exclu",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mode équilibré : calcul possible, coût non calculé et signalé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "aucune référence validée pour le profil (brebis) → refus motivé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence sans bornes d'ingestion de MS → refus",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "aucun ingrédient proposé → refusé dès la saisie [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ingrédients DEMO présents (jeu DEMO chargé)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation réelle : tous les ingrédients DEMO exclus, avec raison",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation réelle : référence DEMO refusée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "composition refusée : MS > 1000 g/kg brut [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "composition refusée : MS négative [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "composition refusée : MAT négative [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "composition refusée : UFL négative [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin d'un autre système refusé (EM NRC sur référence INRA) [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin min > max refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence : ingestion min > max refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : % de MS > 100 refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : min > max refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence : ingestion négative refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contrainte : % négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul : disponibilité négative refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul : prix saisi négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul : poids d'animal négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "prix négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "valeur NRC (EM) présente mais jamais mélangée au calcul INRA",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "second solveur : besoin de 300 g/j effectivement inatteignable",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut INFEASIBLE, aucune ration proposée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "diagnostic : la contrainte MAT est désignée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "diagnostic : écart chiffré ≈ 39.6 g/j (±1)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule impossible enregistrée sans coût ni ingrédient",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule impossible : vérification par un expert refusée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "8 jeux de prix tirés au hasard : coût optimal identique à HiGHS dans 8 cas sur 8",
+  "ok": true,
+  "detail": ""
+ }
+]

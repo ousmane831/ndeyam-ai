@@ -27,6 +27,8 @@ const QUESTIONS: { code: VoiceIntent; label: string; icon: ReactNode }[] = [
 ]
 
 const MAX_SECONDS = 60
+/** Langues comprises à l'oral : le sérère n'a pas encore de mots-clés (questions par images seulement). */
+const SPOKEN_LANGUAGES: SpeechLanguage[] = ['wolof', 'pulaar']
 
 /** Lit les phrases l'une après l'autre ; renvoie la phrase en cours (-1 : à l'arrêt). */
 function useSequentialPlayer() {
@@ -60,8 +62,8 @@ function useSequentialPlayer() {
 }
 
 /**
- * Onglet « Parler » du bouton bélier : l'éleveur pose sa question à voix haute (wolof, pulaar, sérère) ou
- * touche une image ; Ndeyam calcule la réponse sur les données de l'exploitation et la lit à voix haute.
+ * Onglet « Parler » du bouton bélier : l'éleveur pose sa question à voix haute (wolof, pulaar) ou
+ * touche une image (aussi en sérère, réponse lue en wolof) ; Ndeyam calcule la réponse sur les données de l'exploitation et la lit à voix haute.
  */
 export function VoiceAssistant() {
   const { t } = useTranslation()
@@ -76,6 +78,7 @@ export function VoiceAssistant() {
   const voiceLanguages = status.data?.voice_languages ?? ['wolof', 'pulaar']
   const answerLanguage: SpeechLanguage = voiceLanguages.includes(language) ? language : 'wolof'
   const configured = status.data?.configured ?? false
+  const canSpeak = SPOKEN_LANGUAGES.includes(language)
 
   const playAnswer = (answer: VoiceAnswer) => player.play(answer.segments.map((s) => s.audio_url))
   const onAnswer = { onMutate: () => player.stop(), onSuccess: playAnswer }
@@ -149,17 +152,20 @@ export function VoiceAssistant() {
           <div className="flex justify-center gap-2" role="group" aria-label={t('Langue')}>
             {LANGUAGES.map((l) => (
               <button key={l.code} type="button" aria-pressed={language === l.code} onClick={() => setLanguage(l.code)}
-                className={clsx('min-h-11 rounded-md px-3 text-sm font-semibold ring-1 ring-inset transition-colors',
+                disabled={Boolean(recording)}
+                className={clsx('min-h-11 rounded-md px-3 text-sm font-semibold ring-1 ring-inset transition-colors disabled:opacity-60',
                   language === l.code ? 'bg-brand-800 text-white ring-brand-800' : 'bg-white text-brand-800 ring-brand-300 hover:bg-brand-50')}>
                 {t(l.label)}
               </button>
             ))}
           </div>
-          {answerLanguage !== language && (
+          {!canSpeak ? (
+            <p className="mt-2 text-center text-[13px] text-slate-600">{t("Le sérère n'est pas encore compris à l'oral : touchez une question ci-dessous. La réponse sera lue en wolof.")}</p>
+          ) : answerLanguage !== language && (
             <p className="mt-2 text-center text-[13px] text-slate-600">{t("La réponse sera lue en wolof : la voix sérère n'est pas encore disponible.")}</p>
           )}
           <div className="mt-4 flex flex-col items-center gap-2 text-center">
-            <button type="button" onClick={toggleRecording} disabled={!configured || busy || !canRecord()}
+            <button type="button" onClick={toggleRecording} disabled={!configured || busy || !canRecord() || !canSpeak}
               aria-label={recording ? t('Arrêter et envoyer la question') : t('Parler')}
               className={clsx('flex size-20 items-center justify-center rounded-full text-white shadow-md transition-colors disabled:cursor-not-allowed disabled:opacity-50',
                 recording ? 'bg-red-700 hover:bg-red-800' : 'bg-brand-800 hover:bg-brand-700')}>
@@ -168,6 +174,7 @@ export function VoiceAssistant() {
             <p className="text-sm font-medium text-slate-700" aria-live="polite">
               {recording ? t("J'écoute… {{s}} s. Touchez pour envoyer.", { s: seconds })
                 : ask.isPending ? t('Ndeyam écoute votre question (environ quinze secondes)…')
+                : !canSpeak ? t('Touchez une question ci-dessous.')
                 : canRecord() ? t('Touchez le micro et posez votre question.')
                 : t("Ce navigateur ne permet pas d'enregistrer : touchez une question ci-dessous.")}
             </p>

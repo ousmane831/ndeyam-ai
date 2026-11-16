@@ -1,0 +1,1002 @@
+[
+ {
+  "name": "inscription éleveur A [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "inscription : rôle éleveur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "inscription en double refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mot de passe trop faible refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "confirmation différente refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "connexion mauvais mot de passe [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "connexion [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "profil /auth/me/ [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "profil : email",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "modification du profil [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "renouvellement du jeton [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ancien jeton de renouvellement révoqué [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "déconnexion [205]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "jeton inutilisable après déconnexion [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "accès anonyme refusé [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "jeton invalide refusé [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "demande de réinitialisation [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "demande pour un compte inconnu [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "réponse identique (compte inconnu non révélé)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "un seul e-mail envoyé (compte existant)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "lien de réinitialisation dans l'e-mail",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "nouveau mot de passe via le lien [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "lien à usage unique [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ancien mot de passe refusé [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "connexion avec le nouveau mot de passe [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "changement de mot de passe (retour à l'initial) [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "admin : création d'un compte expert [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "admin : liste des utilisateurs [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : administration des utilisateurs interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste des exploitations [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation créée à l'inscription",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "modification de l'exploitation [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "création d'une seconde exploitation [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "invitation de l'expert [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste des membres [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "2 membres (propriétaire + expert)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "suppression d'exploitation impossible (désactivation seulement) [405]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "désactivation de la seconde exploitation [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "création d'un lot [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "nom de lot en double refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "création animal 1 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "création animal 2 (âge estimé) [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "date de naissance estimée calculée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "création animal 3 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "numéro en double refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "modification d'un animal [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste des animaux [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "3 animaux présents",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "recherche d'un animal [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "archivage (vendu) [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "animal vendu retiré des présents",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "restauration [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "observation [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "export CSV des animaux [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "export CSV contient les animaux",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "import CSV d'animaux [200/201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "détail du lot [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "lot : 2 animaux",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pesée 1 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pesée 2 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "deux pesées le même jour refusées [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pesée dans le futur refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "poids négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "séance de pesée groupée [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "croissance animal 1 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "GMD intervalle 1 = (33-30)/20 j = 150 g/j",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "GMD intervalle 2 = (34,5-33)/20 j = 75 g/j",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "GMD global = 4,5 kg / 40 j = 112,5 g/j",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pas de plage de suivi validée : pas de comparaison",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "une seule mesure : GMD non calculé avec raison",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "croissance du lot [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "vue d'ensemble croissance [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut de prédiction [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "aucun modèle de prédiction présenté comme disponible",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "export des pesées [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "export pesées : 4 lignes",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "historique de l'animal [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : source documentaire [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : source DEMO [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : création de source interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : ingrédient catalogue E2E Ingrédient A [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : ingrédient catalogue E2E Ingrédient B [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : ingrédient du catalogue interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : ingrédient privé [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : composition MS=900 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : composition MAT=100 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : composition MS=900 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : composition MAT=300 [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : composition sur ingrédient privé d'un éleveur interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "unité incohérente : MS > 1000 g/kg refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "composition sur source DEMO [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : soumission composition 359 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : validation composition 359 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : soumission composition 360 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : validation composition 360 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : soumission composition 361 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : validation composition 361 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : soumission composition 362 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : validation composition 362 [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "validation refusée pour une source DEMO [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : validation interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "fiche ingrédient avec table de composition [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "table de composition : MS validée 900",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "table : nutriment sans valeur affiché comme inconnu (UFL)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : prix 100 FCFA/kg [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : prix 300 FCFA/kg [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "prix négatif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "derniers prix [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "2 prix récents",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "import CSV de compositions [200/201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste des imports [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : référence [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence sans besoin non validable [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : besoin MAT ≥ 150 g/j [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "besoin d'un autre système refusé (EM NRC sur référence INRA) [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : référence interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "soumission de la référence [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "validation de la référence [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence au statut VALIDATED",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "référence d'essai impossible [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "validation référence impossible [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "rejet sans motif refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "historique des validations [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "historique des validations alimenté",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : historique des validations interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul économique [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut ESTIMATED",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "solution calculée à la main : A 75 % MS, B 25 % MS",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "coût = 0,75×111,11 + 0,25×333,33 = 166,67 FCFA/j",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "toutes les contraintes vérifiées « ok »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "avertissement « Estimation mathématique »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "source citée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul équilibré [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mode équilibré : ESTIMATED",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul sans enregistrement [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "save=false : rien d'enregistré",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "contraintes impossibles [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut INFEASIBLE avec diagnostic",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "données manquantes (ingrédient privé sans composition validée) [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut REFUSED avec raisons",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule saisie manuellement [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule manuelle : coût 0,8×100 + 0,3×300 = 170",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "comparaison de formules [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "demande de vérification [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : auto-validation interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert invité : validation de la formule [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule VALIDATED",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ration sur le lot [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ration animal ET lot refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "distribution enregistrée [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "coût estimé = 10 kg × 150 FCFA/kg brut = 1 500",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "consommation non supposée (vide)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "distribution avec consommation mesurée [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "consommation > distribution refusée [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "synthèse alimentaire [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "synthèse : coût 3 000",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "export alimentaire [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "fin de la ration [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "réévaluation des alertes [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste des alertes [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "alerte MISSING_DATA (animal sans date de naissance)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "alerte WEIGHING_REMINDER (E2E-003 enregistré il y a 40 j, jamais pesé)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "rappel : uniquement E2E-003 (E2E-004 enregistré aujourd'hui)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "alerte expliquée (règle + valeurs)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "prise en compte d'une alerte [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "résolution d'une alerte [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "synthèse des alertes [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "définitions des règles [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "soumission d'une référence (en attente) [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "alertes de l'expert [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : alerte « données de référence à valider » reçue",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : ne reçoit pas cette alerte d'expert",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tableau de bord [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tableau de bord : 4 animaux présents",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "journal d'activité (admin) [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "journal d'activité interdit à l'éleveur [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : import de document interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : import PDF [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "PDF indexé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "doublon refusé [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : brouillon invisible dans la recherche",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "validation refusée sans source [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ajout de la source [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "validation du document [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "recherche (sans accent : humidite) [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "résultat trouvé avec citation document/page/source",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mode plein texte annoncé (pas d'embeddings)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "passages indexés [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "téléchargement du PDF [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "PDF téléchargé identique",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "réindexation [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut de l'assistant [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "assistant annoncé non configuré",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "création d'une conversation [201]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "question : réponse explicite 503 [503]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "message « non configuré » enregistré",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "historique de la conversation [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "2 messages conservés",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "autres modules intacts pendant ce temps",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "suppression de la conversation [204]",
+  "ok": true,
+  "detail": ""
+ }
+]

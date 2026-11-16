@@ -46,6 +46,9 @@ def test_pulaar_numbers_and_spoken_quantities():
         ("Ñaata kilo la sama xar yi diis ?", "weighing"),  # « kilo » n'en fait pas une question de ration
         ("ñaata xaalis laa dépenser ci lekk", "cost"),
         ("Lan laa wara def tey ?", "tasks"),
+        # « tey » (aujourd'hui) n'est qu'un mot de temps : il ne fait pas d'une question de ration une tâche.
+        ("Lan laa wara jox sama xar yi tey ?", "ration"),
+        ("Ñaata la sama xar yi diis tey ?", "weighing"),
         ("sama xar yi dañuy yokk", "growth"),
         ("bonjour", "unknown"),
     ],
@@ -57,6 +60,7 @@ def test_wolof_requests_are_recognised(text, intent):
 def test_detection_ignores_accents_and_spelling_variants():
     assert normalise("Ñaata BÉS bu nëkk ?") == "naata bes bu nekk"
     assert detect("o fotii kilo mi hokkata baay li am ñalnde kala", "pulaar")[0] == "ration"
+    assert detect("ko mi hokkata baali am hannde", "pulaar")[0] == "ration"  # « hannde » : aujourd'hui
 
 
 @pytest.fixture

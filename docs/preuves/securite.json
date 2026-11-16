@@ -1,0 +1,592 @@
+[
+ {
+  "name": "mise en place : formule réelle calculée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : exploitation de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : membres de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : lot de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : animal de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : historique animal de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : observations de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : pesée de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : croissance animal de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : croissance lot de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : ingrédient privé de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : prix de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : formule de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : ration de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : distribution de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : alerte de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne lit pas : conversation de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne modifie pas : animal de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne modifie pas : lot de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne modifie pas : pesée de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne modifie pas : formule de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne modifie pas : exploitation de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne supprime pas : animal de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne supprime pas : pesée de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne supprime pas : ration de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne supprime pas : conversation de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B ne supprime pas : observation de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B n'agit pas : archivage chez A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B n'agit pas : alerte résolue chez A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B n'agit pas : vérification formule chez A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B n'agit pas : fin de ration chez A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B n'agit pas : question assistant chez A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /farms/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /groups/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /animals/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /weighings/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /ingredient-prices/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /formulas/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /rations/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /feeding-records/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /alerts/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "liste /assistant/conversations/ de B sans donnée de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ingrédients : l'ingrédient privé de A est absent pour B",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : tableau de bord de A refusé [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : export des animaux de A sans contenu de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : export des pesées sans les pesées de A",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : créer un animal dans l'exploitation de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : rattacher son animal au lot de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : peser l'animal de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : séance de pesée sur l'animal de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : utiliser l'ingrédient privé de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : calculer pour l'exploitation de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : ration avec la formule de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : prix dans l'exploitation de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : conversation rattachée à l'exploitation de A [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : s'inviter dans l'exploitation de A [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "B : réévaluer les alertes de A [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "données de A inchangées après les tentatives",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert invité : lecture de l'animal de A [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert invité : modification interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert invité : pesée interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert non invité : animal de A invisible [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "gestionnaire : modification autorisée [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "gestionnaire : gestion des membres interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "gestionnaire : validation de formule interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert non invité : validation de formule interdite [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : écriture au catalogue interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : validation interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : référence interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : source interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : document interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : administration des comptes interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : journal d'activité interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : historique des validations interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : administration des comptes interdite [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : journal d'activité interdit [403]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "admin : lecture de l'animal de A [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : impossible de s'attribuer le rôle ADMIN via le profil",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "inscription : rôle imposé ELEVEUR",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "statut non modifiable par PATCH (le circuit de validation est obligatoire)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "admin : impossible de se désactiver [400]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "suppression d'un compte impossible (405) [405]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "admin : désactivation du gestionnaire [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "compte désactivé : jeton refusé [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "compte désactivé : connexion refusée [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "28 routes protégées renvoient 401 sans jeton",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "jeton falsifié (autre user_id, signature d'origine) refusé [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "jeton alg=none refusé [401]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "jeton d'accès refusé comme jeton de renouvellement",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "404 au format unifié {detail, code}",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "403 au format unifié {detail, code}",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "400 au format unifié avec errors par champ",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "identifiant inexistant [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "identifiant non numérique [404]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "recherche avec injection SQL sans effet",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/health/ n'expose ni clé ni mot de passe",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/assistant/conversations/status/ n'expose ni clé ni mot de passe",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/documents/status/ n'expose ni clé ni mot de passe",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "route inconnue : 404 sans trace d'exécution Python",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mots de passe stockés hachés",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "assistant : limite de 20 questions/minute appliquée (429)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "import d'un faux PDF refusé ou en échec explicite",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "API : une donnée DEMO ne peut pas être validée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "base de données : PostgreSQL refuse une donnée DEMO validée (contrainte CHECK)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "is_demo non modifiable par l'éleveur [200]",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "… et reste DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation réelle : ingrédient DEMO exclu (raison affichée), calcul refusé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation réelle : référence DEMO refusée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "prix saisi dans l'exploitation DEMO marqué DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation DEMO : formule marquée DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation DEMO : la donnée réelle validée n'est pas mélangée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation DEMO : le prix DEMO saisi est utilisé (coût 111,11 = 100 / 0,9)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exploitation DEMO : avertissement explicite",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule DEMO non validable, même par un administrateur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "animal créé dans une exploitation DEMO marqué DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "animal DEMO absent de l'exploitation réelle",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "document DEMO non validable",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "document DEMO absent de la recherche des éleveurs",
+  "ok": true,
+  "detail": ""
+ }
+]

@@ -1,0 +1,1727 @@
+[
+ {
+  "name": "[ordinateur] Connexion (/connexion) : titre « Connexion »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Connexion : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Connexion : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Connexion : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Inscription (/inscription) : titre « Créer un compte éleveur »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Inscription : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Inscription : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Inscription : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Mot de passe oublié (/mot-de-passe-oublie) : titre « Mot de passe oublié »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Mot de passe oublié : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Mot de passe oublié : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Mot de passe oublié : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] État du système (/statut) : titre « NDEYAM AI »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] État du système : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] État du système : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] État du système : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] page protégée sans session → redirection vers la connexion",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "connexion vide : champs signalés en erreur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mauvais mot de passe : message « Adresse e-mail ou mot de passe incorrect, ou compte désactivé. »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "inscription vide : erreurs de validation",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "inscription : confirmation différente signalée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "inscription réussie → tableau de bord",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "déconnexion → page de connexion",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] connexion de l'éleveur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Tableau de bord (/) : titre « Bonjour Awa »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Tableau de bord : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Tableau de bord : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Tableau de bord : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Animaux (/animaux) : titre « Mes animaux »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Animaux : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Animaux : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Animaux : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Nouvel animal (/animaux/nouveau) : titre « Ajouter un animal »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Nouvel animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Nouvel animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Nouvel animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche animal (/animaux/158) : titre « E2E-001 »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Modifier animal (/animaux/158/modifier) : titre « Modifier E2E-001 »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Modifier animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Modifier animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Modifier animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Troupeaux (/troupeaux) : titre « Mes troupeaux »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Troupeaux : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Troupeaux : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Troupeaux : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Suivi de croissance (/suivi-croissance) : titre « Suivi de croissance »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Suivi de croissance : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Suivi de croissance : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Suivi de croissance : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Ingrédients (/ingredients) : titre « Ingrédients alimentaires »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Ingrédients : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Ingrédients : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Ingrédients : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche ingrédient (/ingredients/152) : titre « E2E Ingrédient A »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche ingrédient : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche ingrédient : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche ingrédient : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Références (/references) : titre « Références nutritionnelles »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Références : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Références : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Références : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche référence (/references/25) : titre « [DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche référence : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche référence : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Fiche référence : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Formulation (/formulation) : titre « Formulation des aliments »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Formulation : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Formulation : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Formulation : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Résultat de formule (/formulation/159) : titre « E2E Formule économique »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Résultat de formule : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Résultat de formule : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Résultat de formule : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Comparaison (/formulation/comparer?ids=159,163) : titre « Comparaison de formules »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Comparaison : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Comparaison : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Comparaison : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Rations (/rations) : titre « Historique des rations »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Rations : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Rations : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Rations : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Alertes (/alertes) : titre « Alertes et rappels »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Alertes : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Alertes : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Alertes : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Documents (/documents) : titre « Base documentaire »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Documents : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Documents : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Documents : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Assistant (/assistant) : titre « Assistant Ndeyam AI »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Assistant : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Assistant : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Assistant : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Paramètres (/parametres) : titre « Paramètres »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Paramètres : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Paramètres : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Paramètres : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Page 404 (/page-inexistante) : titre « Page introuvable »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Page 404 : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Page 404 : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] Page 404 : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] graphique de croissance affiché (SVG Recharts)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] tableau des pesées affiché",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] tableau de bord : graphique(s) affiché(s)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[ordinateur] tableau de bord : aucune action affichée en code brut",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "menu latéral : 11 modules ouverts par clic",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : lien « Traçabilité » absent du menu",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : /tracabilite refusée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "nouvel animal vide : erreurs affichées",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "nouvel animal enregistré → fiche affichée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pesée invalide (« abc ») : erreur affichée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "pesée enregistrée (virgule décimale acceptée) et listée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formulaire de calcul : exploitation active proposée par défaut (id 99)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul par le formulaire : résultat « Estimation mathématique » affiché",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul : coût 167 FCFA/j affiché (166,67 arrondi : le franc CFA n'a pas de centimes)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "calcul : 75 % / 25 % de MS affichés",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "assistant : « Assistant non configuré » affiché, saisie désactivée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Connexion (/connexion) : titre « Connexion »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Connexion : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Connexion : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Connexion : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Inscription (/inscription) : titre « Créer un compte éleveur »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Inscription : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Inscription : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Inscription : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Mot de passe oublié (/mot-de-passe-oublie) : titre « Mot de passe oublié »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Mot de passe oublié : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Mot de passe oublié : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Mot de passe oublié : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] État du système (/statut) : titre « NDEYAM AI »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] État du système : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] État du système : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] État du système : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] page protégée sans session → redirection vers la connexion",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] connexion de l'éleveur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Tableau de bord (/) : titre « Bonjour Awa »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Tableau de bord : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Tableau de bord : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Tableau de bord : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Animaux (/animaux) : titre « Mes animaux »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Animaux : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Animaux : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Animaux : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Nouvel animal (/animaux/nouveau) : titre « Ajouter un animal »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Nouvel animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Nouvel animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Nouvel animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche animal (/animaux/158) : titre « E2E-001 »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Modifier animal (/animaux/158/modifier) : titre « Modifier E2E-001 »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Modifier animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Modifier animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Modifier animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Troupeaux (/troupeaux) : titre « Mes troupeaux »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Troupeaux : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Troupeaux : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Troupeaux : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Suivi de croissance (/suivi-croissance) : titre « Suivi de croissance »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Suivi de croissance : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Suivi de croissance : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Suivi de croissance : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Ingrédients (/ingredients) : titre « Ingrédients alimentaires »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Ingrédients : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Ingrédients : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Ingrédients : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche ingrédient (/ingredients/152) : titre « E2E Ingrédient A »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche ingrédient : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche ingrédient : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche ingrédient : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Références (/references) : titre « Références nutritionnelles »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Références : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Références : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Références : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche référence (/references/25) : titre « [DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche référence : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche référence : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Fiche référence : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Formulation (/formulation) : titre « Formulation des aliments »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Formulation : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Formulation : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Formulation : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Résultat de formule (/formulation/159) : titre « E2E Formule économique »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Résultat de formule : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Résultat de formule : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Résultat de formule : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Comparaison (/formulation/comparer?ids=159,163) : titre « Comparaison de formules »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Comparaison : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Comparaison : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Comparaison : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Rations (/rations) : titre « Historique des rations »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Rations : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Rations : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Rations : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Alertes (/alertes) : titre « Alertes et rappels »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Alertes : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Alertes : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Alertes : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Documents (/documents) : titre « Base documentaire »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Documents : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Documents : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Documents : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Assistant (/assistant) : titre « Assistant Ndeyam AI »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Assistant : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Assistant : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Assistant : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Paramètres (/parametres) : titre « Paramètres »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Paramètres : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Paramètres : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Paramètres : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Page 404 (/page-inexistante) : titre « Page introuvable »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Page 404 : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Page 404 : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] Page 404 : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] graphique de croissance affiché (SVG Recharts)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] tableau des pesées affiché",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] tableau de bord : graphique(s) affiché(s)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[mobile] tableau de bord : aucune action affichée en code brut",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mobile : menu latéral masqué par défaut",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mobile : menu ouvert, liens visibles",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mobile : navigation par le menu → Mes animaux",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "mobile : menu refermé après navigation",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Connexion (/connexion) : titre « Connexion »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Connexion : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Connexion : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Connexion : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Inscription (/inscription) : titre « Créer un compte éleveur »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Inscription : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Inscription : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Inscription : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Mot de passe oublié (/mot-de-passe-oublie) : titre « Mot de passe oublié »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Mot de passe oublié : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Mot de passe oublié : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Mot de passe oublié : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] État du système (/statut) : titre « NDEYAM AI »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] État du système : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] État du système : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] État du système : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] page protégée sans session → redirection vers la connexion",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] connexion de l'éleveur",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Tableau de bord (/) : titre « Bonjour Awa »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Tableau de bord : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Tableau de bord : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Tableau de bord : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Animaux (/animaux) : titre « Mes animaux »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Animaux : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Animaux : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Animaux : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Nouvel animal (/animaux/nouveau) : titre « Ajouter un animal »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Nouvel animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Nouvel animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Nouvel animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche animal (/animaux/158) : titre « E2E-001 »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Modifier animal (/animaux/158/modifier) : titre « Modifier E2E-001 »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Modifier animal : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Modifier animal : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Modifier animal : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Troupeaux (/troupeaux) : titre « Mes troupeaux »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Troupeaux : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Troupeaux : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Troupeaux : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Suivi de croissance (/suivi-croissance) : titre « Suivi de croissance »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Suivi de croissance : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Suivi de croissance : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Suivi de croissance : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Ingrédients (/ingredients) : titre « Ingrédients alimentaires »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Ingrédients : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Ingrédients : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Ingrédients : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche ingrédient (/ingredients/152) : titre « E2E Ingrédient A »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche ingrédient : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche ingrédient : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche ingrédient : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Références (/references) : titre « Références nutritionnelles »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Références : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Références : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Références : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche référence (/references/25) : titre « [DEMO] Brebis à l'entretien 35–50 kg (valeurs fictives) »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche référence : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche référence : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Fiche référence : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Formulation (/formulation) : titre « Formulation des aliments »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Formulation : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Formulation : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Formulation : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Résultat de formule (/formulation/159) : titre « E2E Formule économique »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Résultat de formule : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Résultat de formule : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Résultat de formule : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Comparaison (/formulation/comparer?ids=159,163) : titre « Comparaison de formules »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Comparaison : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Comparaison : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Comparaison : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Rations (/rations) : titre « Historique des rations »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Rations : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Rations : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Rations : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Alertes (/alertes) : titre « Alertes et rappels »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Alertes : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Alertes : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Alertes : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Documents (/documents) : titre « Base documentaire »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Documents : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Documents : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Documents : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Assistant (/assistant) : titre « Assistant Ndeyam AI »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Assistant : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Assistant : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Assistant : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Paramètres (/parametres) : titre « Paramètres »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Paramètres : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Paramètres : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Paramètres : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Page 404 (/page-inexistante) : titre « Page introuvable »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Page 404 : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Page 404 : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] Page 404 : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] graphique de croissance affiché (SVG Recharts)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] tableau des pesées affiché",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] tableau de bord : graphique(s) affiché(s)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[tablette] tableau de bord : aucune action affichée en code brut",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "e2e-expert@test.sn : menu Traçabilité présent",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "e2e-expert@test.sn : menu Utilisateurs absent",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-expert] Traçabilité (/tracabilite) : titre « Traçabilité des données »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-expert] Traçabilité : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-expert] Traçabilité : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-expert] Traçabilité : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "e2e-admin@test.sn : menu Traçabilité présent",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "e2e-admin@test.sn : menu Utilisateurs présent",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-admin] Traçabilité (/tracabilite) : titre « Traçabilité des données »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-admin] Traçabilité : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-admin] Traçabilité : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[e2e-admin] Traçabilité : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[admin] Utilisateurs (/administration/utilisateurs) : titre « Utilisateurs »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[admin] Utilisateurs : aucune erreur JS ni HTTP 5xx",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[admin] Utilisateurs : pas de défilement horizontal",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "[admin] Utilisateurs : chargement terminé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "admin : journal d'activité avec libellés français (ex. « Connexion » + code auth.login)",
+  "ok": true,
+  "detail": ""
+ }
+]

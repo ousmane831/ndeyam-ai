@@ -152,5 +152,5 @@ modèle libre (Kirikou, etc.) pourra plus tard comprendre des questions libres, 
 chaque phrase synthétisée est retranscrite par le service ; les nombres reviennent correctement dans les deux
 langues ; les noms d'aliments français restent la partie la moins bien rendue.
 
-**Limites.** Réponse en 6 s (question touchée) à 15 s (question parlée), selon le serveur vocal. Pas de voix sérère.
+**Limites.** Réponse en 6 s (question touchée) à 15 s (question parlée), selon le serveur vocal. Sérère : ni mots-clés ni voix (questions par images, réponse lue en wolof).
 Pas de détection automatique de la langue. Phrases à valider par des locuteurs natifs.

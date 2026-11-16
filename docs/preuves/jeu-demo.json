@@ -1,0 +1,122 @@
+[
+ {
+  "name": "connexion eleveur@demo.ndeyam.example",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "connexion eleveur2@demo.ndeyam.example",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "connexion expert@demo.ndeyam.example",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur DEMO : une exploitation, marquée DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tableau de bord : 15 animaux présents (1 vendu exclu)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tableau de bord : courbe de poids mensuelle alimentée",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tous les animaux marqués DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "croissance TH-101 calculée (7 pesées)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "4 formules DEMO",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "formule économique : avertissement DÉMONSTRATION en tête",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : formule DEMO non validable (400)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "exemple impossible : diagnostic présent",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "alertes variées (manquantes, pesée, formule à vérifier)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "30 distributions avec coût estimé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "consommation mesurée seulement 4 jours sur 30",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "7 ingrédients DEMO visibles, aucun validé",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "références DEMO libellées « valeurs fictives »",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : document DEMO visible (brouillon, indexé)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert : document DEMO consultable en prévisualisation",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur : document DEMO non validé absent de la recherche",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert DEMO : alerte « données à valider » (composition soumise)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "expert DEMO : voit l'exploitation de Thiès",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur 2 : seulement Kaolack (isolation)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "éleveur 2 : animal de Thiès inaccessible",
+  "ok": true,
+  "detail": ""
+ }
+]

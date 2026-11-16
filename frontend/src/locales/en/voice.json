@@ -23,7 +23,9 @@
   "Écouter": "Listen",
   "Ndeyam a entendu :": "Ndeyam heard:",
   "Réponse parlée": "Spoken answer",
-  "Parlez en wolof, pulaar ou sérère": "Speak in Wolof, Pulaar or Serer",
+  "Parlez en wolof ou en pulaar": "Speak in Wolof or Pulaar",
+  "Le sérère n'est pas encore compris à l'oral : touchez une question ci-dessous. La réponse sera lue en wolof.": "Spoken Serer is not understood yet: tap a question below. The answer will be read in Wolof.",
+  "Touchez une question ci-dessous.": "Tap a question below.",
   "Écrire": "Write",
   "Réponse": "Answer",
   "Réponses calculées à partir de vos données, jamais inventées. Phrases en wolof et pulaar à faire relire par des locuteurs natifs.": "Answers calculated from your data, never invented. Wolof and Pulaar sentences still to be reviewed by native speakers."

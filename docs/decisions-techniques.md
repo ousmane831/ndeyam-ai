@@ -402,5 +402,6 @@ aucun modèle de langage ne produit de chiffre. Les routes `/respond` et `/ask` 
 contexte) ne sont pas utilisées. Constats des essais réels, d'où la forme des réponses : la synthèse lit mal les
 chiffres (« 1056 » devient un nom) → nombres écrits en lettres (wolof, pulaar) ; les phrases longues se perdent →
 une phrase courte par information, chacune synthétisée à part (en parallèle) et lue à la suite ; noms de lots avec
-chiffres épelés. Le sérère est compris mais la réponse est lue en wolof (pas de voix sérère). Les phrases sont une
+chiffres épelés. Le sérère n'a encore ni mots-clés ni voix : micro désactivé, questions par images, réponse lue en wolof.
+« tey » / « hannde » (aujourd'hui) retirés des mots-clés « tâches » : un mot de temps ne désigne pas une demande. Les phrases sont une
 première version, à faire relire par des locuteurs natifs : elles se corrigent dans `phrases.json`, sans code.
