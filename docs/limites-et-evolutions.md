@@ -54,10 +54,9 @@ reste à faire. Les vérifications citées sont décrites dans le [journal des �
   Activation dans l'administration des données, sans développement.
 
 ### Exploitation et déploiement
-- **Mise en production non réalisée ni testée.** Les réglages de durcissement existent (`config/settings/production.py` :
-  HTTPS, cookies sécurisés, HSTS), mais il reste à choisir et configurer : un serveur d'application (Gunicorn ou
-  Waitress), un serveur web pour les fichiers statiques (`collectstatic`) et le HTTPS, l'envoi d'e-mails SMTP,
-  la planification de `evaluate_alerts`, les sauvegardes PostgreSQL et un rôle PostgreSQL non superutilisateur.
+- **Démonstration en ligne** sur https://ndeyam-ai.netlify.app (Netlify, Render, Neon ; [guide](deploiement.md)).
+  Hébergement gratuit, adapté à la démonstration. Restent à prévoir pour un pilote : envoi d'e-mails SMTP,
+  planification de `evaluate_alerts`, sauvegardes PostgreSQL et stockage durable des fichiers importés.
 - `SECURE_HSTS_PRELOAD` volontairement désactivé (inscription difficile à annuler).
 - Pas de Docker (choix du projet) ; pas d'application mobile native ni de mode hors connexion ; pas de notification
   par SMS ou WhatsApp ; interface en français uniquement.

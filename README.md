@@ -4,6 +4,8 @@ Plateforme AgriTech de gestion d'élevage et de formulation alimentaire destiné
 et aux professionnels de l'élevage au Sénégal et en Afrique de l'Ouest.
 Première espèce prise en charge : **ovins**. L'architecture prévoit les caprins et bovins.
 
+> **En ligne : https://ndeyam-ai.netlify.app** (compte de démonstration, données fictives).
+>
 > **Statut : prototype fonctionnel complet (v0.1.0)** — les 11 modules du cahier des charges sont livrés et
 > vérifiés de bout en bout. Aucune fonctionnalité n'est présentée comme scientifiquement validée : les résultats du
 > moteur sont des estimations mathématiques tant qu'un expert ne les a pas validés, et **aucune donnée

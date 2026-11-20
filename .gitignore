@@ -34,3 +34,6 @@ frontend/coverage/
 .DS_Store
 Thumbs.db
 ~$*
+
+# Dossier de soumission du défi (PDF, vidéos : fichiers lourds, hors dépôt)
+soumission/

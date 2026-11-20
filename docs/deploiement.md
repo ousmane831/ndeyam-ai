@@ -45,7 +45,10 @@ vocale peut en prendre 25).
 1. Créer un compte sur netlify.com (connexion GitHub). **Add new site → Import an existing project**, choisir le dépôt :
    les réglages viennent de `netlify.toml`.
 2. Avant de déployer, ajouter la variable d'environnement
-   `VITE_API_BASE_URL` = `https://<service>.onrender.com/api/v1`.
+   `VITE_API_BASE_URL` = l'adresse **affichée par Render** suivie de `/api/v1`, par ex.
+   `https://ndeyam-api-gvpl.onrender.com/api/v1` (ne pas recopier `<service>` : c'est un modèle). Après toute
+   modification de cette variable : **Deploys → Trigger deploy → Clear cache and deploy site** (elle est intégrée à la
+   compilation).
 3. Déployer, puis **Site configuration → Change site name** : par ex. `ndeyam` → `https://ndeyam.netlify.app`.
 
 ## 4. Relier l'interface à l'API
