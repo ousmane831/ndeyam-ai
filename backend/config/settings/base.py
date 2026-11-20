@@ -17,6 +17,9 @@ env = environ.Env(
     DJANGO_DEBUG=(bool, False),
     DJANGO_ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
     CORS_ALLOWED_ORIGINS=(list, ["http://localhost:5173", "http://127.0.0.1:5173"]),
+    CSRF_TRUSTED_ORIGINS=(list, []),
+    DATABASE_URL=(str, ""),
+    DB_SSLMODE=(str, ""),
     DB_HOST=(str, "localhost"),
     DB_PORT=(int, 5432),
     JWT_ACCESS_MINUTES=(int, 15),
@@ -113,19 +116,29 @@ WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
 # --- Base de données : PostgreSQL uniquement ---------------------------------
-DATABASES = {
-    "default": {
+# Hébergement (Neon, Render…) : une URL unique remplace les variables DB_*, par ex.
+# postgresql://utilisateur:motdepasse@hote/base?sslmode=require
+if env("DATABASE_URL"):
+    _db = env.db_url("DATABASE_URL")
+else:
+    _db = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": env("DB_NAME"),
         "USER": env("DB_USER"),
         "PASSWORD": env("DB_PASSWORD"),
         "HOST": env("DB_HOST"),
         "PORT": env("DB_PORT"),
+    }
+DATABASES = {
+    "default": {
+        **_db,
         "CONN_MAX_AGE": 60,
         "CONN_HEALTH_CHECKS": True,
         "TEST": {"NAME": env("DB_TEST_NAME", default="test_ndeyamai")},
     }
 }
+if env("DB_SSLMODE"):
+    DATABASES["default"].setdefault("OPTIONS", {})["sslmode"] = env("DB_SSLMODE")
 
 AUTH_USER_MODEL = "accounts.User"
 
@@ -215,6 +228,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS")
 CORS_ALLOW_CREDENTIALS = True
 
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")

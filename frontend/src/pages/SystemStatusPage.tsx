@@ -7,6 +7,10 @@ import { Spinner } from '@/components/ui/Spinner'
 import { fetchHealth } from '@/services/system'
 import type { ApiError } from '@/services/api'
 
+// La documentation est servie par le serveur de l'API (autre domaine en production : Render).
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api/v1'
+const API_DOCS_URL = /^https?:/.test(API_BASE) ? new URL('../docs/', API_BASE.replace(/\/?$/, '/')).href : '/api/docs/'
+
 /**
  * Page d'état du système (étape 1).
  * Elle interroge réellement /api/v1/health/ : aucun état n'est simulé.
@@ -84,7 +88,7 @@ export function SystemStatusPage() {
         </section>
 
         <p className="mt-6 text-center text-xs text-slate-500">
-          {t("Documentation de l'API :")} <a className="underline hover:text-brand-600" href="/api/docs/">/api/docs/</a>
+          {t("Documentation de l'API :")} <a className="underline hover:text-brand-600" href={API_DOCS_URL}>{API_DOCS_URL}</a>
         </p>
       </div>
     </main>

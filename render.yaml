@@ -1,0 +1,58 @@
+# NDEYAM AI — serveur Django sur Render (offre gratuite). Base PostgreSQL externe (Neon) via DATABASE_URL.
+# Les variables marquées « sync: false » sont saisies dans le tableau de bord Render, jamais ici.
+services:
+  - type: web
+    name: ndeyam-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    # Migrations, puis jeu de démonstration (ignoré s'il est déjà chargé), puis serveur.
+    # Délai de 180 s : une question vocale peut prendre 20 à 25 s.
+    startCommand: >-
+      python manage.py migrate --noinput &&
+      (python manage.py load_demo_data --allow-production || true) &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 180
+    healthCheckPath: /api/v1/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: .onrender.com
+      - key: DATABASE_URL # chaîne de connexion Neon (avec ?sslmode=require)
+        sync: false
+      - key: FRONTEND_URL # ex. https://ndeyam.netlify.app
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS # même adresse que FRONTEND_URL
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS # adresse du service Render, ex. https://ndeyam-api.onrender.com
+        sync: false
+      - key: DEMO_PASSWORD # mot de passe des comptes de démonstration (jury)
+        sync: false
+      - key: VOICE_SERVICE_URL
+        sync: false
+      - key: VOICE_SERVICE_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: openai_compatible
+      - key: LLM_MODEL
+        value: gemini-flash-lite-latest
+      - key: LLM_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai
+      - key: LLM_API_KEY # nouvelle clé Gemini
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        value: openai_compatible
+      - key: EMBEDDING_MODEL
+        value: gemini-embedding-001
+      - key: EMBEDDING_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai
+      - key: EMBEDDING_API_KEY # même clé Gemini
+        sync: false

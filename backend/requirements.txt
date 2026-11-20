@@ -13,3 +13,6 @@ scipy==1.18.1
 pypdf==6.21.4
 httpx==0.28.1
 anthropic==2.6.0
+# Production (Render) : serveur d'application et fichiers statiques
+gunicorn==27.0.1
+whitenoise==6.12.0

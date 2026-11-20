@@ -516,3 +516,16 @@ Tests de non-régression ajoutés : 24 (backend 23, frontend 1).
 - Preuves des chiffres cités : `docs/preuves/` (rapports JUnit du jour, résultats détaillés des vérifications du 07 et
   du 09/11, captures de l'assistant vocal).
 
+## Préparation de la mise en ligne (20/11/2026) ✅
+
+- Hébergement gratuit retenu : Neon (PostgreSQL, sans expiration), Render (API Django), Netlify (interface, HTTPS).
+  L'interface appelle l'API directement : le relais de Netlify coupe les requêtes vers 26 s, une question vocale peut
+  en prendre 25.
+- `render.yaml` (gunicorn, délai de 180 s, migrations et jeu DEMO au démarrage), `netlify.toml` (application d'une
+  seule page, cache du service worker), guide [deploiement.md](deploiement.md).
+- Réglages : `DATABASE_URL` et `DB_SSLMODE`, `CSRF_TRUSTED_ORIGINS`, whitenoise en production, page de santé exemptée de
+  la redirection HTTPS ; lien de la documentation de l'API suivant l'adresse de l'API.
+- Vérifications : pytest 534, Vitest 125, lint, typecheck ; réglages de production testés en local (check --deploy,
+  connexion par URL, collectstatic, redirection HTTPS, fichiers statiques, CORS autorisé / refusé) ; compilation de
+  l'interface avec une adresse d'API externe.
+

@@ -90,6 +90,7 @@ docs/      Guides, documentation API, architecture, décisions techniques, journ
 - **[Couverture du cahier des charges, limites et évolutions](docs/limites-et-evolutions.md)**
 - [Installation Windows](docs/installation-windows.md)
 - [Installation Linux](docs/installation-linux.md)
+- [Mise en ligne gratuite (Neon, Render, Netlify)](docs/deploiement.md)
 - [Guide utilisateur](docs/guide-utilisateur.md)
 - [Guide administrateur et expert](docs/guide-administrateur.md)
 - [Documentation de l'API](docs/api.md)
