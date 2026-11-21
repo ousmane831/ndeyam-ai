@@ -19,6 +19,16 @@ const schema = z.object({
 })
 type FormValues = z.infer<typeof schema>
 
+/**
+ * Compte de démonstration affiché sous le formulaire (jury, visiteurs) : données fictives uniquement.
+ * Fourni par la configuration du site (VITE_DEMO_EMAIL, VITE_DEMO_PASSWORD), jamais écrit dans le code.
+ */
+function demoAccount(): { email: string; password: string } | null {
+  const email = import.meta.env.VITE_DEMO_EMAIL
+  const password = import.meta.env.VITE_DEMO_PASSWORD
+  return email && password ? { email, password } : null
+}
+
 export function LoginPage() {
   const { t } = useTranslation()
   const { login, sessionExpired } = useAuth()
@@ -31,6 +41,7 @@ export function LoginPage() {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema), defaultValues: { email: '', password: '', remember: true } })
 
@@ -43,6 +54,14 @@ export function LoginPage() {
       setServerError(applyServerErrors(error, setError, ['email', 'password']))
     }
   })
+
+  const demo = demoAccount()
+  const signInWithDemo = () => {
+    if (!demo) return
+    setValue('email', demo.email, { shouldValidate: true })
+    setValue('password', demo.password, { shouldValidate: true })
+    void onSubmit()
+  }
 
   return (
     <AuthLayout
@@ -81,6 +100,21 @@ export function LoginPage() {
           {t('Se connecter')}
         </Button>
       </form>
+      {demo && (
+        <section aria-labelledby="demo-account" className="mt-6 rounded-md bg-mil-50 p-4 ring-1 ring-mil-100">
+          <h2 id="demo-account" className="text-sm font-semibold text-slate-900">{t('Compte de démonstration')}</h2>
+          <p className="mt-1 text-[13px] text-slate-600">{t('Pour découvrir NDEYAM AI avec des données fictives.')}</p>
+          <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+            <dt className="text-slate-600">{t('E-mail')}</dt>
+            <dd className="font-mono break-all text-slate-900">{demo.email}</dd>
+            <dt className="text-slate-600">{t('Mot de passe')}</dt>
+            <dd className="font-mono break-all text-slate-900">{demo.password}</dd>
+          </dl>
+          <Button type="button" variant="secondary" className="mt-3 w-full" onClick={signInWithDemo} disabled={isSubmitting}>
+            {t('Se connecter avec ce compte')}
+          </Button>
+        </section>
+      )}
     </AuthLayout>
   )
 }

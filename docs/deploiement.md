@@ -49,7 +49,9 @@ vocale peut en prendre 25).
    `https://ndeyam-api-gvpl.onrender.com/api/v1` (ne pas recopier `<service>` : c'est un modèle). Après toute
    modification de cette variable : **Deploys → Trigger deploy → Clear cache and deploy site** (elle est intégrée à la
    compilation).
-3. Déployer, puis **Site configuration → Change site name** : par ex. `ndeyam` → `https://ndeyam.netlify.app`.
+3. Facultatif, pour le jury : `VITE_DEMO_EMAIL` et `VITE_DEMO_PASSWORD` (compte de démonstration). Ils s'affichent
+   alors sous le formulaire de connexion, avec un bouton « Se connecter avec ce compte » (données fictives uniquement).
+4. Déployer, puis **Site configuration → Change site name** : par ex. `ndeyam` → `https://ndeyam.netlify.app`.
 
 ## 4. Relier l'interface à l'API
 Sur Render, remplacer `FRONTEND_URL` et `CORS_ALLOWED_ORIGINS` par l'adresse Netlify (`https://ndeyam.netlify.app`).

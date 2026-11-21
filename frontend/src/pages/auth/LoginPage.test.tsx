@@ -1,6 +1,6 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/services/api'
 import { breeder, fakeAuth, renderWithProviders } from '@/test/utils'
 import { LoginPage } from './LoginPage'
@@ -41,5 +41,29 @@ describe('LoginPage', () => {
   it("prévient l'utilisateur lorsque sa session a expiré", () => {
     renderWithProviders(<LoginPage />, { auth: fakeAuth({ sessionExpired: true }), route: '/connexion' })
     expect(screen.getByText(/session a expiré/)).toBeInTheDocument()
+  })
+
+  describe('compte de démonstration', () => {
+    afterEach(() => vi.unstubAllEnvs())
+
+    it("n'apparaît pas sans configuration du site", () => {
+      vi.stubEnv('VITE_DEMO_EMAIL', '')
+      vi.stubEnv('VITE_DEMO_PASSWORD', '')
+      renderWithProviders(<LoginPage />, { auth: fakeAuth(), route: '/connexion' })
+      expect(screen.queryByRole('heading', { name: 'Compte de démonstration' })).not.toBeInTheDocument()
+    })
+
+    it('affiche les identifiants et connecte en un geste', async () => {
+      vi.stubEnv('VITE_DEMO_EMAIL', 'eleveur@demo.ndeyam.example')
+      vi.stubEnv('VITE_DEMO_PASSWORD', 'Mot-de-passe-demo-1')
+      const auth = fakeAuth({ login: vi.fn().mockResolvedValue(breeder) })
+      renderWithProviders(<LoginPage />, { auth, route: '/connexion', extraRoutes: [home] })
+      expect(screen.getByRole('heading', { name: 'Compte de démonstration' })).toBeInTheDocument()
+      expect(screen.getByText('eleveur@demo.ndeyam.example')).toBeInTheDocument()
+      expect(screen.getByText('Mot-de-passe-demo-1')).toBeInTheDocument()
+      await userEvent.click(screen.getByRole('button', { name: 'Se connecter avec ce compte' }))
+      await waitFor(() => expect(auth.login).toHaveBeenCalledWith('eleveur@demo.ndeyam.example', 'Mot-de-passe-demo-1', true))
+      expect(await screen.findByText('Accueil connecté')).toBeInTheDocument()
+    })
   })
 })

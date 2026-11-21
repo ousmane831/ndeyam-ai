@@ -182,5 +182,9 @@
   "Vérification des besoins (recalcul indépendant)": "Requirement check (independent recalculation)",
   "Profil et avertissements": "Profile and warnings",
   "Référence : {{name}}": "Reference: {{name}}",
-  "Nom_person": "Last name"
+  "Nom_person": "Last name",
+  "Compte de démonstration": "Demo account",
+  "Pour découvrir NDEYAM AI avec des données fictives.": "To explore NDEYAM AI with fictitious data.",
+  "E-mail": "Email",
+  "Se connecter avec ce compte": "Sign in with this account"
 }
